@@ -1,0 +1,128 @@
+:root {
+  --primary: #3498db;
+  --primary-light: rgba(52, 152, 219, 0.1);
+  --secondary: #2ECC71;
+  --danger: #E74C3C;
+  --warning: #F39C12;
+  --accent: #9B59B6;
+  --text-main: #36454F;
+  --text-light: #ffffff;
+  --background: #ffffff;
+  --sidebar-width: 280px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #f8fafc;
+  color: var(--text-main);
+  margin-left: var(--sidebar-width);
+}
+
+/* Barre latérale fixe */
+.side-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--background);
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Contenu principal */
+.main-content {
+  padding: 1.5rem;
+  margin-left: 0;
+}
+
+/* Barre de navigation supérieure enrichie */
+.top-navbar {
+  background: var(--background);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 1.5rem;
+}
+
+.nav-search {
+  width: 300px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  padding-left: 40px;
+}
+
+.nav-search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+/* Cartes */
+.dashboard-card {
+  background: var(--background);
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Graphiques */
+.chart-container {
+  position: relative;
+  height: 300px;
+}
+
+/* Badges */
+.badge-admin {
+  background-color: var(--accent);
+}
+.badge-entreprise {
+  background-color: var(--primary);
+}
+.badge-candidat {
+  background-color: var(--secondary);
+}
+
+/* Version mobile */
+@media (max-width: 992px) {
+  body {
+    margin-left: 0;
+  }
+  
+  .side-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .side-menu.show {
+    transform: translateX(0);
+  }
+  
+  .nav-search {
+    width: 200px;
+  }
+}
+
+/* Animation des icônes */
+.activity-badge i {
+  font-size: 1.3rem;
+  transition: transform 0.2s;
+}
+.activity-badge i:hover {
+  transform: scale(1.1);
+}
+.p-3{
+  padding: 13px !important;
+}

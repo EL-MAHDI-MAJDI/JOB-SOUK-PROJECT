@@ -1,0 +1,126 @@
+:root {
+  --primary: #3498db;
+  --primary-light: rgba(52, 152, 219, 0.1);
+  --secondary: #2ECC71;
+  --danger: #E74C3C;
+  --warning: #F39C12;
+  --accent: #9B59B6;
+  --text-main: #36454F;
+  --sidebar-width: 280px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #f8fafc;
+  color: var(--text-main);
+  margin-left: var(--sidebar-width);
+}
+
+/* Sidebar Styles */
+.side-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: white;
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Main Content */
+.main-content {
+  padding: 20px;
+  margin-left: auto;
+}
+
+/* Top Navbar */
+.top-navbar {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 20px;
+}
+
+/* Cards */
+.dashboard-card {
+  background: white;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Badges */
+.badge-super-admin {
+  background-color: var(--accent);
+}
+.badge-admin {
+  background-color: var(--primary);
+}
+.badge-moderator {
+  background-color: var(--secondary);
+}
+.badge-support {
+  background-color: var(--warning);
+}
+
+/* Table Styles */
+.table-responsive {
+  overflow-x: auto;
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  body {
+    margin-left: 0;
+  }
+  .side-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .side-menu.show {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+  }
+}
+.p-3{
+  padding: 13px !important;
+}
+
+/* Custom styles for announcements */
+.announcement-card {
+  border-left: 4px solid var(--primary);
+  transition: all 0.3s ease;
+}
+.announcement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.announcement-card.pinned {
+  border-left-color: var(--warning);
+  background-color: rgba(243, 156, 18, 0.05);
+}
+.announcement-card.important {
+  border-left-color: var(--danger);
+  background-color: rgba(231, 76, 60, 0.05);
+}
+.announcement-image {
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}

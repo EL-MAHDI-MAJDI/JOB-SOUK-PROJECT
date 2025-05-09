@@ -1,0 +1,124 @@
+:root {
+  --primary: #3498db;
+  --primary-light: rgba(52, 152, 219, 0.1);
+  --secondary: #2ECC71;
+  --danger: #E74C3C;
+  --warning: #F39C12;
+  --accent: #9B59B6;
+  --text-main: #36454F;
+  --sidebar-width: 280px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #f8fafc;
+  color: var(--text-main);
+  margin-left: var(--sidebar-width);
+}
+
+/* Sidebar Styles */
+.side-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: white;
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Main Content */
+.main-content {
+  padding: 20px;
+  margin-left: auto;
+}
+
+/* Top Navbar */
+.top-navbar {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 20px;
+}
+
+/* Cards */
+.dashboard-card {
+  background: white;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Category Cards */
+.category-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
+}
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.category-icon {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.5rem;
+}
+.category-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/* Color Classes */
+.bg-it { background-color: #3498db; color: white; }
+.bg-marketing { background-color: #2ECC71; color: white; }
+.bg-finance { background-color: #9B59B6; color: white; }
+.bg-hr { background-color: #E74C3C; color: white; }
+.bg-design { background-color: #F39C12; color: white; }
+.bg-education { background-color: #1ABC9C; color: white; }
+.bg-engineering { background-color: #34495E; color: white; }
+
+/* Table Styles */
+.table-responsive {
+  overflow-x: auto;
+}
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  body {
+    margin-left: 0;
+  }
+  .side-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  .side-menu.show {
+    transform: translateX(0);
+  }
+  .main-content {
+    margin-left: 0;
+  }
+}
+.p-3{
+  padding: 13px !important;
+}
