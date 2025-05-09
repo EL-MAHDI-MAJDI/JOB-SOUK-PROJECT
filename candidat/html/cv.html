@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mon CV - Job Souk</title>
+  <title>Importer CV - Job Souk</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -80,129 +80,123 @@
       color: #6c757d;
     }
 
-    /* Styles spécifiques au CV */
-    .cv-container {
+    /* Styles spécifiques à l'import de CV */
+    .upload-container {
       background: white;
       border-radius: 12px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       padding: 2rem;
+      margin-top: 2rem;
     }
 
-    .cv-header {
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: 1.5rem;
+    .upload-area {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 3rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
       margin-bottom: 2rem;
     }
 
-    .cv-section {
-      margin-bottom: 2rem;
+    .upload-area:hover {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
     }
 
-    .cv-section-title {
+    .upload-icon {
+      font-size: 3rem;
       color: var(--primary);
-      border-bottom: 1px solid #eee;
-      padding-bottom: 0.5rem;
       margin-bottom: 1rem;
     }
 
-    .cv-item {
-      margin-bottom: 1.5rem;
+    .file-info {
+      display: flex;
+      align-items: center;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
     }
 
-    .cv-item-title {
+    .file-icon {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      color: var(--primary);
+    }
+
+    .file-details {
+      flex-grow: 1;
+    }
+
+    .file-actions {
+      margin-left: 1rem;
+    }
+
+    .btn-remove {
+      color: #dc3545;
+      background: none;
+      border: none;
+    }
+
+    .btn-remove:hover {
+      color: #c82333;
+    }
+
+    .parsing-results {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .parsed-field {
+      margin-bottom: 1rem;
+    }
+
+    .parsed-field label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    /* Historique des CV */
+    .cv-history {
+      margin-top: 3rem;
+    }
+
+    .cv-card {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+
+    .cv-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cv-card .cv-title {
       font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .cv-item-subtitle {
-      color: #6c757d;
       margin-bottom: 0.5rem;
     }
 
-    .cv-item-date {
-      font-size: 0.85rem;
+    .cv-card .cv-date {
+      font-size: 0.875rem;
       color: #6c757d;
-      margin-bottom: 0.5rem;
     }
 
-    .cv-item-description {
-      margin-bottom: 0;
-    }
-
-    .cv-skills-list {
+    .cv-card .cv-actions {
+      margin-top: 1rem;
       display: flex;
-      flex-wrap: wrap;
       gap: 0.5rem;
-      margin: 0;
-      padding: 0;
-      list-style: none;
     }
 
-    .cv-skill {
+    .cv-card .cv-main {
       background-color: var(--primary-light);
-      color: var(--primary);
-      padding: 0.35rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-    }
-
-    .cv-avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 4px solid white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      object-fit: cover;
-    }
-
-    .cv-contact-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .cv-contact-icon {
-      width: 24px;
-      text-align: center;
-      margin-right: 0.75rem;
-      color: var(--primary);
-    }
-
-    /* Boutons d'action */
-    .cv-actions {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      display: flex;
-      gap: 1rem;
-      z-index: 100;
-    }
-
-    .cv-action-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
-    }
-
-    .cv-action-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-
-    .cv-action-btn-primary {
-      background-color: var(--primary);
-      color: white;
-    }
-
-    .cv-action-btn-secondary {
-      background-color: white;
-      color: var(--primary);
-      border: 1px solid var(--primary);
+      border-color: var(--primary);
     }
 
     /* Version mobile */
@@ -223,150 +217,9 @@
       .nav-search {
         width: 200px;
       }
-
-      .cv-actions {
-        bottom: 1rem;
-        right: 1rem;
-      }
     }
-
-    /* Modals */
-    .modal-header {
-      border-bottom: 1px solid #f0f0f0;
-      padding: 1.5rem;
-    }
-
-    .modal-footer {
-      border-top: 1px solid #f0f0f0;
-      padding: 1rem 1.5rem;
-    }
-
-    .form-floating label {
-      color: #6c757d;
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .btn-primary:hover {
-      background-color: #c0392b;
-      border-color: #c0392b;
-    }
-
-    .p-3 {
+.p-3 {
       height: 47px;
-    }
-
-    /* Styles pour le modal d'édition corrigé */
-    .modal-xl .modal-content {
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .modal-xl .modal-body {
-      overflow: hidden;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    #cvEditTabsContent {
-      flex: 1;
-      overflow-y: auto;
-      padding: 15px;
-    }
-    
-    .nav-tabs {
-      padding-left: 15px;
-      padding-right: 15px;
-      margin-bottom: 0;
-    }
-    
-    .tab-pane {
-      padding-bottom: 15px;
-    }
-    
-    /* Correction des champs de formulaire */
-    .form-floating {
-      margin-bottom: 1rem;
-    }
-    
-    .form-floating > .form-control,
-    .form-floating > .form-select {
-      height: calc(3.5rem + 2px);
-    }
-    
-    textarea.form-control {
-      min-height: 100px;
-    }
-    
-    /* Style pour les listes dans les modals */
-    .list-group-item {
-      padding: 0.75rem 1.25rem;
-    }
-
-    /* Preview Modal */
-    .preview-modal .modal-dialog {
-      max-width: 800px;
-    }
-
-    .preview-modal .modal-body {
-      padding: 0;
-    }
-
-    .preview-modal .cv-container {
-      box-shadow: none;
-      border-radius: 0;
-    }
-
-    /* Download Options */
-    .download-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .download-option {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .download-option:hover {
-      background-color: #f8f9fa;
-      border-color: var(--primary);
-    }
-
-    .download-option i {
-      margin-right: 10px;
-      font-size: 1.2rem;
-    }
-
-    .skill-badge {
-      display: inline-flex;
-      align-items: center;
-      background-color: var(--primary-light);
-      color: var(--primary);
-      padding: 0.25rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-    }
-
-    .skill-badge i {
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-
-    .skill-badge i:hover {
-      opacity: 1;
     }
   </style>
 </head>
@@ -502,43 +355,6 @@
           </ul>
         </div>
         
-        <!-- Messages -->
-        <!-- <div class="dropdown me-3">
-          <button class="btn position-relative" type="button" data-bs-toggle="dropdown">
-            <i class="bi bi-envelope"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
-            <li class="mb-2">
-              <a href="#" class="d-flex align-items-center p-2 rounded">
-                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
-                  <span>MT</span>
-                </div>
-                <div>
-                  <p class="mb-0 small fw-bold">Meryem Tazi</p>
-                  <p class="mb-0 small text-muted">Nous avons bien reçu votre candidature...</p>
-                </div>
-              </a>
-            </li>
-            <li class="mb-2">
-              <a href="#" class="d-flex align-items-center p-2 rounded">
-                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
-                  <span>KL</span>
-                </div>
-                <div>
-                  <p class="mb-0 small fw-bold">Karim Lahlou</p>
-                  <p class="mb-0 small text-muted">Votre profil a retenu notre attention...</p>
-                </div>
-              </a>
-            </li>
-            <li><hr class="dropdown-divider my-2">
-              <a href="messages.html" class="d-flex align-items-center justify-content-center p-2 rounded btn btn-primary text-center">
-                Tous les messages
-              </a>
-            </li>
-          </ul>
-        </div> -->
-        
         <!-- Profil utilisateur -->
         <div class="dropdown">
           <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
@@ -564,952 +380,449 @@
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 class="fw-bold mb-1">Mon CV</h2>
-          <!-- <p class="text-muted mb-0" id="currentDate"></p> -->
-        </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#previewModal">
-            <i class="bi bi-eye me-2"></i>Prévisualiser
-          </button>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#downloadModal">
-            <i class="bi bi-download me-2"></i>Télécharger PDF
-          </button>
+          <h2 class="fw-bold mb-1">Importer mon CV</h2>
+          <p class="text-muted mb-0">Téléchargez votre CV pour compléter automatiquement votre profil</p>
         </div>
       </div>
       
-      <!-- Conteneur du CV -->
-      <div class="cv-container">
-        <!-- En-tête du CV -->
-        <div class="cv-header">
-          <div class="row align-items-center">
-            <div class="col-md-8">
-              <h1 class="mb-2">Omar Mansouri</h1>
-              <h4 class="text-muted mb-3">Développeur Full Stack</h4>
-              <p class="mb-0">Passionné par le développement web et les nouvelles technologies avec 5 ans d'expérience dans la création d'applications performantes.</p>
+      <!-- Conteneur d'upload -->
+      <div class="upload-container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div id="uploadArea" class="upload-area">
+              <div class="upload-icon">
+                <i class="bi bi-cloud-arrow-up"></i>
+              </div>
+              <h4>Glissez-déposez votre CV ici</h4>
+              <p class="text-muted">ou cliquez pour sélectionner un fichier</p>
+              <p class="small text-muted">Formats supportés: PDF, DOC, DOCX, TXT (max. 5MB)</p>
+              <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" style="display: none;">
             </div>
-            <div class="col-md-4 text-center text-md-end">
-              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Photo de profil" class="cv-avatar">
+            
+            <div id="filePreview" style="display: none;">
+              <div class="file-info">
+                <div class="file-icon">
+                  <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div class="file-details">
+                  <h6 id="fileName">mon_cv.pdf</h6>
+                  <small class="text-muted" id="fileSize">2.4 MB</small>
+                </div>
+                <div class="file-actions">
+                  <button class="btn btn-remove" id="removeFile">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-primary" id="parseBtn">
+                  <i class="bi bi-magic me-2"></i>Extraire les informations
+                </button>
+                <button class="btn btn-primary" id="saveBtn" disabled>
+                  <i class="bi bi-save me-2"></i>Enregistrer le CV
+                </button>
+              </div>
+            </div>
+            
+            <div id="parsingResults" class="parsing-results" style="display: none;">
+              <h5 class="mb-3">Informations extraites</h5>
+              <p>Vérifiez et complétez les informations détectées depuis votre CV :</p>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="parsed-field">
+                    <label for="parsedName">Nom complet</label>
+                    <input type="text" class="form-control" id="parsedName" value="Omar Mansouri">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="parsed-field">
+                    <label for="parsedTitle">Titre professionnel</label>
+                    <input type="text" class="form-control" id="parsedTitle" value="Développeur Full Stack">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="parsed-field">
+                    <label for="parsedEmail">Email</label>
+                    <input type="email" class="form-control" id="parsedEmail" value="contact@omarmansouri.com">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="parsed-field">
+                    <label for="parsedPhone">Téléphone</label>
+                    <input type="tel" class="form-control" id="parsedPhone" value="+212 6 12 34 56 78">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="parsed-field">
+                    <label for="parsedSummary">Résumé professionnel</label>
+                    <textarea class="form-control" id="parsedSummary" rows="3">Passionné par le développement web et les nouvelles technologies avec 5 ans d'expérience dans la création d'applications performantes.</textarea>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mt-4">
+                <h6>Expériences professionnelles détectées</h6>
+                <ul class="list-group mt-2">
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <strong>Développeur Full Stack Senior</strong><br>
+                        <small class="text-muted">TechSolutions Inc. - Janvier 2021 à Présent</small>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <strong>Développeur Frontend</strong><br>
+                        <small class="text-muted">WebVision - Mars 2019 à Décembre 2020</small>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="mt-4">
+                <h6>Formations détectées</h6>
+                <ul class="list-group mt-2">
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <strong>Master en Ingénierie Logicielle</strong><br>
+                        <small class="text-muted">Université Mohammed V - 2017 à 2019</small>
+                      </div>
+                      <div>
+                        <input class="form-check-input" type="checkbox" checked>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="mt-4">
+                <h6>Compétences détectées</h6>
+                <div class="d-flex flex-wrap gap-2 mt-2">
+                  <span class="badge bg-primary">JavaScript</span>
+                  <span class="badge bg-primary">React</span>
+                  <span class="badge bg-primary">Node.js</span>
+                  <span class="badge bg-primary">TypeScript</span>
+                  <span class="badge bg-primary">MongoDB</span>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-end mt-4">
+                <button class="btn btn-primary" id="saveAllBtn">
+                  <i class="bi bi-save me-2"></i>Enregistrer toutes les informations
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Historique des CV -->
+      <div class="cv-history">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="fw-bold mb-0">Historique de mes CV</h3>
+          <button class="btn btn-sm btn-outline-primary" id="addNewCv">
+            <i class="bi bi-plus-circle me-1"></i>Ajouter un nouveau CV
+          </button>
         </div>
         
         <div class="row">
-          <!-- Colonne gauche -->
-          <div class="col-md-8">
-            <!-- Expérience professionnelle -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-briefcase me-2"></i>Expérience Professionnelle</h3>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Développeur Full Stack Senior</h4>
-                <p class="cv-item-subtitle">TechSolutions Inc. - Casablanca</p>
-                <p class="cv-item-date">Janvier 2021 - Présent</p>
-                <ul class="cv-item-description">
-                  <li>Conception et développement d'une plateforme SaaS pour la gestion des ressources humaines</li>
-                  <li>Encadrement d'une équipe de 3 développeurs juniors</li>
-                  <li>Optimisation des performances (réduction du temps de chargement de 40%)</li>
-                  <li>Mise en place de processus CI/CD</li>
-                </ul>
+          <div class="col-md-6">
+            <div class="cv-card cv-main">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="cv-title">CV Principal - Développeur Full Stack</h5>
+                  <p class="cv-date">Dernière mise à jour: 15 mai 2024</p>
+                </div>
+                <span class="badge bg-primary">Principal</span>
               </div>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Développeur Frontend</h4>
-                <p class="cv-item-subtitle">WebVision - Rabat</p>
-                <p class="cv-item-date">Mars 2019 - Décembre 2020</p>
-                <ul class="cv-item-description">
-                  <li>Développement d'interfaces utilisateur avec React et Redux</li>
-                  <li>Collaboration avec les designers pour implémenter des maquettes Figma</li>
-                  <li>Participation aux revues de code et amélioration des processus CI/CD</li>
-                </ul>
-              </div>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Stagiaire Développeur</h4>
-                <p class="cv-item-subtitle">DigitalLab - Casablanca</p>
-                <p class="cv-item-date">Juillet 2018 - Septembre 2018</p>
-                <ul class="cv-item-description">
-                  <li>Développement d'une application web de gestion de contenu</li>
-                  <li>Intégration de maquettes responsive</li>
-                  <li>Tests unitaires et fonctionnels</li>
-                </ul>
-              </div>
-            </div>
-            
-            <!-- Formation -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-mortarboard me-2"></i>Formation</h3>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Master en Ingénierie Logicielle</h4>
-                <p class="cv-item-subtitle">Université Mohammed V - Rabat</p>
-                <p class="cv-item-date">2017 - 2019</p>
-                <p class="cv-item-description">
-                  Spécialisation en architectures distribuées et cloud computing. Projet de fin d'études sur l'optimisation des requêtes GraphQL dans les applications microservices.
-                </p>
-              </div>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Licence en Informatique</h4>
-                <p class="cv-item-subtitle">Université Hassan II - Casablanca</p>
-                <p class="cv-item-date">2014 - 2017</p>
-              </div>
-            </div>
-            
-            <!-- Projets -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-code-square me-2"></i>Projets Personnels</h3>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Plateforme de E-learning</h4>
-                <p class="cv-item-date">2022</p>
-                <p class="cv-item-description">
-                  Développement d'une plateforme de cours en ligne avec système de paiement, suivi de progression et évaluations. Technologies: React, Node.js, MongoDB.
-                </p>
-              </div>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">Application de Gestion de Budget</h4>
-                <p class="cv-item-date">2021</p>
-                <p class="cv-item-description">
-                  Application mobile pour le suivi des dépenses personnelles avec visualisation graphique. Technologies: Flutter, Firebase.
-                </p>
+              <div class="cv-actions">
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-eye me-1"></i>Voir
+                </button>
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-download me-1"></i>Télécharger
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash me-1"></i>Supprimer
+                </button>
               </div>
             </div>
           </div>
           
-          <!-- Colonne droite -->
-          <div class="col-md-4">
-            <!-- Contact -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-person-lines-fill me-2"></i>Contact</h3>
-              
-              <div class="cv-contact-item">
-                <div class="cv-contact-icon"><i class="bi bi-envelope"></i></div>
-                <div>contact@omarmansouri.com</div>
-              </div>
-              
-              <div class="cv-contact-item">
-                <div class="cv-contact-icon"><i class="bi bi-phone"></i></div>
-                <div>+212 6 12 34 56 78</div>
-              </div>
-              
-              <div class="cv-contact-item">
-                <div class="cv-contact-icon"><i class="bi bi-geo-alt"></i></div>
-                <div>Casablanca, Maroc</div>
-              </div>
-              
-              <div class="cv-contact-item">
-                <div class="cv-contact-icon"><i class="bi bi-linkedin"></i></div>
-                <div>linkedin.com/in/omarmansouri</div>
-              </div>
-              
-              <div class="cv-contact-item">
-                <div class="cv-contact-icon"><i class="bi bi-github"></i></div>
-                <div>github.com/omarmansouri</div>
-              </div>
-            </div>
-            
-            <!-- Compétences -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-tools me-2"></i>Compétences Techniques</h3>
-              
-              <ul class="cv-skills-list">
-                <li class="cv-skill">JavaScript</li>
-                <li class="cv-skill">React</li>
-                <li class="cv-skill">Node.js</li>
-                <li class="cv-skill">TypeScript</li>
-                <li class="cv-skill">GraphQL</li>
-                <li class="cv-skill">MongoDB</li>
-                <li class="cv-skill">Docker</li>
-                <li class="cv-skill">AWS</li>
-                <li class="cv-skill">Git</li>
-                <li class="cv-skill">CI/CD</li>
-              </ul>
-            </div>
-            
-            <!-- Langues -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-globe2 me-2"></i>Langues</h3>
-              
-              <div class="mb-3">
-                <div class="d-flex justify-content-between">
-                  <span>Arabe</span>
-                  <small>Langue maternelle</small>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
+          <div class="col-md-6">
+            <div class="cv-card">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="cv-title">CV Anglais - Software Engineer</h5>
+                  <p class="cv-date">Dernière mise à jour: 10 mars 2024</p>
                 </div>
               </div>
-              
-              <div class="mb-3">
-                <div class="d-flex justify-content-between">
-                  <span>Français</span>
-                  <small>Courant</small>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 90%"></div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <div class="d-flex justify-content-between">
-                  <span>Anglais</span>
-                  <small>Professionnel</small>
-                </div>
-                <div class="progress" style="height: 6px;">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"></div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Certifications -->
-            <div class="cv-section">
-              <h3 class="cv-section-title"><i class="bi bi-award me-2"></i>Certifications</h3>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">AWS Certified Developer</h4>
-                <p class="cv-item-date">2022</p>
-              </div>
-              
-              <div class="cv-item">
-                <h4 class="cv-item-title">React Advanced Concepts</h4>
-                <p class="cv-item-date">2021</p>
+              <div class="cv-actions">
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-eye me-1"></i>Voir
+                </button>
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-download me-1"></i>Télécharger
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash me-1"></i>Supprimer
+                </button>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-star me-1"></i>Définir comme principal
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Boutons d'action flottants -->
-  <div class="cv-actions">
-    <button class="cv-action-btn cv-action-btn-primary" data-bs-toggle="modal" data-bs-target="#editCvModal">
-      <i class="bi bi-pencil"></i>
-    </button>
-    <button class="cv-action-btn cv-action-btn-secondary" id="printBtn">
-      <i class="bi bi-printer"></i>
-    </button>
-  </div>
-
-  <!-- Modal de prévisualisation -->
-  <div class="modal fade preview-modal" id="previewModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Prévisualisation du CV</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="cv-container">
-            <!-- Le contenu du CV est copié ici dynamiquement par JavaScript -->
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#downloadModal">
-            <i class="bi bi-download me-2"></i>Télécharger
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal de téléchargement -->
-  <div class="modal fade" id="downloadModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Options de téléchargement</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="download-options">
-            <div class="download-option" data-format="pdf">
-              <i class="bi bi-file-earmark-pdf text-danger"></i>
-              <div>
-                <h6 class="mb-0">Télécharger en PDF</h6>
-                <small class="text-muted">Format standard pour impression</small>
-              </div>
-            </div>
-            <div class="download-option" data-format="docx">
-              <i class="bi bi-file-earmark-word text-primary"></i>
-              <div>
-                <h6 class="mb-0">Télécharger en Word</h6>
-                <small class="text-muted">Format éditable (DOCX)</small>
-              </div>
-            </div>
-            <div class="download-option" data-format="txt">
-              <i class="bi bi-file-earmark-text"></i>
-              <div>
-                <h6 class="mb-0">Télécharger en texte</h6>
-                <small class="text-muted">Format texte simple</small>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal d'édition du CV - Version corrigée -->
-  <div class="modal fade" id="editCvModal" tabindex="-1" aria-labelledby="editCvModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editCvModalLabel">Modifier mon CV</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body p-0">
-          <ul class="nav nav-tabs px-3 pt-2" id="cvEditTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Informations</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="experience-tab" data-bs-toggle="tab" data-bs-target="#experience" type="button" role="tab">Expérience</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="education-tab" data-bs-toggle="tab" data-bs-target="#education" type="button" role="tab">Formation</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="skills-tab" data-bs-toggle="tab" data-bs-target="#skills" type="button" role="tab">Compétences</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects" type="button" role="tab">Projets</button>
-            </li>
-          </ul>
           
-          <div class="tab-content" id="cvEditTabsContent">
-            <!-- Onglet Informations -->
-            <div class="tab-pane fade show active" id="info" role="tabpanel">
-              <form>
-                <div class="row g-3 p-33">
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="cvName" placeholder="Nom complet" value="Omar Mansouri">
-                      <label for="cvName">Nom complet</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="cvTitle" placeholder="Titre professionnel" value="Développeur Full Stack">
-                      <label for="cvTitle">Titre professionnel</label>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="form-floating">
-                      <textarea class="form-control" id="cvSummary" style="height: 100px" placeholder="Résumé professionnel">Passionné par le développement web et les nouvelles technologies avec 5 ans d'expérience dans la création d'applications performantes.</textarea>
-                      <label for="cvSummary">Résumé professionnel</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="email" class="form-control" id="cvEmail" placeholder="Email" value="contact@omarmansouri.com">
-                      <label for="cvEmail">Email</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="tel" class="form-control" id="cvPhone" placeholder="Téléphone" value="+212 6 12 34 56 78">
-                      <label for="cvPhone">Téléphone</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="cvLocation" placeholder="Localisation" value="Casablanca, Maroc">
-                      <label for="cvLocation">Localisation</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="url" class="form-control" id="cvLinkedin" placeholder="LinkedIn" value="linkedin.com/in/omarmansouri">
-                      <label for="cvLinkedin">LinkedIn</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-floating">
-                      <input type="url" class="form-control" id="cvGithub" placeholder="GitHub" value="github.com/omarmansouri">
-                      <label for="cvGithub">GitHub</label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="cvPhoto" class="form-label">Photo de profil</label>
-                    <input class="form-control" type="file" id="cvPhoto">
-                  </div>
+          <div class="col-md-6">
+            <div class="cv-card">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="cv-title">CV Version Simple</h5>
+                  <p class="cv-date">Dernière mise à jour: 5 janvier 2024</p>
                 </div>
-              </form>
-            </div>
-            
-            <!-- Onglet Expérience -->
-            <div class="tab-pane fade" id="experience" role="tabpanel">
-              <div class="d-flex justify-content-between align-items-center mb-3 p-33">
-                <h6>Expériences professionnelles</h6>
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addExperienceModal">
-                  <i class="bi bi-plus"></i> Ajouter
+              </div>
+              <div class="cv-actions">
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-eye me-1"></i>Voir
                 </button>
-              </div>
-              
-              <div class="list-group mx-3">
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Développeur Full Stack Senior</h6>
-                      <small class="text-muted">TechSolutions Inc. - Janvier 2021 à Présent</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Développeur Frontend</h6>
-                      <small class="text-muted">WebVision - Mars 2019 à Décembre 2020</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Stagiaire Développeur</h6>
-                      <small class="text-muted">DigitalLab - Juillet 2018 à Septembre 2018</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Onglet Formation -->
-            <div class="tab-pane fade" id="education" role="tabpanel">
-              <div class="d-flex justify-content-between align-items-center mb-3 p-33">
-                <h6>Formations académiques</h6>
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addEducationModal">
-                  <i class="bi bi-plus"></i> Ajouter
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-download me-1"></i>Télécharger
                 </button>
-              </div>
-              
-              <div class="list-group mx-3">
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Master en Ingénierie Logicielle</h6>
-                      <small class="text-muted">Université Mohammed V - 2017 à 2019</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Licence en Informatique</h6>
-                      <small class="text-muted">Université Hassan II - 2014 à 2017</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Onglet Compétences -->
-            <div class="tab-pane fade" id="skills" role="tabpanel">
-              <div class="row p-33">
-                <div class="col-md-6">
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6>Compétences techniques</h6>
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addTechnicalSkillModal">
-                      <i class="bi bi-plus"></i> Ajouter
-                    </button>
-                  </div>
-                  
-                  <div class="d-flex flex-wrap gap-2 mb-4">
-                    <span class="skill-badge">JavaScript <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">React <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">Node.js <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">TypeScript <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">GraphQL <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">MongoDB <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">Docker <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">AWS <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">Git <i class="bi bi-x ms-1"></i></span>
-                    <span class="skill-badge">CI/CD <i class="bi bi-x ms-1"></i></span>
-                  </div>
-                </div>
-                
-                <div class="col-md-6">
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6>Langues</h6>
-                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addLanguageModal">
-                      <i class="bi bi-plus"></i> Ajouter
-                    </button>
-                  </div>
-                  
-                  <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span>Arabe</span>
-                      <small>Langue maternelle</small>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
-                    </div>
-                  </div>
-                  
-                  <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span>Français</span>
-                      <small>Courant</small>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar bg-primary" role="progressbar" style="width: 90%"></div>
-                    </div>
-                  </div>
-                  
-                  <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span>Anglais</span>
-                      <small>Professionnel</small>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                    <div class="progress" style="height: 6px;">
-                      <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Onglet Projets -->
-            <div class="tab-pane fade" id="projects" role="tabpanel">
-              <div class="d-flex justify-content-between align-items-center mb-3 p-33">
-                <h6>Projets personnels</h6>
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">
-                  <i class="bi bi-plus"></i> Ajouter
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash me-1"></i>Supprimer
                 </button>
-              </div>
-              
-              <div class="list-group mx-3">
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Plateforme de E-learning</h6>
-                      <small class="text-muted">2022</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="list-group-item">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h6 class="mb-1">Application de Gestion de Budget</h6>
-                      <small class="text-muted">2021</small>
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-pencil"></i></button>
-                      <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-star me-1"></i>Définir comme principal
+                </button>
               </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Enregistrer les modifications</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modals d'ajout -->
-
-  <!-- Modal Ajout Expérience -->
-  <div class="modal fade" id="addExperienceModal" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addExperienceModalLabel">Ajouter une expérience professionnelle</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="expTitle" placeholder="Poste">
-                  <label for="expTitle">Poste occupé</label>
+          
+          <div class="col-md-6">
+            <div class="cv-card">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h5 class="cv-title">Ancien CV - Version 2023</h5>
+                  <p class="cv-date">Dernière mise à jour: 15 septembre 2023</p>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="expCompany" placeholder="Entreprise">
-                  <label for="expCompany">Entreprise</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="expLocation" placeholder="Lieu">
-                  <label for="expLocation">Lieu</label>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="expStartDate" placeholder="Date de début">
-                  <label for="expStartDate">Date de début</label>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="expEndDate" placeholder="Date de fin">
-                  <label for="expEndDate">Date de fin</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="expCurrent">
-                  <label class="form-check-label" for="expCurrent">
-                    J'occupe actuellement ce poste
-                  </label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea class="form-control" id="expDescription" style="height: 150px" placeholder="Description"></textarea>
-                  <label for="expDescription">Description (une tâche par ligne)</label>
-                </div>
+              <div class="cv-actions">
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-eye me-1"></i>Voir
+                </button>
+                <button class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-download me-1"></i>Télécharger
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash me-1"></i>Supprimer
+                </button>
+                <button class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-star me-1"></i>Définir comme principal
+                </button>
               </div>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Ajouter</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Ajout Formation -->
-  <div class="modal fade" id="addEducationModal" tabindex="-1" aria-labelledby="addEducationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addEducationModalLabel">Ajouter une formation</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="eduDegree" placeholder="Diplôme">
-                  <label for="eduDegree">Diplôme</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="eduSchool" placeholder="Établissement">
-                  <label for="eduSchool">Établissement</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="eduStartDate" placeholder="Date de début">
-                  <label for="eduStartDate">Date de début</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="eduEndDate" placeholder="Date de fin">
-                  <label for="eduEndDate">Date de fin</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea class="form-control" id="eduDescription" style="height: 100px" placeholder="Description"></textarea>
-                  <label for="eduDescription">Description (optionnelle)</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Ajouter</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Ajout Compétence Technique -->
-  <div class="modal fade" id="addTechnicalSkillModal" tabindex="-1" aria-labelledby="addTechnicalSkillModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addTechnicalSkillModalLabel">Ajouter une compétence technique</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="skillName" placeholder="Compétence">
-                  <label for="skillName">Compétence</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <select class="form-select" id="skillLevel">
-                    <option value="1">Débutant</option>
-                    <option value="2">Intermédiaire</option>
-                    <option value="3">Avancé</option>
-                    <option value="4">Expert</option>
-                  </select>
-                  <label for="skillLevel">Niveau</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Ajouter</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Ajout Langue -->
-  <div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addLanguageModalLabel">Ajouter une langue</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="languageName" placeholder="Langue">
-                  <label for="languageName">Langue</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <select class="form-select" id="languageLevel">
-                    <option value="native">Langue maternelle</option>
-                    <option value="fluent">Courant</option>
-                    <option value="professional">Professionnel</option>
-                    <option value="intermediate">Intermédiaire</option>
-                    <option value="basic">Basique</option>
-                  </select>
-                  <label for="languageLevel">Niveau</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Ajouter</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Ajout Projet -->
-  <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addProjectModalLabel">Ajouter un projet personnel</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="projectName" placeholder="Nom du projet">
-                  <label for="projectName">Nom du projet</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="projectDate" placeholder="Date">
-                  <label for="projectDate">Date</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea class="form-control" id="projectDescription" style="height: 120px" placeholder="Description"></textarea>
-                  <label for="projectDescription">Description</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="projectTechnologies" placeholder="Technologies utilisées">
-                  <label for="projectTechnologies">Technologies utilisées (séparées par des virgules)</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="url" class="form-control" id="projectLink" placeholder="Lien">
-                  <label for="projectLink">Lien vers le projet (optionnel)</label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Ajouter</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    // Ajouter la date actuelle
-    const dateElement = document.getElementById('currentDate');
-    if (dateElement) {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const today = new Date();
-      dateElement.textContent = today.toLocaleDateString('fr-FR', options);
-    }
-
     // Toggle sidebar on mobile
     document.getElementById('menuToggle').addEventListener('click', function() {
       document.querySelector('.side-menu').classList.toggle('show');
     });
 
-    // Gestion des modals
-    const editCvModal = document.getElementById('editCvModal');
-    if (editCvModal) {
-      editCvModal.addEventListener('shown.bs.modal', function() {
-        const firstTab = document.querySelector('#cvEditTabs .nav-link:first-child');
-        if (firstTab) {
-          new bootstrap.Tab(firstTab).show();
-        }
-      });
-    }
+    // Gestion de l'upload de fichier
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const filePreview = document.getElementById('filePreview');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFile = document.getElementById('removeFile');
+    const parseBtn = document.getElementById('parseBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const parsingResults = document.getElementById('parsingResults');
+    const saveAllBtn = document.getElementById('saveAllBtn');
+    const addNewCvBtn = document.getElementById('addNewCv');
 
-    // Prévisualisation du CV
-    const previewModal = document.getElementById('previewModal');
-    if (previewModal) {
-      previewModal.addEventListener('show.bs.modal', function() {
-        const originalCv = document.querySelector('.cv-container');
-        const previewCv = previewModal.querySelector('.cv-container');
-        previewCv.innerHTML = originalCv.innerHTML;
-      });
-    }
-
-    // Options de téléchargement
-    const downloadOptions = document.querySelectorAll('.download-option');
-    downloadOptions.forEach(option => {
-      option.addEventListener('click', function() {
-        const format = this.getAttribute('data-format');
-        downloadCV(format);
-      });
+    // Gestion du drag and drop
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = 'var(--primary)';
+      uploadArea.style.backgroundColor = 'var(--primary-light)';
     });
 
-    // Fonction pour télécharger le CV
-    function downloadCV(format) {
-      const element = document.querySelector('.cv-container');
-      const opt = {
-        margin: 10,
-        filename: 'CV_Omar_Mansouri.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.style.borderColor = '#ddd';
+      uploadArea.style.backgroundColor = 'transparent';
+    });
 
-      switch(format) {
-        case 'pdf':
-          html2pdf().from(element).set(opt).save();
-          break;
-        case 'docx':
-          alert('Fonctionnalité de téléchargement en Word sera implémentée');
-          break;
-        case 'txt':
-          alert('Fonctionnalité de téléchargement en texte sera implémentée');
-          break;
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '#ddd';
+      uploadArea.style.backgroundColor = 'transparent';
+      
+      if (e.dataTransfer.files.length) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Gestion du clic pour sélectionner un fichier
+    uploadArea.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    // Fonction pour gérer le fichier sélectionné
+    function handleFile(file) {
+      // Vérifier le type de fichier
+      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const validExtensions = ['pdf', 'doc', 'docx', 'txt'];
+      
+      if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
+        alert('Format de fichier non supporté. Veuillez uploader un fichier PDF, DOC, DOCX ou TXT.');
+        return;
       }
       
-      const modal = bootstrap.Modal.getInstance(document.getElementById('downloadModal'));
-      modal.hide();
+      // Vérifier la taille du fichier (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Le fichier est trop volumineux. Taille maximale: 5MB.');
+        return;
+      }
+      
+      // Afficher les informations du fichier
+      fileName.textContent = file.name;
+      fileSize.textContent = formatFileSize(file.size);
+      filePreview.style.display = 'block';
+      saveBtn.disabled = false;
     }
 
-    // Impression du CV
-    document.getElementById('printBtn').addEventListener('click', function() {
-      const originalCv = document.querySelector('.cv-container');
-      const printWindow = window.open('', '', 'width=800,height=600');
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>CV Omar Mansouri</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-            <style>
-              body { padding: 20px; }
-              @media print {
-                .cv-container { box-shadow: none; }
-              }
-            </style>
-          </head>
-          <body>
-            ${originalCv.outerHTML}
-            <script>
-              window.onload = function() {
-                window.print();
-                window.close();
-              };
-            <\/script>
-          </body>
-        </html>
-      `);
-      printWindow.document.close();
+    // Formater la taille du fichier
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' bytes';
+      else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      else return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // Supprimer le fichier sélectionné
+    removeFile.addEventListener('click', () => {
+      fileInput.value = '';
+      filePreview.style.display = 'none';
+      parsingResults.style.display = 'none';
     });
 
-    // Gestion des compétences
-    const skillBadges = document.querySelectorAll('.skill-badge i');
-    skillBadges.forEach(badge => {
-      badge.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const badge = this.parentElement;
-        badge.remove();
-      });
+    // Bouton pour extraire les informations
+    parseBtn.addEventListener('click', () => {
+      // Simuler l'extraction des informations (en réalité, vous utiliseriez une API)
+      parsingResults.style.display = 'block';
+      
+      // Défilement vers les résultats
+      parsingResults.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Enregistrer le CV (sans extraction)
+    saveBtn.addEventListener('click', () => {
+      alert('CV enregistré avec succès!');
+      // Ici, vous enverriez le fichier au serveur
+      
+      // Simuler l'ajout à l'historique
+      const cvHistory = document.querySelector('.cv-history .row');
+      const newCvCard = `
+        <div class="col-md-6">
+          <div class="cv-card">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="cv-title">${fileInput.files[0].name}</h5>
+                <p class="cv-date">Dernière mise à jour: ${new Date().toLocaleDateString('fr-FR')}</p>
+              </div>
+            </div>
+            <div class="cv-actions">
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-eye me-1"></i>Voir
+              </button>
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-download me-1"></i>Télécharger
+              </button>
+              <button class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash me-1"></i>Supprimer
+              </button>
+              <button class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-star me-1"></i>Définir comme principal
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      cvHistory.insertAdjacentHTML('afterbegin', newCvCard);
+      
+      // Réinitialiser le formulaire
+      fileInput.value = '';
+      filePreview.style.display = 'none';
+    });
+
+    // Enregistrer toutes les informations extraites
+    saveAllBtn.addEventListener('click', () => {
+      alert('Toutes les informations ont été enregistrées dans votre profil!');
+      // Ici, vous enverriez les données au serveur
+    });
+
+    // Bouton pour ajouter un nouveau CV
+    addNewCvBtn.addEventListener('click', () => {
+      document.getElementById('uploadArea').scrollIntoView({ behavior: 'smooth' });
+      fileInput.click();
+    });
+
+    // Gestion des actions sur les CV de l'historique
+    document.addEventListener('click', function(e) {
+      // Définir comme CV principal
+      if (e.target.closest('.btn-outline-primary') && e.target.closest('.cv-actions')) {
+        const card = e.target.closest('.cv-card');
+        // Retirer le badge "Principal" de tous les CV
+        document.querySelectorAll('.cv-card').forEach(c => {
+          c.classList.remove('cv-main');
+          const badge = c.querySelector('.badge');
+          if (badge) badge.remove();
+        });
+        
+        // Ajouter le badge au CV sélectionné
+        card.classList.add('cv-main');
+        const titleDiv = card.querySelector('.d-flex.justify-content-between');
+        if (titleDiv && !titleDiv.querySelector('.badge')) {
+          titleDiv.insertAdjacentHTML('beforeend', '<span class="badge bg-primary">Principal</span>');
+        }
+        
+        alert('Ce CV est maintenant défini comme votre CV principal');
+      }
+      
+      // Supprimer un CV
+      if (e.target.closest('.btn-outline-danger') && e.target.closest('.cv-actions')) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce CV ?')) {
+          const card = e.target.closest('.col-md-6');
+          if (card) card.remove();
+          alert('CV supprimé avec succès');
+        }
+      }
     });
   </script>
 </body>
