@@ -313,12 +313,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-side-menu activePage=8/>
+    <x-compoCandidat.side-menu activePage=8/>
   </div>
 
   <!-- Barre de navigation supérieure -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-navbar />
+    <x-compoCandidat.navbar />
   </nav>
 
   <!-- Contenu principal -->

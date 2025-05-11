@@ -198,12 +198,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-side-menu activePage=4 />
+    <x-compoCandidat.side-menu activePage=4 />
   </div>
 
   <!-- Barre de navigation supérieure enrichie -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-navbar />
+    <x-compoCandidat.navbar />
   </nav>
 
   <!-- Contenu principal -->
