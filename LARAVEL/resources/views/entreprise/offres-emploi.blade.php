@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offres d'emploi - Job Souk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/mon-profil.css">
+</head>
+<body>
+  <!-- Menu latéral fixe -->
+  <div class="side-menu">
+    <div class="d-flex flex-column h-100">
+      <!-- Logo -->
+      <div class="p-3 border-bottom">
+        <a class="navbar-brand d-flex align-items-center" href="../../CODE PROJECT/HTML/accueil.html">
+            <img src="../../image/job souk.png" alt="Logo de site web" width="35" height="35" class="me-2">
+            <span class="fw-bold" style="color: #E74C3C;">Job Souk</span>
+        </a>
+      </div>
+      
+      <!-- Navigation -->
+      <div class="flex-grow-1 p-3">
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="dashboard.html">
+              <i class="bi bi-speedometer2 me-3"></i>Tableau de bord
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="mon-profil.html">
+              <i class="bi bi-person me-3"></i> Mon profil
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link active d-flex align-items-center p-3 rounded" style="color: var(--secondary) ;" href="offres-emploi.html">
+              <i class="bi bi-briefcase me-3"></i> Offres d'emploi
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="evaluer-candidat.html">
+              <i class="bi bi-person-check me-3"></i> Évaluer Candidats
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="messages.html">
+              <i class="bi bi-envelope me-3"></i> Messages
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="entretiens.html">
+              <i class="bi bi-calendar me-3"></i> Entretiens
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="rechercher-candidats.html">
+              <i class="bi bi-search me-3"></i> Rechercher candidats
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="notification.html">
+              <i class="bi bi-bell me-3"></i> Notifications
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link d-flex align-items-center p-3 rounded" href="parametres.html">
+              <i class="bi bi-gear me-3"></i> Parametres
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barre de navigation supérieure -->
+  <nav class="top-navbar navbar navbar-expand">
+    <div class="container-fluid">
+      <button class="btn d-lg-none me-2" id="menuToggle" aria-label="Menu">
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <!-- Barre de recherche -->
+      <div class="position-relative">
+        <i class="bi bi-search nav-search-icon"></i>
+        <input type="text" class="form-control nav-search" placeholder="Rechercher des offres, candidats...">
+      </div>
+      
+      <div class="d-flex align-items-center ms-auto">
+        <!-- Notifications -->
+        <div class="dropdown me-3">
+          <button class="btn position-relative" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px;">
+            <li class="mb-2">
+              <a href="#" class="d-flex align-items-center p-2 rounded">
+                <div class="bg-primary bg-opacity-10 p-2 rounded me-2">
+                  <i class="bi bi-person-check text-primary"></i>
+                </div>
+                <div>
+                  <p class="mb-0 small fw-bold">Nouvelle candidature</p>
+                  <p class="mb-0 small text-muted">Pour Développeur Front-end</p>
+                </div>
+              </a>
+            </li>
+            <li class="mb-2">
+              <a href="#" class="d-flex align-items-center p-2 rounded">
+                <div class="bg-success bg-opacity-10 p-2 rounded me-2">
+                  <i class="bi bi-calendar-event text-success"></i>
+                </div>
+                <div>
+                  <p class="mb-0 small fw-bold">Entretien demain</p>
+                  <p class="mb-0 small text-muted">Avec Y. Benali à 14h</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="d-flex align-items-center p-2 rounded">
+                <div class="bg-info bg-opacity-10 p-2 rounded me-2">
+                  <i class="bi bi-envelope text-info"></i>
+                </div>
+                <div>
+                  <p class="mb-0 small fw-bold">Message non lu</p>
+                  <p class="mb-0 small text-muted">De Société XYZ</p>
+                </div>
+              </a>
+            </li>
+            <li><hr class="dropdown-divider my-2">
+              <a href="notification.html" class="d-flex align-items-center justify-content-center p-2 rounded btn btn-primary text-center">
+                Toutes les notifications
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Profil utilisateur -->
+        <div class="dropdown">
+          <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+            <img src="https://via.placeholder.com/32" alt="Profile" class="rounded-circle me-2" width="32" height="32">
+            <span class="d-none d-md-inline">Mon compte</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profil</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <div class="container-fluid">
+      <!-- En-tête -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1">Offres d'emploi</h2>
+          <p class="text-muted mb-0">Gérez vos offres d'emploi publiées</p>
+        </div>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#publishOfferModal">
+          <i class="bi bi-plus-lg"></i> Publier une offre
+        </button>
+      </div>
+      
+      <!-- Filtres -->
+      <div class="dashboard-card p-4 mb-4">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Statut</label>
+            <select class="form-select">
+              <option selected>Toutes les offres</option>
+              <option>Actives</option>
+              <option>Clôturées</option>
+              <option>Brouillons</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Localisation</label>
+            <select class="form-select">
+              <option selected>Toutes</option>
+              <option>Casablanca</option>
+              <option>Rabat</option>
+              <option>Marrakech</option>
+              <option>Remote</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Type de contrat</label>
+            <select class="form-select">
+              <option selected>Tous</option>
+              <option>CDI</option>
+              <option>CDD</option>
+              <option>Freelance</option>
+              <option>Stage</option>
+            </select>
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-outline-secondary w-100">
+              <i class="bi bi-funnel"></i> Filtrer
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Statistiques -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="dashboard-card p-3 text-center">
+            <h3 class="fw-bold mb-1" style="color: var(--primary);">12</h3>
+            <p class="text-muted mb-0">Offres actives</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashboard-card p-3 text-center">
+            <h3 class="fw-bold mb-1" style="color: var(--secondary);">156</h3>
+            <p class="text-muted mb-0">Candidatures</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashboard-card p-3 text-center">
+            <h3 class="fw-bold mb-1" style="color: var(--accent);">24</h3>
+            <p class="text-muted mb-0">Entretiens</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashboard-card p-3 text-center">
+            <h3 class="fw-bold mb-1" style="color: #3498db;">8</h3>
+            <p class="text-muted mb-0">Offres clôturées</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Liste des offres -->
+      <div class="dashboard-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="section-title fw-bold">Vos offres d'emploi</h4>
+          <div class="d-flex">
+            <div class="input-group me-2" style="width: 250px;">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" placeholder="Rechercher...">
+            </div>
+            <button class="btn btn-outline-secondary">
+              <i class="bi bi-sort-down"></i> Trier
+            </button>
+          </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Poste</th>
+                <th>Candidats</th>
+                <th>Localisation</th>
+                <th>Type</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
+                    <div>
+                      <h6 class="fw-bold mb-0">Développeur Full Stack</h6>
+                      <small class="text-muted">TechnoSoft Solutions</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge bg-primary bg-opacity-10 text-primary">24 candidats</span>
+                </td>
+                <td>Casablanca</td>
+                <td>CDI</td>
+                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
+                <td>15/06/2023</td>
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
+                    <div>
+                      <h6 class="fw-bold mb-0">Chef de Projet IT</h6>
+                      <small class="text-muted">TechnoSoft Solutions</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge bg-primary bg-opacity-10 text-primary">18 candidats</span>
+                </td>
+                <td>Rabat</td>
+                <td>CDI</td>
+                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
+                <td>10/06/2023</td>
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
+                    <div>
+                      <h6 class="fw-bold mb-0">Designer UI/UX</h6>
+                      <small class="text-muted">TechnoSoft Solutions</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge bg-primary bg-opacity-10 text-primary">32 candidats</span>
+                </td>
+                <td>Remote</td>
+                <td>CDD</td>
+                <td><span class="badge bg-secondary bg-opacity-10 text-secondary">Clôturée</span></td>
+                <td>25/05/2023</td>
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
+                    <div>
+                      <h6 class="fw-bold mb-0">Data Scientist</h6>
+                      <small class="text-muted">TechnoSoft Solutions</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge bg-primary bg-opacity-10 text-primary">12 candidats</span>
+                </td>
+                <td>Casablanca</td>
+                <td>CDI</td>
+                <td><span class="badge bg-warning bg-opacity-10 text-warning">Brouillon</span></td>
+                <td>05/06/2023</td>
+                <td>
+                  <div class="dropdown">
+                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Publier une offre -->
+  <div class="modal fade" id="publishOfferModal" tabindex="-1" aria-labelledby="publishOfferModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="publishOfferModalLabel">Publier une nouvelle offre d'emploi</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="jobTitle" class="form-label">Intitulé du poste*</label>
+                <input type="text" class="form-control" id="jobTitle" placeholder="Ex: Développeur Full Stack" required>
+              </div>
+              <div class="col-md-6">
+                <label for="companyName" class="form-label">Nom de l'entreprise*</label>
+                <input type="text" class="form-control" id="companyName" placeholder="Ex: TechnoSoft Solutions" required>
+              </div>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="jobType" class="form-label">Type de contrat*</label>
+                <select class="form-select" id="jobType" required>
+                  <option value="" selected disabled>Sélectionner</option>
+                  <option>CDI</option>
+                  <option>CDD</option>
+                  <option>Freelance</option>
+                  <option>Stage</option>
+                  <option>Alternance</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="jobLocation" class="form-label">Localisation*</label>
+                <select class="form-select" id="jobLocation" required>
+                  <option value="" selected disabled>Sélectionner</option>
+                  <option>Casablanca</option>
+                  <option>Rabat</option>
+                  <option>Marrakech</option>
+                  <option>Tanger</option>
+                  <option>Remote</option>
+                  <option>Hybride</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="salaryRange" class="form-label">Salaire (optionnel)</label>
+                <input type="text" class="form-control" id="salaryRange" placeholder="Ex: 15 000 - 20 000 MAD">
+              </div>
+              <div class="col-md-6">
+                <label for="experienceLevel" class="form-label">Niveau d'expérience*</label>
+                <select class="form-select" id="experienceLevel" required>
+                  <option value="" selected disabled>Sélectionner</option>
+                  <option>Débutant (0-2 ans)</option>
+                  <option>Intermédiaire (2-5 ans)</option>
+                  <option>Confirmé (5-10 ans)</option>
+                  <option>Senior (+10 ans)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="jobDescription" class="form-label">Description du poste*</label>
+              <textarea class="form-control" id="jobDescription" rows="5" placeholder="Décrivez en détail les missions et responsabilités du poste..." required></textarea>
+            </div>
+            
+            <div class="mb-3">
+              <label for="jobRequirements" class="form-label">Compétences requises*</label>
+              <textarea class="form-control" id="jobRequirements" rows="3" placeholder="Listez les compétences et qualifications nécessaires..." required></textarea>
+              <div class="form-text">Séparez les compétences par des virgules</div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="jobBenefits" class="form-label">Avantages (optionnel)</label>
+              <textarea class="form-control" id="jobBenefits" rows="2" placeholder="Listez les avantages proposés..."></textarea>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="applicationDeadline" class="form-label">Date limite de candidature</label>
+                <input type="date" class="form-control" id="applicationDeadline">
+              </div>
+              <div class="col-md-6">
+                <label for="jobStatus" class="form-label">Statut de publication</label>
+                <select class="form-select" id="jobStatus">
+                  <option value="active" selected>Publier immédiatement</option>
+                  <option value="draft">Enregistrer comme brouillon</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="border-top pt-3 mb-3">
+              <h6 class="fw-bold">Informations supplémentaires</h6>
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="contactEmail" class="form-label">Email de contact*</label>
+                  <input type="email" class="form-control" id="contactEmail" placeholder="contact@entreprise.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="contactPhone" class="form-label">Téléphone (optionnel)</label>
+                  <input type="tel" class="form-control" id="contactPhone" placeholder="06 12 34 56 78">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary">Publier l'offre</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/offres-emploi.js"></script>
+</body>
+</html>

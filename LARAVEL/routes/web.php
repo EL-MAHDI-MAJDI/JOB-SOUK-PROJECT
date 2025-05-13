@@ -2,6 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+Require __DIR__.'/webCandidat.php'; // Require __DIR__.'/fichier-route' necessaire pour inclure tout les fichiers de routes
+
+Require __DIR__.'/webEntreprise.php'; 
+
+Require __DIR__.'/webAdmin.php'; 
