@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accueil - Job souk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ asset('storage/StyleIndex/accueil.css') }}" />
+</head>
+<body>
+  <!-- Navbar -->
+   <x-compoIndex.navbar activePage='1'/>
+
+<!-- Section Pourquoi nous choisir -->
+<section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="mb-4 text-center">Pourquoi choisir Job Souk?</h2>
+      <div class="row g-4">
+        <div class="col-md-4 text-center">
+          <div class="why-card p-3">
+            <i class="bi bi-search text-primary mb-3" style="font-size: 2.5rem;"></i>
+            <h4>+10,000 offres</h4>
+            <p>Des milliers d'offres d'emploi dans tous les secteurs au Maroc.</p>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="why-card p-3">
+            <i class="bi bi-lightning-charge text-primary mb-3" style="font-size: 2.5rem;"></i>
+            <h4>Processus rapide</h4>
+            <p>Postulez en quelques clics et obtenez des réponses rapidement.</p>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <div class="why-card p-3">
+            <i class="bi bi-building text-primary mb-3" style="font-size: 2.5rem;"></i>
+            <h4>Entreprises vérifiées</h4>
+            <p>Nous vérifions toutes les entreprises qui publient sur notre plateforme.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Catégories populaires -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="mb-4 text-center">Explorez les catégories populaires</h2>
+      <div class="row g-3">
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="category-card text-center p-3 border rounded">
+            <i class="bi bi-code-slash mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+            <h6>Informatique</h6>
+            <small>548 offres</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="category-card text-center p-3 border rounded">
+            <i class="bi bi-cash-coin mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+            <h6>Finance</h6>
+            <small>325 offres</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="category-card text-center p-3 border rounded">
+            <i class="bi bi-bag mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+            <h6>Marketing</h6>
+            <small>412 offres</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="category-card text-center p-3 border rounded">
+            <i class="bi bi-hospital mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+            <h6>Santé</h6>
+            <small>236 offres</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="category-card text-center p-3 border rounded">
+            <i class="bi bi-truck mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+            <h6>Logistique</h6>
+            <small>189 offres</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <div class="category-card text-center p-3 border rounded">
+            <i class="bi bi-gear mb-2" style="font-size: 2rem; color: var(--primary);"></i>
+            <h6>Industrie</h6>
+            <small>274 offres</small>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="#" class="btn btn-outline-primary">Voir toutes les catégories</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Témoignages -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="mb-4 text-center">Ce que disent nos utilisateurs</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 bg-white rounded shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+              <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                <span>SM</span>
+              </div>
+              <div>
+                <h5 class="mb-0">Sarah Mansouri</h5>
+                <p class="mb-0 text-muted small">Développeuse Web</p>
+              </div>
+            </div>
+            <p class="mb-2">"Grâce à Job Souk, j'ai trouvé mon emploi idéal en seulement 2 semaines. Le processus était simple et efficace."</p>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 bg-white rounded shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                <span>YB</span>
+              </div>
+              <div>
+                <h5 class="mb-0">Youssef Benali</h5>
+                <p class="mb-0 text-muted small">Analyste Financier</p>
+              </div>
+            </div>
+            <p class="mb-2">"Le site est très intuitif et les offres sont pertinentes. J'ai reçu plusieurs propositions qui correspondaient parfaitement à mon profil."</p>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-half"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card p-4 bg-white rounded shadow-sm">
+            <div class="d-flex align-items-center mb-3">
+              <div class="rounded-circle bg-accent text-dark d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; background-color: var(--accent);">
+                <span>LN</span>
+              </div>
+              <div>
+                <h5 class="mb-0">Leila Nassiri</h5>
+                <p class="mb-0 text-muted small">Chargée Marketing</p>
+              </div>
+            </div>
+            <p class="mb-2">"Un grand merci à l'équipe de Job Souk! J'ai pu décrocher un entretien dans une grande entreprise grâce à votre plateforme."</p>
+            <div class="text-warning">
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Entreprises partenaires -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="mb-4 text-center">Ils nous font confiance</h2>
+      <div class="row g-4 align-items-center justify-content-center">
+        <div class="col-4 col-md-2 text-center">
+          <div class="company-logo p-3">
+            <div class="placeholder-logo bg-light d-flex align-items-center justify-content-center" style="height: 80px;">
+              <span class="fw-bold text-muted">Logo 1</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md-2 text-center">
+          <div class="company-logo p-3">
+            <div class="placeholder-logo bg-light d-flex align-items-center justify-content-center" style="height: 80px;">
+              <span class="fw-bold text-muted">Logo 2</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md-2 text-center">
+          <div class="company-logo p-3">
+            <div class="placeholder-logo bg-light d-flex align-items-center justify-content-center" style="height: 80px;">
+              <span class="fw-bold text-muted">Logo 3</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md-2 text-center">
+          <div class="company-logo p-3">
+            <div class="placeholder-logo bg-light d-flex align-items-center justify-content-center" style="height: 80px;">
+              <span class="fw-bold text-muted">Logo 4</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md-2 text-center">
+          <div class="company-logo p-3">
+            <div class="placeholder-logo bg-light d-flex align-items-center justify-content-center" style="height: 80px;">
+              <span class="fw-bold text-muted">Logo 5</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 col-md-2 text-center">
+          <div class="company-logo p-3">
+            <div class="placeholder-logo bg-light d-flex align-items-center justify-content-center" style="height: 80px;">
+              <span class="fw-bold text-muted">Logo 6</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Guide/Blog -->
+  <section class="py-5 bg-light">
+    <div class="container">
+      <h2 class="mb-4 text-center">Guide & Conseils pour votre carrière</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="bg-secondary text-center text-white p-4">
+              <i class="bi bi-file-earmark-text" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Comment rédiger un CV parfait</h5>
+              <p class="card-text">Découvrez nos conseils d'experts pour créer un CV qui attire l'attention des recruteurs.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm">Lire l'article</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="bg-primary text-center text-white p-4">
+              <i class="bi bi-chat-dots" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Réussir son entretien d'embauche</h5>
+              <p class="card-text">Préparez-vous efficacement et impressionnez vos futurs employeurs avec ces techniques.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm">Lire l'article</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="bg-accent text-center text-dark p-4" style="background-color: var(--accent);">
+              <i class="bi bi-graph-up" style="font-size: 3rem;"></i>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Négocier son salaire efficacement</h5>
+              <p class="card-text">Apprenez à valoriser vos compétences et à obtenir le salaire que vous méritez.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm">Lire l'article</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="#" class="btn btn-primary">Voir tous les articles</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section CTA (Call to Action) -->
+  <section class="py-5" style="background: linear-gradient(to right, var(--primary), var(--secondary));">
+    <div class="container text-center text-white">
+      <h2 class="mb-3">Prêt à donner un nouvel élan à votre carrière?</h2>
+      <p class="lead mb-4">Inscrivez-vous dès maintenant pour accéder à toutes les offres d'emploi</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="#" class="btn btn-light btn-lg">Créer un compte</a>
+        <a href="#" class="btn btn-outline-light btn-lg">En savoir plus</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-5 pt-5 pb-4" style="background-color: #E74C3C; color: white;">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-4 mb-4">
+        <h5>Job Souk</h5>
+        <p>Job Souk est une plateforme marocaine dédiée à la mise en relation entre recruteurs et talents. Trouvez votre prochain défi professionnel dès aujourd'hui.</p>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <h5>Liens rapides</h5>
+        <ul class="list-unstyled">
+          <li><a href="accueil.html" class="text-white text-decoration-none">Accueil</a></li>
+          <li><a href="offre.html" class="text-white text-decoration-none">Offres d'Emploi</a></li>
+          <li><a href="Entreprises.html" class="text-white text-decoration-none">Entreprises</a></li>
+          <li><a href="conexion.html" class="text-white text-decoration-none">Se connecter</a></li>
+          <li><a href="choix-inscription.html" class="text-white text-decoration-none">Créer un compte</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <h5>Contact</h5>
+        <p><i class="bi bi-geo-alt"></i> Fes, Maroc</p>
+        <p><i class="bi bi-envelope"></i> contact@jobfinder.ma</p>
+        <p><i class="bi bi-telephone"></i> +212 6 00 00 00 00</p>
+        <div class="mt-3">
+          <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="border-light" />
+    <div class="text-center">
+      <small>&copy; 2025 JobFinder. Tous droits réservés. | <a href="#" class="text-white text-decoration-underline">Mentions légales</a> | <a href="#" class="text-white text-decoration-underline">Politique de confidentialité</a></small>
+    </div>
+  </div>
+</footer>
+
+  <!-- Bouton retour en haut -->
+  <a href="{{ route('accueil') }}" class="scroll-to-top" id="scrollToTop" aria-label="Retour en haut">
+    <i class="bi bi-arrow-up"></i>
+  </a>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ asset('storage/indexJs/script.js') }}"></script>
+</body>
+</html>

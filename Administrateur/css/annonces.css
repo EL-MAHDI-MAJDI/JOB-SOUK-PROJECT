@@ -37,7 +37,7 @@ body {
 
 .side-menu .nav-link.active {
   background: var(--primary-light1);
-  color: var(--secondary1);
+  color: var(--secondary);
 }
 /* Main Content */
 .main-content {

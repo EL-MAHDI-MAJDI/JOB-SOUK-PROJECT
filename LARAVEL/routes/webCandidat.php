@@ -13,26 +13,25 @@ use App\Http\Controllers\candidat\notificationController;
 use App\Http\Controllers\candidat\parametreController;
 
 
-Route::get('/', [dashboardController::class,'index'])->name('dashboard.index');
 
-Route::get('/dashboard',[dashboardController::class,'index'])->name('dashboard.index');
+Route::get('/candidat/dashboard',[dashboardController::class,'index'])->name('candidat.dashboard');
 
-Route::get('/profil',[profilController::class,'index'])->name('profil.index');
+Route::get('/candidat/profil',[profilController::class,'index'])->name('candidat.profil');
 
-Route::get('/cv',[cvController::class,'index'])->name('cv.index');
+Route::get('/candidat/cv',[cvController::class,'index'])->name('candidat.cv');
 
-Route::get('/mesCandidatures',[mesCandidaturesController::class,'index'])->name('mesCandidatures.index');
+Route::get('/candidat/mesCandidatures',[mesCandidaturesController::class,'index'])->name('candidat.mesCandidatures');
 
-Route::get('/chercherOffres',[chercherOffresController::class,'index'])->name('chercherOffres.index');
+Route::get('/candidat/chercherOffres',[chercherOffresController::class,'index'])->name('candidat.chercherOffres');
 
-Route::get('/offreSauvgarder',[offreSauvgarderController::class,'index'])->name('offreSauvgarder.index');
+Route::get('/candidat/offreSauvgarder',[offreSauvgarderController::class,'index'])->name('candidat.offreSauvgarder');
 
-Route::get('/mesEntretiens',[mesEntretiensController::class,'index'])->name('mesEntretiens.index');
+Route::get('/candidat/mesEntretiens',[mesEntretiensController::class,'index'])->name('candidat.mesEntretiens');
 
-Route::get('/message',[messageController::class,'index'])->name('message.index');
+Route::get('/candidat/message',[messageController::class,'index'])->name('candidat.message');
 
-Route::get('/notification',[notificationController::class,'index'])->name('notification.index');
+Route::get('/candidat/notification',[notificationController::class,'index'])->name('candidat.notification');
 
-Route::get('/parametre',[parametreController::class,'index'])->name('parametre.index');
+Route::get('/candidat/parametre',[parametreController::class,'index'])->name('candidat.parametre');
 
 
