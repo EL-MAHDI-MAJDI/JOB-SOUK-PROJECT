@@ -9,6 +9,8 @@
   --text-light: #ffffff;
   --background: #ffffff;
   --sidebar-width: 280px;
+  --primary1: #E74C3C;
+  --primary-light1: rgba(231, 76, 60, 0.1);
 }
 
 body {
@@ -30,7 +32,15 @@ body {
   overflow-y: auto;
   z-index: 1000;
 }
+.side-menu .nav-link:hover {
+  background: var(--primary-light1);
+  color: var(--primary1);
+}
 
+.side-menu .nav-link.active {
+  background: var(--primary-light1);
+  color: var(--secondary1);
+}
 /* Contenu principal */
 .main-content {
   padding: 1.5rem;
