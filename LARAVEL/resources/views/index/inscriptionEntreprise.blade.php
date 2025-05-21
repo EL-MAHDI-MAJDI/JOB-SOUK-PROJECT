@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-  <link rel="stylesheet" href="{{ asset('storage/StyleIndex/inscriptionEntreprise.css') }}">
+  @vite(['resources/css/StyleIndex/inscriptionEntreprise.css'])
 </head>
 <body>
   <!-- Navbar -->
@@ -114,6 +114,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ asset('storage/indexJs/numero-telephone.js') }}"></script>
+  @vite(['resources/js/indexJs/numero-telephone.js'])
 </body>
 </html>

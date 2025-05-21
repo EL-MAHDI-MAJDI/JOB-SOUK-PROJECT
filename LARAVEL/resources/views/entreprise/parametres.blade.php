@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" as="style">
-  <link rel="stylesheet" href="{{ asset('storage/StyleEntreprise/parametres.css') }}">
+  @vite(['resources/css/StyleEntreprise/parametres.css'])
 </head>
 <body>
   <!-- Menu latéral fixe -->
@@ -400,6 +400,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ asset('storage/entrepriseJs/parametres.js') }}"></script>
+  @vite(['resources/js/entrepriseJs/parametres.js'])
 </body>
 </html>

@@ -13,25 +13,26 @@ use App\Http\Controllers\candidat\notificationController;
 use App\Http\Controllers\candidat\parametreController;
 
 
+Route::prefix('candidat')->name('candidat.')->group(function () {
+   
+    Route::get('dashboard',[dashboardController::class,'index'])->name('dashboard');
 
-Route::get('/candidat/dashboard',[dashboardController::class,'index'])->name('candidat.dashboard');
+    Route::get('profil',[profilController::class,'index'])->name('profil');
 
-Route::get('/candidat/profil',[profilController::class,'index'])->name('candidat.profil');
+    Route::get('cv',[cvController::class,'index'])->name('cv');
 
-Route::get('/candidat/cv',[cvController::class,'index'])->name('candidat.cv');
+    Route::get('mesCandidatures',[mesCandidaturesController::class,'index'])->name('mesCandidatures');
 
-Route::get('/candidat/mesCandidatures',[mesCandidaturesController::class,'index'])->name('candidat.mesCandidatures');
+    Route::get('chercherOffres',[chercherOffresController::class,'index'])->name('chercherOffres');
 
-Route::get('/candidat/chercherOffres',[chercherOffresController::class,'index'])->name('candidat.chercherOffres');
+    Route::get('offreSauvgarder',[offreSauvgarderController::class,'index'])->name('offreSauvgarder');
 
-Route::get('/candidat/offreSauvgarder',[offreSauvgarderController::class,'index'])->name('candidat.offreSauvgarder');
+    Route::get('mesEntretiens',[mesEntretiensController::class,'index'])->name('mesEntretiens');
 
-Route::get('/candidat/mesEntretiens',[mesEntretiensController::class,'index'])->name('candidat.mesEntretiens');
+    Route::get('message',[messageController::class,'index'])->name('message');
 
-Route::get('/candidat/message',[messageController::class,'index'])->name('candidat.message');
+    Route::get('notification',[notificationController::class,'index'])->name('notification');
 
-Route::get('/candidat/notification',[notificationController::class,'index'])->name('candidat.notification');
+    Route::get('parametre',[parametreController::class,'index'])->name('parametre');
 
-Route::get('/candidat/parametre',[parametreController::class,'index'])->name('candidat.parametre');
-
-
+});

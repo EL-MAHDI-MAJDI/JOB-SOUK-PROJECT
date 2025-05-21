@@ -1,0 +1,249 @@
+:root {
+  --primary: #E74C3C;
+  --primary-light: rgba(231, 76, 60, 0.1);
+  --secondary: #2ECC71;
+  --accent: #FFD700;
+  --text-main: #36454F;
+  --text-light: #ffffff;
+  --background: #ffffff;
+  --sidebar-width: 280px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #f8fafc;
+  color: var(--text-main);
+  margin-left: var(--sidebar-width);
+}
+
+/* Barre latérale fixe */
+.side-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--background);
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.side-menu .nav-link:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.side-menu .nav-link.active {
+  background: var(--primary-light);
+  color: var(--secondary);
+}
+
+/* Contenu principal */
+.main-content {
+  padding: 2rem;
+}
+
+/* Styles supplémentaires pour la page Offres d'emploi */
+/* Tableau */
+.main-content {
+  padding: 1.5rem;
+}
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(231, 76, 60, 0.02);
+  }
+  
+  .table th {
+    font-weight: 600;
+    color: var(--text-main);
+    border-bottom: 2px solid #eee;
+  }
+  
+  .table td {
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+    padding: 1rem 0.5rem;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: rgba(231, 76, 60, 0.05);
+  }
+  
+  /* Pagination */
+  .pagination .page-item.active .page-link {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .pagination .page-link {
+    color: var(--primary);
+    border-radius: 6px;
+    margin: 0 3px;
+    border: 1px solid #eee;
+  }
+  
+  .pagination .page-link:hover {
+    background-color: var(--primary-light);
+  }
+  
+  /* Badges */
+  .badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+  }
+  
+  /* Input group */
+  .input-group-text {
+    background-color: #f8f9fa;
+    border-right: none;
+  }
+  
+  .form-control {
+    border-left: none;
+    background-color: #f8f9fa;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    background-color: white;
+    border-color: #ced4da;
+  }
+/* Barre de navigation supérieure enrichie */
+  .top-navbar {
+    background: var(--background);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 1.5rem;
+  }
+  
+  .nav-search {
+    width: 300px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    padding-left: 40px;
+  }
+.nav-search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+.p-3 {
+  padding: 14px !important;
+}
+.side-menu .nav-link:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.side-menu .nav-link.active {
+  background: var(--primary-light);
+  color: var(--secondary);
+}
+
+/* Barre de navigation supérieure enrichie */
+.top-navbar {
+  background: var(--background);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 1.5rem;
+}
+
+.nav-search {
+  width: 300px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  padding-left: 40px;
+}
+
+.nav-search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+/* Cartes */
+.dashboard-card {
+  background: var(--background);
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Notification styles */
+.notification-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.notification-item.unread {
+  background-color: var(--primary-light);
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.notification-badge {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.notification-actions {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.notification-item:hover .notification-actions {
+  opacity: 1;
+}
+
+/* Version mobile */
+@media (max-width: 992px) {
+  body {
+    margin-left: 0;
+  }
+  
+  .side-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .side-menu.show {
+    transform: translateX(0);
+  }
+  
+  .nav-search {
+    width: 200px;
+  }
+}
+
+.p-3 {
+  padding: 14px !important;
+}

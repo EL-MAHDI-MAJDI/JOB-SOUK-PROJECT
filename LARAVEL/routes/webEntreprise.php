@@ -11,20 +11,23 @@ use App\Http\Controllers\entreprise\parametresController;
 use App\Http\Controllers\entreprise\notificationController;
 use App\Http\Controllers\entreprise\rechercherCandidatsController;
 
-Route::get('/entreprise/dashboard', [dashboardController::class,'index'])->name('entreprise.dashboard');
+Route::prefix('entreprise')->name('entreprise.')->group(function () {
+    Route::get('dashboard', [dashboardController::class,'index'])->name('dashboard');
 
-Route::get('/entreprise/entretiens', [entretiensController::class,'index'])->name('entreprise.entretiens');
+    Route::get('entretiens', [entretiensController::class,'index'])->name('entretiens');
 
-Route::get('/entreprise/offresEmploi', [offresEmploiController::class,'index'])->name('entreprise.offresEmploi');
+    Route::get('offresEmploi', [offresEmploiController::class,'index'])->name('offresEmploi');
 
-Route::get('/entreprise/messages', [messagesController::class,'index'])->name('entreprise.messages');
+    Route::get('messages', [messagesController::class,'index'])->name('messages');
 
-Route::get('/entreprise/monProfil', [monProfilController::class,'index'])->name('entreprise.monProfil');
+    Route::get('monProfil', [monProfilController::class,'index'])->name('monProfil');
 
-Route::get('/entreprise/evaluerCandidat', [evaluerCandidatController::class,'index'])->name('entreprise.evaluerCandidat');
+    Route::get('evaluerCandidat', [evaluerCandidatController::class,'index'])->name('evaluerCandidat');
 
-Route::get('/entreprise/parametres', [parametresController::class,'index'])->name('entreprise.parametres');
+    Route::get('parametres', [parametresController::class,'index'])->name('parametres');
 
-Route::get('/entreprise/notification', [notificationController::class,'index'])->name('entreprise.notification');
+    Route::get('notification', [notificationController::class,'index'])->name('notification');
 
-Route::get('/entreprise/rechercherCandidats', [rechercherCandidatsController::class,'index'])->name('entreprise.rechercherCandidats');
+    Route::get('rechercherCandidats', [rechercherCandidatsController::class,'index'])->name('rechercherCandidats');
+
+});

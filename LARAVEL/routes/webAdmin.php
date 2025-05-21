@@ -10,21 +10,22 @@ use App\Http\Controllers\admin\parametresController;
 use App\Http\Controllers\admin\signalementsController;
 use App\Http\Controllers\admin\administrateursController;
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', [dashboardController::class,'index'])->name('dashboard');
 
-Route::get('/admin/dashboard', [dashboardController::class,'index'])->name('admin.dashboard');
+    Route::get('gestionOffres', [gestionOffresController::class,'index'])->name('gestionOffres');
 
-Route::get('/admin/gestionOffres', [gestionOffresController::class,'index'])->name('admin.gestionOffres');
+    Route::get('annonces', [annoncesController::class,'index'])->name('annonces');
 
-Route::get('/admin/annonces', [annoncesController::class,'index'])->name('admin.annonces');
+    Route::get('categories', [categoriesController::class,'index'])->name('categories');
 
-Route::get('/admin/categories', [categoriesController::class,'index'])->name('admin.categories');
+    Route::get('gestionComptes', [gestionComptesController::class,'index'])->name('gestionComptes');
 
-Route::get('/admin/gestionComptes', [gestionComptesController::class,'index'])->name('admin.gestionComptes');
+    Route::get('parametres', [parametresController::class,'index'])->name('parametres');
+        
+    Route::get('signalements', [signalementsController::class,'index'])->name('signalements');
 
-Route::get('/admin/parametres', [parametresController::class,'index'])->name('admin.parametres');
+    Route::get('administrateurs', [administrateursController::class,'index'])->name('administrateurs');
 
-Route::get('/admin/signalements', [signalementsController::class,'index'])->name('admin.signalements');
-
-Route::get('/admin/administrateurs', [administrateursController::class,'index'])->name('admin.administrateurs');
-
+});
 

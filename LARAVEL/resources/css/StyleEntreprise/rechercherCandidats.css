@@ -1,0 +1,187 @@
+:root {
+  --primary: #E74C3C;
+  --primary-light: rgba(231, 76, 60, 0.1);
+  --secondary: #2ECC71;
+  --accent: #FFD700;
+  --text-main: #36454F;
+  --text-light: #ffffff;
+  --background: #ffffff;
+  --sidebar-width: 280px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: #f8fafc;
+  color: var(--text-main);
+  margin-left: var(--sidebar-width);
+}
+
+/* Barre latérale fixe */
+.side-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background: var(--background);
+  border-right: 1px solid #eee;
+  overflow-y: auto;
+  z-index: 1000;
+}
+.side-menu .nav-link:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.side-menu .nav-link.active {
+  background: var(--primary-light);
+  color: var(--secondary);
+}
+/* Contenu principal */
+.main-content {
+  padding: 1.5rem;
+  margin-left: 0;
+}
+
+/* Barre de navigation supérieure enrichie */
+.top-navbar {
+  background: var(--background);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 1.5rem;
+}
+
+.nav-search {
+  width: 300px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  padding-left: 40px;
+}
+
+.nav-search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+/* Cartes */
+.dashboard-card {
+  background: var(--background);
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  height: auto;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Version mobile */
+@media (max-width: 992px) {
+  body {
+    margin-left: 0;
+  }
+  
+  .side-menu {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .side-menu.show {
+    transform: translateX(0);
+  }
+}
+
+/* Styles spécifiques à la page Rechercher Candidats */
+.bg-primary-light {
+  background-color: var(--primary-light);
+}
+
+.list-group-item {
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.input-group-text {
+  border-right: none;
+}
+
+.form-control, .form-select {
+  border-left: none;
+}
+
+.form-control:focus, .form-select:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}
+
+.page-item.active .page-link {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.page-link {
+  color: #0d6efd;
+}
+
+.page-link:hover {
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .candidate-actions {
+    margin-top: 1rem;
+    justify-content: flex-start !important;
+  }
+  
+  .candidate-info div {
+    margin-bottom: 0.5rem;
+  }
+}
+.p-3 {
+  padding: 14px !important;
+}
+
+/* Styles pour le modal des filtres avancés */
+.filter-modal .modal-dialog {
+  max-width: 800px;
+}
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+.filter-section h5 {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+.skill-tag {
+  display: inline-block;
+  background: #f0f0f0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin: 0.25rem;
+  cursor: pointer;
+}
+.skill-tag.selected {
+  background: var(--primary);
+  color: white;
+}
+.salary-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.salary-inputs .form-control {
+  flex: 1;
+}
