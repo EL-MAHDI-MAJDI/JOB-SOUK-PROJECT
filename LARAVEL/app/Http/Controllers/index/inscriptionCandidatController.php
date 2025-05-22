@@ -29,7 +29,7 @@ class inscriptionCandidatController extends Controller
             'prenom'=>'required|string|max:30',
             'nom'=>'required|string|max:30',
             'email'=>'required|email|unique:candidats',
-            'phone'=>'required|regex:/^[0-9\-]+$/|max:15',
+            'phone'=>'required|regex:/^[0-9\-]+$/|max:20',
             'ville'=>'required|string|max:30',
             'adresse'=>'required|string|max:100',
             'titre_professionnel'=>'nullable|string|max:50',

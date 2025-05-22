@@ -56,7 +56,7 @@
       
       <!-- Déconnexion -->
       <div class="p-3 border-top">
-        <a class="nav-link d-flex align-items-center p-3 rounded text-danger" href="../../CODE PROJECT/HTML/conexion.html">
+        <a class="nav-link d-flex align-items-center p-3 rounded text-danger" href="{{ route('login')}}">
           <i class="bi bi-box-arrow-right me-3"></i> Déconnexion
         </a>
       </div>

@@ -8,7 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  @vite(['resources/css/StyleIndex/conexion.css'])
+  @vite(['resources/css/StyleIndex/login.css'])
 </head>
 <body>
     <!-- Navbar -->
@@ -18,7 +18,7 @@
     <div class="container">
       <div class="login-card mx-auto">
         <h2>Connexion</h2>
-        <form action="{{ route('conexion') }}" method="POST">
+        <form action="{{ route('login') }}" method="POST">
           @csrf
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>

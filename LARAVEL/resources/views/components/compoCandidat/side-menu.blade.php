@@ -67,7 +67,7 @@
       
       <!-- Déconnexion -->
       <!-- <div class="p-3 border-top">
-        <a href="../../CODE PROJECT/HTML/conexion.html" class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
+        <a href="../../CODE PROJECT/HTML/login.html" class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
           <i class="bi bi-box-arrow-right me-2"></i> Déconnexion
         </a>
       </div> -->

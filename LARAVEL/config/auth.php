@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'candidats',
         ],
+        'entreprises' => [
+            'driver' => 'session',
+            'provider' => 'entreprises',
+        ],
     ],
 
     /*
@@ -72,6 +76,10 @@ return [
         'candidats' => [
             'driver' => 'database',
             'table' => 'candidats',
+        ],
+        'entreprises' => [
+            'driver' => 'database',
+            'table' => 'entreprises',
         ],
     ],
 
@@ -103,6 +111,12 @@ return [
         ],
         'candidats' => [
             'provider' => 'candidats',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'entreprises' => [
+            'provider' => 'entreprises',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

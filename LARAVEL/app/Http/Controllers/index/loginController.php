@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class loginController extends Controller
 {
     public function show(){
-        return view('index.conexion');
+        return view('index.login');
     }
 
 
@@ -30,7 +30,10 @@ class loginController extends Controller
 
             return to_route('candidat.dashboard');
 
-        }else{
+        }else
+        if(Auth::guard('entreprises')->attempt($credentials)){
+            return to_route('entreprise.dashboard');
+        }else
             return back()->withErrors([
                 'error' => 'Votre adresse e-mail ou votre mot de passe est incorrect. Veuillez le vérifier.',
             ])->onlyInput('email');
@@ -41,4 +44,4 @@ class loginController extends Controller
 
 
 
-}
+

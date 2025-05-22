@@ -382,7 +382,7 @@
             <li><a href="accueil.html" class="text-white text-decoration-none">Accueil</a></li>
             <li><a href="offre.html" class="text-white text-decoration-none">Offres d'Emploi</a></li>
             <li><a href="Entreprises.html" class="text-white text-decoration-none">Entreprises</a></li>
-            <li><a href="conexion.html" class="text-white text-decoration-none">Se connecter</a></li>
+            <li><a href="login.html" class="text-white text-decoration-none">Se connecter</a></li>
             <li><a href="choix-inscription.html" class="text-white text-decoration-none">Créer un compte</a></li>
           </ul>
         </div>

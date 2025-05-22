@@ -23,25 +23,25 @@
           @csrf
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="prenom" class="form-label">Prénom</label>
-              <input type="text" name="prenom" class="form-control" id="prenom" value="{{ old('prenom') }}">
+              <label for="prenom" class="form-label">Prénom*</label>
+              <input type="text" name="prenom" class="form-control @error('prenom') is-invalid @enderror" id="prenom" value="{{ old('prenom') }}">
               @error('prenom')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>
             <div class="col-md-6">
-              <label for="nom" class="form-label">Nom</label>
-              <input type="text" name="nom" class="form-control" id="nom" value="{{ old('nom') }}">
+              <label for="nom" class="form-label">Nom*</label>
+              <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" id="nom" value="{{ old('nom') }}">
               @error('nom')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>
           </div>
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" id="email" value="{{ old('email') }}">
+            <label for="email" class="form-label">Email*</label>
+            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}">
             @error('email')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <!-- <div class="mb-3">
@@ -50,60 +50,60 @@
             <input type="tel" id="phone" placeholder="phone"/>
           </div> -->
           <div class="mb-3">
-            <label for="phone" class="form-label">Téléphone</label>
+            <label for="phone" class="form-label">Téléphone*</label>
             <!-- Champ caché avec le numéro complet international -->
-            <!-- <input type="hidden" id="fullPhone" name="phone"> -->
+            <input type="hidden" id="fullPhone" name="phone">
             <!-- Champ visible stylé avec intl-tel-input -->
-            <input type="tel" id="phone" name="phone" class="form-control" placeholder="6 12 34 56 78"  value="{{ old('phone') }}"/>
+            <input type="tel" id="phone" name="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="6 12 34 56 78"  value="{{ old('phone') }}"/>
             @error('phone')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3">
-            <label for="ville" class="form-label">Ville</label>
-            <input type="text" class="form-control" name="ville" id="ville" value="{{ old('ville') }}">
+            <label for="ville" class="form-label">Ville*</label>
+            <input type="text" class="form-control @error('ville') is-invalid @enderror" name="ville" id="ville" value="{{ old('ville') }}">
             @error('ville')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3">
-            <label for="adresse" class="form-label">Adresse</label>
-            <input type="text" class="form-control" name="adresse" id="adresse" value="{{ old('adresse') }}">
+            <label for="adresse" class="form-label">Adresse*</label>
+            <input type="text" class="form-control @error('adresse') is-invalid @enderror" name="adresse" id="adresse" value="{{ old('adresse') }}">
             @error('adresse')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3">
-            <label for="titre" class="form-label">Titre professionnel</label>
-            <input type="text" class="form-control" id="titre" name="titre_professionnel" placeholder="Ex: Développeur Web Full Stack" value="{{ old('titre_professionnel') }}">
+            <label for="titre" class="form-label">Titre professionnel (optionnel)</label>
+            <input type="text" class="form-control @error('titre_professionnel') is-invalid @enderror" id="titre" name="titre_professionnel" placeholder="Ex: Développeur Web Full Stack" value="{{ old('titre_professionnel') }}">
             @error('titre_professionnel')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3">
-            <label class="form-label d-block">CV</label>
+            <label class="form-label d-block">CV (optionnel)</label>
             <label for="cv" class="custom-file-upload d-block">
               <i class="bi bi-cloud-arrow-up"></i>
               <div>Cliquez ou glissez votre CV ici</div>
               <div class="text-muted small">PDF, DOC ou DOCX (Max 5MB)</div>
             </label>
-            <input type="file" id="cv" name="url_cv" class="d-none" accept=".pdf,.doc,.docx" value="{{ old('url_cv') }}">
+            <input type="file" id="cv" name="url_cv" class="d-none @error('url_cv') is-invalid @enderror" accept=".pdf,.doc,.docx" value="{{ old('url_cv') }}">
             @error('url_cv')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3">
-            <label for="password" class="form-label">Mot de passe</label>
-            <input type="password" name="password" class="form-control" id="password">
+            <label for="password" class="form-label">Mot de passe*</label>
+            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password">
             @error('password')
-                <div class="text-danger">{{ $message }}</div>
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3">
-            <label for="confirm-password" class="form-label">Confirmer le mot de passe</label>
-            <input type="password" name="password_confirmation" class="form-control" id="confirm-password">
-            @error('password')
-                <div class="text-danger">{{ $message }}</div>
+            <label for="confirm-password" class="form-label">Confirmer le mot de passe*</label>
+            <input type="password" name="password_confirmation" class="form-control @error('password') is-invalid @enderror" id="confirm-password">
+            @error('password_confirmation')
+                <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           <div class="mb-3 form-check">

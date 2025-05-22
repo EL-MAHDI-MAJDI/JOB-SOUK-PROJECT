@@ -16,15 +16,16 @@ Route::get('/accueil', [accueilController::class,'index'])->name('accueil');
 
 Route::get('/offre', [offreController::class,'index'])->name('offre');
 
-Route::get('/conexion', [loginController::class,'show'])->name('conexion');
-Route::post('/conexion', [loginController::class,'login'])->name('conexion');
+Route::get('/login', [loginController::class,'show'])->name('login');
+Route::post('/login', [loginController::class,'login'])->name('login');
 
 Route::get('/choixInscription', [choixInscriptionController::class,'index'])->name('choixInscription');
 
 Route::get('/inscriptionCandidat', [inscriptionCandidatController::class,'create'])->name('inscriptionCandidat');
 Route::post('/inscriptionCandidat', [inscriptionCandidatController::class,'store'])->name('inscriptionCandidat');
 
-Route::get('/inscriptionEntreprise', [inscriptionEntrepriseController::class,'index'])->name('inscriptionEntreprise');
+Route::get('/inscriptionEntreprise', [inscriptionEntrepriseController::class,'create'])->name('inscriptionEntreprise');
+Route::post('/inscriptionEntreprise', [inscriptionEntrepriseController::class,'store'])->name('inscriptionEntreprise');
 
 
 Route::get('/entreprises', [entreprisesController::class,'index'])->name('entreprises');

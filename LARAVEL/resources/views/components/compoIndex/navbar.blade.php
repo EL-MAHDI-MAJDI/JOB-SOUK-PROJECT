@@ -13,7 +13,7 @@
           <li class="nav-item"><a class="nav-link {{ $activePage === '1' ? 'active' : '' }}" href="{{ route('accueil') }}"><i class="fa-solid fa-house"></i>Accueil</a></li>
           <li class="nav-item"><a class="nav-link {{ $activePage === '2' ? 'active' : '' }}" href="{{ route('offre') }}"><i class="fa-solid fa-briefcase"></i> Offres d'Emploi</a></li>
           <li class="nav-item"><a class="nav-link {{ $activePage === '3' ? 'active' : '' }}" href="{{ route('entreprises') }}"><i class="fa-solid fa-building"></i> Entreprises</a></li>
-          <li class="nav-item"><a class="nav-link {{ $activePage === '4' ? 'active' : '' }}" href="{{ route('conexion') }}"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</a></li>
+          <li class="nav-item"><a class="nav-link {{ $activePage === '4' ? 'active' : '' }}" href="{{ route('login') }}"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</a></li>
           <li class="nav-item"><a class="nav-link {{ $activePage === '5' ? 'active' : '' }}" href="{{ route('choixInscription') }}"><i class="fa-solid fa-user-plus"></i> S'inscrire</a></li>
         </ul>
       </div>

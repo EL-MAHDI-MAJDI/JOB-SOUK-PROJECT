@@ -295,7 +295,7 @@
     <div class="container-fluid">
 
       <!-- Afficher message "Votre compte a été créé avec succès !" -->
-      @include('partials.flashbag'); 
+      @include('partials.flashbag')
 
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
