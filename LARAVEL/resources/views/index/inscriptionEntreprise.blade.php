@@ -182,7 +182,7 @@
           
           <div class="mb-3">
             <label for="ville" class="form-label">Ville*</label>
-            <input type="text" class="form-control @error('ville') is-invalid @enderror" id="ville" name="ville" value="{{ old('ville') }}" required>
+            <input type="text" class="form-control @error('ville') is-invalid @enderror" id="ville" name="ville" value="{{ old('ville') }}" >
             @error('ville')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -190,7 +190,7 @@
           
           <div class="mb-3">
             <label for="adresse" class="form-label">Adresse*</label>
-            <input type="text" class="form-control @error('adresse') is-invalid @enderror" id="adresse" name="adresse" value="{{ old('adresse') }}" required>
+            <input type="text" class="form-control @error('adresse') is-invalid @enderror" id="adresse" name="adresse" value="{{ old('adresse') }}" >
             @error('adresse')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -198,7 +198,7 @@
           
           <div class="mb-3">
             <label for="dateCreation" class="form-label">Date de création*</label>
-            <input type="date" class="form-control @error('dateCreation') is-invalid @enderror" name="dateCreation" id="dateCreation" value="{{ old('dateCreation') }}" required>
+            <input type="date" class="form-control @error('dateCreation') is-invalid @enderror" name="dateCreation" id="dateCreation" value="{{ old('dateCreation') }}" >
             @error('dateCreation')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -239,16 +239,18 @@
           
           <div class="mb-3">
             <label for="phone" class="form-label">Téléphone*</label>
-            <input type="hidden" id="fullPhone" name="telephone">
-            <input type="tel" id="phone" class="form-control @error('telephone') is-invalid @enderror" placeholder="6 12 34 56 78" value="{{ old('telephone') }}" required>
-            @error('telephone')
+            <!-- Champ caché avec le numéro complet international -->
+            <input type="hidden" id="fullPhone" name="phone">
+            <!-- Champ visible stylé avec intl-tel-input -->
+            <input type="tel" id="phone" name="telephone" class="form-control @error('phone') is-invalid @enderror" placeholder="6 12 34 56 78"  value="{{ old('phone') }}"/>
+            @error('phone')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           
           <div class="mb-3">
             <label for="password" class="form-label">Mot de passe*</label>
-            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" >
             @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -256,20 +258,17 @@
           
           <div class="mb-3">
             <label for="confirm-password" class="form-label">Confirmer le mot de passe*</label>
-            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="confirm-password" name="password_confirmation" required>
+            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="confirm-password" name="password_confirmation" >
             @error('password_confirmation')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           
           <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input @error('conditions') is-invalid @enderror" id="conditions" name="conditions" required>
+            <input type="checkbox" class="form-check-input id="conditions" name="conditions" >
             <label class="form-check-label" for="conditions">
               J'accepte les conditions d'utilisation et la politique de confidentialité
             </label>
-            @error('conditions')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
           </div>
           
           <button type="submit" class="btn btn-primary">Créer mon compte entreprise</button>

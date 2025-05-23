@@ -4,6 +4,8 @@ namespace App\Http\Controllers\index;
 use App\Http\Controllers\Controller;
 use App\Models\Candidat;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 class inscriptionCandidatController extends Controller
 {
@@ -28,7 +30,13 @@ class inscriptionCandidatController extends Controller
         $request->validate([
             'prenom'=>'required|string|max:30',
             'nom'=>'required|string|max:30',
-            'email'=>'required|email|unique:candidats',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('candidats'),
+                Rule::unique('admins'),
+                Rule::unique('entreprises'),
+            ],
             'phone'=>'required|regex:/^[0-9\-]+$/|max:20',
             'ville'=>'required|string|max:30',
             'adresse'=>'required|string|max:100',

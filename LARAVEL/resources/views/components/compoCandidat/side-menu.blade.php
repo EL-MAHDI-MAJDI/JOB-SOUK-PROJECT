@@ -4,7 +4,7 @@
       <!-- Logo -->
       <div class="p-3 border-bottom" style="height: auto;">
         <a class="navbar-brand d-flex align-items-center" href="{{ route('candidat.dashboard')}}">
-          <img src="{{ asset('storage/job souk.png') }}" alt="Logo de site web" width="35" height="35" class="me-2">
+          <img src="{{ Vite::asset('resources/images/job souk.png') }}" alt="Logo de site web" width="35" height="35" class="me-2">
           <span class="fw-bold" style="color: #E74C3C;">Job Souk</span>
         </a>
       </div>

@@ -34,6 +34,9 @@ class loginController extends Controller
         if(Auth::guard('entreprises')->attempt($credentials)){
             return to_route('entreprise.dashboard');
         }else
+        if(Auth::guard('admins')->attempt($credentials)){
+            return to_route('admin.dashboard');
+        }else
             return back()->withErrors([
                 'error' => 'Votre adresse e-mail ou votre mot de passe est incorrect. Veuillez le vérifier.',
             ])->onlyInput('email');

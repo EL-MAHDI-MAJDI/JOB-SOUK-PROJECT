@@ -120,7 +120,7 @@
             <div class="photo-upload-container">
               <div id="initialUpload" class="photo-upload-btn">
                 <i class="bi bi-camera-fill"></i>
-                <span>Ajouter une photo</span>
+                <span>Ajoutez votre photo de profil</span>
                 <input type="file" name="photo" id="photoInput" class="photo-upload-input" accept="image/*">
               </div>
               
@@ -164,8 +164,10 @@
           
           <div class="mb-3">
             <label for="phone" class="form-label">Téléphone*</label>
+            <!-- Champ caché avec le numéro complet international -->
             <input type="hidden" id="fullPhone" name="phone">
-            <input type="tel" id="phone" name="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="6 12 34 56 78" value="{{ old('phone') }}"/>
+            <!-- Champ visible stylé avec intl-tel-input -->
+            <input type="tel" id="phone" name="telephone" class="form-control @error('phone') is-invalid @enderror" placeholder="6 12 34 56 78" value="{{ old('telephone') }}"/>
             @error('phone')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

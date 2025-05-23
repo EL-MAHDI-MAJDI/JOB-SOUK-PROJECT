@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="{{ route('accueil') }}">
-        <img src="{{ asset('storage/job souk.png') }}" alt="Logo de site web" width="35" height="35" class="me-2">
+        <img src="{{ Vite::asset('resources/images/job souk.png') }}" alt="Logo de site web" width="35" height="35" class="me-2">
         <span class="fw-bold" style="color: #E74C3C;">Job Souk</span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

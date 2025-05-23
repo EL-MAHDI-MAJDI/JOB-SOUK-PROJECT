@@ -4,6 +4,7 @@ namespace App\Http\Controllers\index;
 use App\Http\Controllers\Controller;
 use App\Models\Entreprise;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class inscriptionEntrepriseController extends Controller
 {
@@ -31,7 +32,13 @@ class inscriptionEntrepriseController extends Controller
         // validation des données
         $request->validate([
             'nomEntreprise' => 'required|string|max:100',
-            'email' => 'required|email|unique:entreprises',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('candidats'),
+                Rule::unique('admins'),
+                Rule::unique('entreprises'),
+            ],
             'SecteurActivite' => 'required|string|max:50',
             'tailleEntreprise' => 'required|string|max:50',
             'siteWeb' => 'nullable|url|max:255',
@@ -39,11 +46,11 @@ class inscriptionEntrepriseController extends Controller
             'adresse' => 'required|string|max:100',
             'dateCreation' => 'required|date|after_or_equal:1900-01-01|before_or_equal:today',
             'description' => 'nullable|string|max:500',
-            'logo' => 'nullable|string|max:2048',
+            'logo' => 'nullable|image|max:2048',
             'phone' => 'required|regex:/^[0-9\-\+\s]+$/|max:20',
             'password' => 'required|string|min:8|confirmed',
         ]);
-        
+        // dd($nomEntreprise,$email,$SecteurActivite,$tailleEntreprise,$siteWeb,$ville,$adresse,$dateCreation,$description,$logo,$phone,$password);
         // insertion
         Entreprise::create([
             'nomEntreprise' => $nomEntreprise,
