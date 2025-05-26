@@ -25,7 +25,7 @@ class Candidat extends Authenticatable
             'ville',
             'adresse',
             'titre_professionnel',
-            'url_cv',
+            'photoProfile',
             'password',
     ];
 

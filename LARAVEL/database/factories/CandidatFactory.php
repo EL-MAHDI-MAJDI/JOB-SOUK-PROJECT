@@ -27,7 +27,7 @@ class CandidatFactory extends Factory
             'ville'=> fake()->city(),
             'adresse'=> fake()->address(),
             'titre_professionnel'=> fake()->jobTitle(),
-            'URL_CV'=> fake()->url(),
+            'photoProfile'=> fake()->url(),
         ];
     }
 }

@@ -16,6 +16,8 @@ class inscriptionCandidatController extends Controller
     }
     public function store(Request $request){
         // recuperation des données
+        if ($request->hasFile('photoProfile')) $photoProfile = $request->file('photoProfile')->store('photoProfile', 'public');
+        else $photoProfile = null;
         $prenom=$request->prenom;
         $nom=$request->nom;
         $email=$request->email;
@@ -23,9 +25,10 @@ class inscriptionCandidatController extends Controller
         $ville=$request->ville;
         $adresse=$request->adresse;
         $titre_professionnel=$request->titre_professionnel;
-        $url_cv=$request->url_cv;
         $password=$request->password;
+        $testPhone=$request->testPhone;
         
+        // dd($photoProfile,$prenom,$nom,$email,$phone,$ville,$adresse,$titre_professionnel,$password);
         // validation des données
         $request->validate([
             'prenom'=>'required|string|max:30',
@@ -37,13 +40,24 @@ class inscriptionCandidatController extends Controller
                 Rule::unique('admins'),
                 Rule::unique('entreprises'),
             ],
-            'phone'=>'required|regex:/^[0-9\-]+$/|max:20',
+            'phone' => [
+                'required',
+                'regex:/^\+?[0-9\-]+$/',
+                'max:30',
+                function($attribute, $value, $fail) use ($request) {
+                    if ($request->testPhone === 'nonValide') {
+                        $fail('Veuillez saisir un numéro de téléphone valide.');
+                    }
+                },
+            ],
             'ville'=>'required|string|max:30',
             'adresse'=>'required|string|max:100',
             'titre_professionnel'=>'nullable|string|max:50',
-            'url_cv'=>'nullable|url|max:255',
+            'photoProfile'=>'nullable|image|max:2048',
             'password'=>'required|string|min:8|confirmed',
         ]);
+        // dd($photoProfile,$prenom,$nom,$email,$phone,$ville,$adresse,$titre_professionnel,$password);
+        // dd($testPhone);
         // insertion
         Candidat::create([
             'prenom'=>$prenom,
@@ -53,7 +67,7 @@ class inscriptionCandidatController extends Controller
             'ville'=>$ville,
             'adresse'=>$adresse,
             'titre_professionnel'=>$titre_professionnel,
-            'url_cv'=>$url_cv,
+            'photoProfile'=>$photoProfile,
             'password'=>bcrypt($password),
         ]);
 

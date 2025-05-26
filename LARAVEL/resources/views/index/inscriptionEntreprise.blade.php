@@ -63,8 +63,9 @@
     }
     
     .custom-file-upload:hover {
-      border-color: #0d6efd;
+      border-color: #c0392b;
       background-color: #f8f9fa;
+      box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
     }
     
     .custom-file-upload i {
@@ -137,24 +138,21 @@
           <div class="mb-3">
             <label for="secteur" class="form-label">Secteur d'activité*</label>
             <select class="form-select @error('SecteurActivite') is-invalid @enderror" id="secteur" name="SecteurActivite" required>
-              <option value="">Sélectionnez un secteur</option>
+              <option value="" >Sélectionnez un secteur</option>
               <option value="technologie" {{ old('SecteurActivite') == 'technologie' ? 'selected' : '' }}>Technologie</option>
               <option value="finance" {{ old('SecteurActivite') == 'finance' ? 'selected' : '' }}>Finance</option>
               <option value="sante" {{ old('SecteurActivite') == 'sante' ? 'selected' : '' }}>Santé</option>
               <option value="education" {{ old('SecteurActivite') == 'education' ? 'selected' : '' }}>Éducation</option>
               <option value="industrie" {{ old('SecteurActivite') == 'industrie' ? 'selected' : '' }}>Industrie</option>
               <option value="commerce" {{ old('SecteurActivite') == 'commerce' ? 'selected' : '' }}>Commerce</option>
-              <option value="autre" {{ old('SecteurActivite') == 'autre' ? 'selected' : '' }}>Autre</option>
+              <option value="autre" {{ !in_array(old('SecteurActivite'), ['technologie','finance','sante','education','industrie','commerce','']) ? 'selected' : '' }}>Autre</option>
             </select>
+            <div id="autreSecteurContainer" class="mt-2">
+              <input type="text" class="form-select @error('SecteurActivite') is-invalid @enderror" id="autreSecteur" placeholder="Veuillez préciser votre secteur d'activité" value="{{ old('SecteurActivite') && !in_array(old('SecteurActivite'), ['technologie','finance','sante','education','industrie','commerce','']) ? old('SecteurActivite') : '' }}" required>
+            </div>
             @error('SecteurActivite')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-            <div id="autreSecteurContainer" class="mt-2">
-              <input type="text" class="form-control @error('autreSecteur') is-invalid @enderror" id="autreSecteur" name="autreSecteur" placeholder="Veuillez préciser votre secteur d'activité" value="{{ old('autreSecteur') }}">
-              @error('autreSecteur')
-                <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-            </div>
           </div>
           
           <div class="mb-3">
@@ -182,7 +180,7 @@
           
           <div class="mb-3">
             <label for="ville" class="form-label">Ville*</label>
-            <input type="text" class="form-control @error('ville') is-invalid @enderror" id="ville" name="ville" value="{{ old('ville') }}" >
+            <input type="text" class="form-control @error('ville') is-invalid @enderror" id="ville" name="ville" value="{{ old('ville') }}"  required>
             @error('ville')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -190,7 +188,7 @@
           
           <div class="mb-3">
             <label for="adresse" class="form-label">Adresse*</label>
-            <input type="text" class="form-control @error('adresse') is-invalid @enderror" id="adresse" name="adresse" value="{{ old('adresse') }}" >
+            <input type="text" class="form-control @error('adresse') is-invalid @enderror" id="adresse" name="adresse" value="{{ old('adresse') }}"  required>
             @error('adresse')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -198,7 +196,7 @@
           
           <div class="mb-3">
             <label for="dateCreation" class="form-label">Date de création*</label>
-            <input type="date" class="form-control @error('dateCreation') is-invalid @enderror" name="dateCreation" id="dateCreation" value="{{ old('dateCreation') }}" >
+            <input type="date" class="form-control @error('dateCreation') is-invalid @enderror" name="dateCreation" id="dateCreation" value="{{ old('dateCreation') }}"  required>
             @error('dateCreation')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -229,7 +227,7 @@
                   <div>Cliquez pour télécharger</div>
                   <div class="file-info">PNG, JPG ou SVG (Max 2MB)</div>
                 </label>
-                <input type="file" id="logo" name="logo" class="d-none @error('logo') is-invalid @enderror" accept=".png,.jpg,.jpeg,.svg">
+                <input type="file" id="logo" name="logo" class="d-none @error('logo') is-invalid @enderror" accept=".png,.jpg,.jpeg,.svg" />
                 @error('logo')
                   <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -240,9 +238,10 @@
           <div class="mb-3">
             <label for="phone" class="form-label">Téléphone*</label>
             <!-- Champ caché avec le numéro complet international -->
-            <input type="hidden" id="fullPhone" name="phone">
+            <input type="hidden" id="fullPhone" class="@error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required>
+            <input type="hidden" name="testPhone">
             <!-- Champ visible stylé avec intl-tel-input -->
-            <input type="tel" id="phone" name="telephone" class="form-control @error('phone') is-invalid @enderror" placeholder="6 12 34 56 78"  value="{{ old('phone') }}"/>
+            <input type="tel" id="phone" name="telephone" class="form-control" placeholder="6 12 34 56 78" required>
             @error('phone')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -250,7 +249,7 @@
           
           <div class="mb-3">
             <label for="password" class="form-label">Mot de passe*</label>
-            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" >
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password"  required>
             @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -258,14 +257,14 @@
           
           <div class="mb-3">
             <label for="confirm-password" class="form-label">Confirmer le mot de passe*</label>
-            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="confirm-password" name="password_confirmation" >
+            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="confirm-password" name="password_confirmation"  required>
             @error('password_confirmation')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
           </div>
           
           <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input id="conditions" name="conditions" >
+            <input type="checkbox" class="form-check-input" id="conditions" name="conditions" >
             <label class="form-check-label" for="conditions">
               J'accepte les conditions d'utilisation et la politique de confidentialité
             </label>
@@ -322,23 +321,24 @@
     const autreSecteurInput = document.getElementById('autreSecteur');
     const entrepriseForm = document.getElementById('entrepriseForm');
 
-    // Afficher/masquer le champ "Autre secteur"
-    secteurSelect.addEventListener('change', function() {
-      if (this.value === 'autre') {
-        autreSecteurContainer.style.display = 'block';
-        autreSecteurInput.setAttribute('required', 'required');
-      } else {
-        autreSecteurContainer.style.display = 'none';
-        autreSecteurInput.removeAttribute('required');
-      }
-    });
-
-    // Au chargement de la page, vérifier si "Autre" était déjà sélectionné
-    document.addEventListener('DOMContentLoaded', function() {
+    function updateSecteurName() {
       if (secteurSelect.value === 'autre') {
         autreSecteurContainer.style.display = 'block';
         autreSecteurInput.setAttribute('required', 'required');
+        autreSecteurInput.setAttribute('name', 'SecteurActivite');
+        secteurSelect.removeAttribute('name');
+      } else {
+        autreSecteurContainer.style.display = 'none';
+        autreSecteurInput.removeAttribute('required');
+        autreSecteurInput.removeAttribute('name');
+        secteurSelect.setAttribute('name', 'SecteurActivite');
       }
+    }
+
+    secteurSelect.addEventListener('change', updateSecteurName);
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateSecteurName();
     });
 
     // Avant la soumission du formulaire

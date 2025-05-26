@@ -87,6 +87,10 @@ body {
   border-color: var(--primary);
   box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
 }
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+}
 
 .btn-primary {
   background-color: var(--primary);
@@ -132,6 +136,9 @@ body {
 input.is-invalid {
     border-color: #dc3545;
   }
+.form-select.is-invalid {
+  border-color: #dc3545 !important;
+}
   .iti {
     width: 100%;
   }

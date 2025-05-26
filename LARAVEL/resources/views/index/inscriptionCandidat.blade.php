@@ -121,9 +121,8 @@
               <div id="initialUpload" class="photo-upload-btn">
                 <i class="bi bi-camera-fill"></i>
                 <span>Ajoutez votre photo de profil</span>
-                <input type="file" name="photo" id="photoInput" class="photo-upload-input" accept="image/*">
+                <input type="file" name="photoProfile" id="photoInput" class="photo-upload-input @error('photoProfile') is-invalid @enderror " accept="image/*">
               </div>
-              
               <div id="photoActions" class="photo-actions hidden">
                 <button type="button" id="photoChangeBtn" class="photo-change-btn">
                   <i class="bi bi-arrow-repeat"></i> Changer
@@ -132,21 +131,24 @@
                   <i class="bi bi-trash"></i> Supprimer
                 </button>
               </div>
+              @error('photoProfile')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
             </div>
           </div>
+          
 
-          <!-- Reste du formulaire -->
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="prenom" class="form-label">Prénom*</label>
-              <input type="text" name="prenom" class="form-control @error('prenom') is-invalid @enderror" id="prenom" value="{{ old('prenom') }}">
+              <input type="text" name="prenom" class="form-control @error('prenom') is-invalid @enderror" id="prenom" value="{{ old('prenom') }}" required>
               @error('prenom')
                 <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>
             <div class="col-md-6">
               <label for="nom" class="form-label">Nom*</label>
-              <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" id="nom" value="{{ old('nom') }}">
+              <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" id="nom" value="{{ old('nom') }}" required>
               @error('nom')
                 <div class="invalid-feedback">{{ $message }}</div>
               @enderror
@@ -156,7 +158,7 @@
           <!-- Autres champs du formulaire... -->
           <div class="mb-3">
             <label for="email" class="form-label">Email*</label>
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}">
+            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" required>
             @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -165,9 +167,10 @@
           <div class="mb-3">
             <label for="phone" class="form-label">Téléphone*</label>
             <!-- Champ caché avec le numéro complet international -->
-            <input type="hidden" id="fullPhone" name="phone">
+            <input type="hidden" id="fullPhone" name="phone" class="@error('phone') is-invalid @enderror" value="{{ old('phone') }}" required>
+            <input type="hidden" name="testPhone">
             <!-- Champ visible stylé avec intl-tel-input -->
-            <input type="tel" id="phone" name="telephone" class="form-control @error('phone') is-invalid @enderror" placeholder="6 12 34 56 78" value="{{ old('telephone') }}"/>
+            <input type="tel" id="phone" name="telephone" class="form-control" placeholder="6 12 34 56 78" value="{{ old('telephone') }}" required/>
             @error('phone')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -175,7 +178,7 @@
           
           <div class="mb-3">
             <label for="ville" class="form-label">Ville*</label>
-            <input type="text" class="form-control @error('ville') is-invalid @enderror" name="ville" id="ville" value="{{ old('ville') }}">
+            <input type="text" class="form-control @error('ville') is-invalid @enderror" name="ville" id="ville" value="{{ old('ville') }}" required>
             @error('ville')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -183,7 +186,7 @@
           
           <div class="mb-3">
             <label for="adresse" class="form-label">Adresse*</label>
-            <input type="text" class="form-control @error('adresse') is-invalid @enderror" name="adresse" id="adresse" value="{{ old('adresse') }}">
+            <input type="text" class="form-control @error('adresse') is-invalid @enderror" name="adresse" id="adresse" value="{{ old('adresse') }}" required>
             @error('adresse')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -199,7 +202,7 @@
           
           <div class="mb-3">
             <label for="password" class="form-label">Mot de passe*</label>
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password">
+            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" required>
             @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -207,7 +210,7 @@
           
           <div class="mb-3">
             <label for="confirm-password" class="form-label">Confirmer le mot de passe*</label>
-            <input type="password" name="password_confirmation" class="form-control @error('password') is-invalid @enderror" id="confirm-password">
+            <input type="password" name="password_confirmation" class="form-control @error('password') is-invalid @enderror" id="confirm-password" required>
             @error('password_confirmation')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

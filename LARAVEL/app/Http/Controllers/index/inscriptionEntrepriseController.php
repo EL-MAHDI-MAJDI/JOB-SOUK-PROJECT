@@ -23,10 +23,10 @@ class inscriptionEntrepriseController extends Controller
         $adresse = $request->adresse;
         $dateCreation = $request->dateCreation;
         $description = $request->description;
-        $logo = $request->logo;
+        if ($request->hasFile('logo')) $logo = $request->file('logo')->store('logoEntreprise', 'public');
+        else $logo = null;
         $phone = $request->phone;
         $password = $request->password;
-        
         // dd($nomEntreprise,$email,$SecteurActivite,$tailleEntreprise,$siteWeb,$ville,$adresse,$dateCreation,$description,$logo,$phone,$password);
         
         // validation des données
@@ -47,8 +47,19 @@ class inscriptionEntrepriseController extends Controller
             'dateCreation' => 'required|date|after_or_equal:1900-01-01|before_or_equal:today',
             'description' => 'nullable|string|max:500',
             'logo' => 'nullable|image|max:2048',
-            'phone' => 'required|regex:/^[0-9\-\+\s]+$/|max:20',
+            'phone' => [
+                'required',
+                'regex:/^\+?[0-9\-]+$/',
+                'max:30',
+                function($attribute, $value, $fail) use ($request) {
+                    if ($request->testPhone === 'nonValide') {
+                        $fail('Veuillez saisir un numéro de téléphone valide.');
+                    }
+                },
+            ],
             'password' => 'required|string|min:8|confirmed',
+            ], [
+            'dateCreation.before_or_equal' => 'La date ne peut pas être dans le futur.',
         ]);
         // dd($nomEntreprise,$email,$SecteurActivite,$tailleEntreprise,$siteWeb,$ville,$adresse,$dateCreation,$description,$logo,$phone,$password);
         // insertion

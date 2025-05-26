@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ville');
             $table->string('adresse');
             $table->string('titre_professionnel')->nullable();
-            $table->string('URL_CV')->nullable();
+            $table->string('photoProfile')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
