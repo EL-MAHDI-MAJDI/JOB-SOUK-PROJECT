@@ -36,11 +36,11 @@
               <i class="bi bi-tags me-3"></i> Catégories
             </a>
           </li>
-          <li class="nav-item mb-2">
+          {{-- <li class="nav-item mb-2">
             <a class="nav-link d-flex align-items-center p-3 rounded {{ $activePage === '6' ? 'active' : '' }}" href="{{ route('admin.administrateurs') }}">
               <i class="bi bi-shield-lock me-3"></i> Administrateurs
             </a>
-          </li>
+          </li> --}}
           <li class="nav-item mb-2">
             <a class="nav-link d-flex align-items-center p-3 rounded {{ $activePage === '7' ? 'active' : '' }}" href="{{ route('admin.parametres') }}">
               <i class="bi bi-gear me-3"></i> Paramètres

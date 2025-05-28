@@ -284,13 +284,6 @@
                 <input type="text" class="form-control" id="jobTitle" placeholder="Ex: Développeur Full Stack" required>
               </div>
               <div class="col-md-6">
-                <label for="companyName" class="form-label">Nom de l'entreprise*</label>
-                <input type="text" class="form-control" id="companyName" placeholder="Ex: TechnoSoft Solutions" required>
-              </div>
-            </div>
-            
-            <div class="row mb-3">
-              <div class="col-md-6">
                 <label for="jobType" class="form-label">Type de contrat*</label>
                 <select class="form-select" id="jobType" required>
                   <option value="" selected disabled>Sélectionner</option>
@@ -301,19 +294,9 @@
                   <option>Alternance</option>
                 </select>
               </div>
-              <div class="col-md-6">
-                <label for="jobLocation" class="form-label">Localisation*</label>
-                <select class="form-select" id="jobLocation" required>
-                  <option value="" selected disabled>Sélectionner</option>
-                  <option>Casablanca</option>
-                  <option>Rabat</option>
-                  <option>Marrakech</option>
-                  <option>Tanger</option>
-                  <option>Remote</option>
-                  <option>Hybride</option>
-                </select>
-              </div>
             </div>
+            
+
             
             <div class="row mb-3">
               <div class="col-md-6">

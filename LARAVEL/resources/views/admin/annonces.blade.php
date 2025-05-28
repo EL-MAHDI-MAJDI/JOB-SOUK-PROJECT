@@ -127,31 +127,6 @@
           </div>
         </div>
 
-        <!-- Announcement 3 - With Image -->
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="announcement-card dashboard-card p-4">
-            <div class="dropdown float-end">
-              <button class="btn btn-sm" data-bs-toggle="dropdown">
-                <i class="bi bi-three-dots-vertical"></i>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editAnnouncementModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-              </ul>
-            </div>
-            <img src="../../image/job souk.png" alt="Promotion" class="announcement-image w-100 mb-3">
-            <h5 class="fw-bold mb-2">Offre spéciale pour les entreprises</h5>
-            <p class="text-muted small mb-3">Publié le 05/06/2023 - Jusqu'au 20/06/2023</p>
-            <p class="mb-3">Profitez de 20% de réduction sur tous nos forfaits entreprise jusqu'au 20 juin.</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="badge bg-warning">Promotion</span>
-              <span class="badge bg-success">Actif</span>
-            </div>
-          </div>
-        </div>
-
         <!-- Announcement 4 - Scheduled -->
         <div class="col-md-6 col-lg-4 mb-4">
           <div class="announcement-card dashboard-card p-4">
@@ -285,12 +260,6 @@
                 <input type="datetime-local" class="form-control">
               </div>
             </div>
-            
-            <div class="mb-3">
-              <label class="form-label">Image (optionnel)</label>
-              <input type="file" class="form-control" accept="image/*">
-            </div>
-            
             <div class="mb-3">
               <label class="form-label">Options</label>
               <div class="border p-3 rounded">
@@ -377,13 +346,6 @@
                 <input type="datetime-local" class="form-control" value="2023-06-30T23:59">
               </div>
             </div>
-            
-            <div class="mb-3">
-              <label class="form-label">Image (optionnel)</label>
-              <input type="file" class="form-control" accept="image/*">
-              <div class="form-text">Laissez vide pour conserver l'image actuelle</div>
-            </div>
-            
             <div class="mb-3">
               <label class="form-label">Options</label>
               <div class="border p-3 rounded">
