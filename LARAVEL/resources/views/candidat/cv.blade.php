@@ -143,62 +143,6 @@
       color: #c82333;
     }
 
-    .parsing-results {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      background-color: #f8f9fa;
-      border-radius: 8px;
-    }
-
-    .parsed-field {
-      margin-bottom: 1rem;
-    }
-
-    .parsed-field label {
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    /* Historique des CV */
-    .cv-history {
-      margin-top: 3rem;
-    }
-
-    .cv-card {
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      transition: all 0.3s;
-    }
-
-    .cv-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .cv-card .cv-title {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .cv-card .cv-date {
-      font-size: 0.875rem;
-      color: #6c757d;
-    }
-
-    .cv-card .cv-actions {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .cv-card .cv-main {
-      background-color: var(--primary-light);
-      border-color: var(--primary);
-    }
-
     /* Version mobile */
     @media (max-width: 992px) {
       body {
@@ -221,6 +165,44 @@
     .p-3 {
           height: 47px;
         }
+
+    /* Nouveaux styles pour la version simplifiée */
+    .current-cv-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .no-cv-message {
+      text-align: center;
+      padding: 2rem;
+      color: #6c757d;
+    }
+
+    .cv-preview {
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .cv-preview h5 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .cv-preview .cv-date {
+      font-size: 0.875rem;
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+
+    .cv-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -240,8 +222,8 @@
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 class="fw-bold mb-1">Importer mon CV</h2>
-          <p class="text-muted mb-0">Téléchargez votre CV pour compléter automatiquement votre profil</p>
+          <h2 class="fw-bold mb-1">Mon CV</h2>
+          <p class="text-muted mb-0">Téléchargez votre CV pour compléter votre profil</p>
         </div>
       </div>
       
@@ -255,8 +237,8 @@
               </div>
               <h4>Glissez-déposez votre CV ici</h4>
               <p class="text-muted">ou cliquez pour sélectionner un fichier</p>
-              <p class="small text-muted">Formats supportés: PDF, DOC, DOCX, TXT (max. 5MB)</p>
-              <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" style="display: none;">
+              <p class="small text-muted">Formats supportés: PDF, DOC, DOCX (max. 5MB)</p>
+              <input type="file" id="fileInput" accept=".pdf,.doc,.docx" style="display: none;">
             </div>
             
             <div id="filePreview" style="display: none;">
@@ -275,112 +257,9 @@
                 </div>
               </div>
               
-              <div class="d-flex justify-content-between">
-                <button class="btn btn-outline-primary" id="parseBtn">
-                  <i class="bi bi-magic me-2"></i>Extraire les informations
-                </button>
-                <button class="btn btn-primary" id="saveBtn" disabled>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" id="saveBtn">
                   <i class="bi bi-save me-2"></i>Enregistrer le CV
-                </button>
-              </div>
-            </div>
-            
-            <div id="parsingResults" class="parsing-results" style="display: none;">
-              <h5 class="mb-3">Informations extraites</h5>
-              <p>Vérifiez et complétez les informations détectées depuis votre CV :</p>
-              
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="parsed-field">
-                    <label for="parsedName">Nom complet</label>
-                    <input type="text" class="form-control" id="parsedName" value="Omar Mansouri">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="parsed-field">
-                    <label for="parsedTitle">Titre professionnel</label>
-                    <input type="text" class="form-control" id="parsedTitle" value="Développeur Full Stack">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="parsed-field">
-                    <label for="parsedEmail">Email</label>
-                    <input type="email" class="form-control" id="parsedEmail" value="contact@omarmansouri.com">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="parsed-field">
-                    <label for="parsedPhone">Téléphone</label>
-                    <input type="tel" class="form-control" id="parsedPhone" value="+212 6 12 34 56 78">
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="parsed-field">
-                    <label for="parsedSummary">Résumé professionnel</label>
-                    <textarea class="form-control" id="parsedSummary" rows="3">Passionné par le développement web et les nouvelles technologies avec 5 ans d'expérience dans la création d'applications performantes.</textarea>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="mt-4">
-                <h6>Expériences professionnelles détectées</h6>
-                <ul class="list-group mt-2">
-                  <li class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <strong>Développeur Full Stack Senior</strong><br>
-                        <small class="text-muted">TechSolutions Inc. - Janvier 2021 à Présent</small>
-                      </div>
-                      <div>
-                        <input class="form-check-input" type="checkbox" checked>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <strong>Développeur Frontend</strong><br>
-                        <small class="text-muted">WebVision - Mars 2019 à Décembre 2020</small>
-                      </div>
-                      <div>
-                        <input class="form-check-input" type="checkbox" checked>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              
-              <div class="mt-4">
-                <h6>Formations détectées</h6>
-                <ul class="list-group mt-2">
-                  <li class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                      <div>
-                        <strong>Master en Ingénierie Logicielle</strong><br>
-                        <small class="text-muted">Université Mohammed V - 2017 à 2019</small>
-                      </div>
-                      <div>
-                        <input class="form-check-input" type="checkbox" checked>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              
-              <div class="mt-4">
-                <h6>Compétences détectées</h6>
-                <div class="d-flex flex-wrap gap-2 mt-2">
-                  <span class="badge bg-primary">JavaScript</span>
-                  <span class="badge bg-primary">React</span>
-                  <span class="badge bg-primary">Node.js</span>
-                  <span class="badge bg-primary">TypeScript</span>
-                  <span class="badge bg-primary">MongoDB</span>
-                </div>
-              </div>
-              
-              <div class="d-flex justify-content-end mt-4">
-                <button class="btn btn-primary" id="saveAllBtn">
-                  <i class="bi bi-save me-2"></i>Enregistrer toutes les informations
                 </button>
               </div>
             </div>
@@ -388,112 +267,15 @@
         </div>
       </div>
 
-      <!-- Historique des CV -->
-      <div class="cv-history">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h3 class="fw-bold mb-0">Historique de mes CV</h3>
-          <button class="btn btn-sm btn-outline-primary" id="addNewCv">
-            <i class="bi bi-plus-circle me-1"></i>Ajouter un nouveau CV
-          </button>
-        </div>
+      <!-- CV actuel -->
+      <div class="current-cv-container">
+        <h3 class="fw-bold mb-4">Mon CV actuel</h3>
         
-        <div class="row">
-          <div class="col-md-6">
-            <div class="cv-card cv-main">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <h5 class="cv-title">CV Principal - Développeur Full Stack</h5>
-                  <p class="cv-date">Dernière mise à jour: 15 mai 2024</p>
-                </div>
-                <span class="badge bg-primary">Principal</span>
-              </div>
-              <div class="cv-actions">
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-eye me-1"></i>Voir
-                </button>
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-download me-1"></i>Télécharger
-                </button>
-                <button class="btn btn-sm btn-outline-danger">
-                  <i class="bi bi-trash me-1"></i>Supprimer
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-md-6">
-            <div class="cv-card">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <h5 class="cv-title">CV Anglais - Software Engineer</h5>
-                  <p class="cv-date">Dernière mise à jour: 10 mars 2024</p>
-                </div>
-              </div>
-              <div class="cv-actions">
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-eye me-1"></i>Voir
-                </button>
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-download me-1"></i>Télécharger
-                </button>
-                <button class="btn btn-sm btn-outline-danger">
-                  <i class="bi bi-trash me-1"></i>Supprimer
-                </button>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="bi bi-star me-1"></i>Définir comme principal
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-md-6">
-            <div class="cv-card">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <h5 class="cv-title">CV Version Simple</h5>
-                  <p class="cv-date">Dernière mise à jour: 5 janvier 2024</p>
-                </div>
-              </div>
-              <div class="cv-actions">
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-eye me-1"></i>Voir
-                </button>
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-download me-1"></i>Télécharger
-                </button>
-                <button class="btn btn-sm btn-outline-danger">
-                  <i class="bi bi-trash me-1"></i>Supprimer
-                </button>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="bi bi-star me-1"></i>Définir comme principal
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-md-6">
-            <div class="cv-card">
-              <div class="d-flex justify-content-between align-items-start">
-                <div>
-                  <h5 class="cv-title">Ancien CV - Version 2023</h5>
-                  <p class="cv-date">Dernière mise à jour: 15 septembre 2023</p>
-                </div>
-              </div>
-              <div class="cv-actions">
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-eye me-1"></i>Voir
-                </button>
-                <button class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-download me-1"></i>Télécharger
-                </button>
-                <button class="btn btn-sm btn-outline-danger">
-                  <i class="bi bi-trash me-1"></i>Supprimer
-                </button>
-                <button class="btn btn-sm btn-outline-primary">
-                  <i class="bi bi-star me-1"></i>Définir comme principal
-                </button>
-              </div>
-            </div>
+        <div id="currentCv">
+          <div class="no-cv-message">
+            <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+            <h4>Aucun CV enregistré</h4>
+            <p class="text-muted">Vous n'avez pas encore téléchargé de CV. Ajoutez votre CV pour compléter votre profil.</p>
           </div>
         </div>
       </div>
@@ -502,6 +284,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Variables globales
+    let currentCvFile = null;
+
     // Toggle sidebar on mobile
     document.getElementById('menuToggle').addEventListener('click', function() {
       document.querySelector('.side-menu').classList.toggle('show');
@@ -514,11 +299,8 @@
     const fileName = document.getElementById('fileName');
     const fileSize = document.getElementById('fileSize');
     const removeFile = document.getElementById('removeFile');
-    const parseBtn = document.getElementById('parseBtn');
     const saveBtn = document.getElementById('saveBtn');
-    const parsingResults = document.getElementById('parsingResults');
-    const saveAllBtn = document.getElementById('saveAllBtn');
-    const addNewCvBtn = document.getElementById('addNewCv');
+    const currentCv = document.getElementById('currentCv');
 
     // Gestion du drag and drop
     uploadArea.addEventListener('dragover', (e) => {
@@ -558,10 +340,10 @@
       // Vérifier le type de fichier
       const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
       const fileExtension = file.name.split('.').pop().toLowerCase();
-      const validExtensions = ['pdf', 'doc', 'docx', 'txt'];
+      const validExtensions = ['pdf', 'doc', 'docx'];
       
       if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
-        alert('Format de fichier non supporté. Veuillez uploader un fichier PDF, DOC, DOCX ou TXT.');
+        alert('Format de fichier non supporté. Veuillez uploader un fichier PDF, DOC ou DOCX.');
         return;
       }
       
@@ -575,7 +357,6 @@
       fileName.textContent = file.name;
       fileSize.textContent = formatFileSize(file.size);
       filePreview.style.display = 'block';
-      saveBtn.disabled = false;
     }
 
     // Formater la taille du fichier
@@ -589,101 +370,101 @@
     removeFile.addEventListener('click', () => {
       fileInput.value = '';
       filePreview.style.display = 'none';
-      parsingResults.style.display = 'none';
     });
 
-    // Bouton pour extraire les informations
-    parseBtn.addEventListener('click', () => {
-      // Simuler l'extraction des informations (en réalité, vous utiliseriez une API)
-      parsingResults.style.display = 'block';
-      
-      // Défilement vers les résultats
-      parsingResults.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Enregistrer le CV (sans extraction)
+    // Enregistrer le CV
     saveBtn.addEventListener('click', () => {
-      alert('CV enregistré avec succès!');
-      // Ici, vous enverriez le fichier au serveur
+      const file = fileInput.files[0];
+      if (!file) return;
       
-      // Simuler l'ajout à l'historique
-      const cvHistory = document.querySelector('.cv-history .row');
-      const newCvCard = `
-        <div class="col-md-6">
-          <div class="cv-card">
-            <div class="d-flex justify-content-between align-items-start">
-              <div>
-                <h5 class="cv-title">${fileInput.files[0].name}</h5>
-                <p class="cv-date">Dernière mise à jour: ${new Date().toLocaleDateString('fr-FR')}</p>
-              </div>
+      // Stocker le fichier en mémoire
+      currentCvFile = file;
+      
+      // Afficher le CV dans la section "CV actuel"
+      currentCv.innerHTML = `
+        <div class="cv-preview">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5>${file.name}</h5>
+              <p class="cv-date">Téléchargé le: ${new Date().toLocaleDateString('fr-FR')} • ${formatFileSize(file.size)}</p>
             </div>
-            <div class="cv-actions">
-              <button class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-eye me-1"></i>Voir
-              </button>
-              <button class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-download me-1"></i>Télécharger
-              </button>
-              <button class="btn btn-sm btn-outline-danger">
-                <i class="bi bi-trash me-1"></i>Supprimer
-              </button>
-              <button class="btn btn-sm btn-outline-primary">
-                <i class="bi bi-star me-1"></i>Définir comme principal
-              </button>
-            </div>
+          </div>
+          <div class="cv-actions">
+            <button class="btn btn-sm btn-outline-secondary" id="viewCv">
+              <i class="bi bi-eye me-1"></i>Voir
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="downloadCv">
+              <i class="bi bi-download me-1"></i>Télécharger
+            </button>
+            <button class="btn btn-sm btn-outline-danger" id="deleteCv">
+              <i class="bi bi-trash me-1"></i>Supprimer
+            </button>
           </div>
         </div>
       `;
-      cvHistory.insertAdjacentHTML('afterbegin', newCvCard);
       
       // Réinitialiser le formulaire
       fileInput.value = '';
       filePreview.style.display = 'none';
-    });
-
-    // Enregistrer toutes les informations extraites
-    saveAllBtn.addEventListener('click', () => {
-      alert('Toutes les informations ont été enregistrées dans votre profil!');
-      // Ici, vous enverriez les données au serveur
-    });
-
-    // Bouton pour ajouter un nouveau CV
-    addNewCvBtn.addEventListener('click', () => {
-      document.getElementById('uploadArea').scrollIntoView({ behavior: 'smooth' });
-      fileInput.click();
-    });
-
-    // Gestion des actions sur les CV de l'historique
-    document.addEventListener('click', function(e) {
-      // Définir comme CV principal
-      if (e.target.closest('.btn-outline-primary') && e.target.closest('.cv-actions')) {
-        const card = e.target.closest('.cv-card');
-        // Retirer le badge "Principal" de tous les CV
-        document.querySelectorAll('.cv-card').forEach(c => {
-          c.classList.remove('cv-main');
-          const badge = c.querySelector('.badge');
-          if (badge) badge.remove();
-        });
-        
-        // Ajouter le badge au CV sélectionné
-        card.classList.add('cv-main');
-        const titleDiv = card.querySelector('.d-flex.justify-content-between');
-        if (titleDiv && !titleDiv.querySelector('.badge')) {
-          titleDiv.insertAdjacentHTML('beforeend', '<span class="badge bg-primary">Principal</span>');
-        }
-        
-        alert('Ce CV est maintenant défini comme votre CV principal');
-      }
       
-      // Supprimer un CV
-      if (e.target.closest('.btn-outline-danger') && e.target.closest('.cv-actions')) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce CV ?')) {
-          const card = e.target.closest('.col-md-6');
-          if (card) card.remove();
-          alert('CV supprimé avec succès');
-        }
-      }
+      alert('CV enregistré avec succès!');
+      
+      // Ajouter les écouteurs d'événements pour les nouveaux boutons
+      document.getElementById('viewCv').addEventListener('click', viewCurrentCv);
+      document.getElementById('downloadCv').addEventListener('click', downloadCurrentCv);
+      document.getElementById('deleteCv').addEventListener('click', deleteCurrentCv);
     });
+
+    // Visualiser le CV actuel dans un nouvel onglet
+    function viewCurrentCv() {
+      if (!currentCvFile) return;
+      
+      // Créer une URL pour le fichier
+      const fileUrl = URL.createObjectURL(currentCvFile);
+      
+      // Ouvrir dans un nouvel onglet
+      window.open(fileUrl, '_blank');
+      
+      // Libérer la mémoire après un délai (l'URL reste valide tant que le nouvel onglet est ouvert)
+      setTimeout(() => {
+        URL.revokeObjectURL(fileUrl);
+      }, 10000); // 10 secondes
+    }
+
+    // Télécharger le CV actuel
+    function downloadCurrentCv() {
+      if (!currentCvFile) return;
+      
+      // Créer un lien de téléchargement
+      const a = document.createElement('a');
+      const url = URL.createObjectURL(currentCvFile);
+      
+      a.href = url;
+      a.download = currentCvFile.name || 'mon_cv';
+      document.body.appendChild(a);
+      a.click();
+      
+      // Nettoyer
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 0);
+    }
+
+    // Supprimer le CV actuel
+    function deleteCurrentCv() {
+      if (confirm('Êtes-vous sûr de vouloir supprimer votre CV ?')) {
+        currentCvFile = null;
+        currentCv.innerHTML = `
+          <div class="no-cv-message">
+            <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+            <h4>Aucun CV enregistré</h4>
+            <p class="text-muted">Vous n'avez pas encore téléchargé de CV. Ajoutez votre CV pour compléter votre profil.</p>
+          </div>
+        `;
+        alert('CV supprimé avec succès');
+      }
+    }
   </script>
 </body>
 </html>

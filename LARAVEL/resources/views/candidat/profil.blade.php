@@ -125,6 +125,7 @@
       padding-bottom: 0.75rem;
       margin-bottom: 1.5rem;
       font-weight: 600;
+      color: var(--primary);
     }
 
     .skill-badge {
@@ -136,6 +137,18 @@
       align-items: center;
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .skill-badge .delete-btn {
+      margin-left: 5px;
+      cursor: pointer;
+      color: var(--primary);
+      opacity: 0.7;
+    }
+
+    .skill-badge .delete-btn:hover {
+      opacity: 1;
     }
 
     .language-level {
@@ -202,6 +215,13 @@
     .timeline-content {
       padding-bottom: 1rem;
       border-bottom: 1px dashed #eee;
+      position: relative;
+    }
+
+    .timeline-actions {
+      position: absolute;
+      top: 0;
+      right: 0;
     }
 
     .btn-primary {
@@ -214,9 +234,21 @@
       border-color: #c0392b;
     }
 
+    .btn-outline-primary {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-outline-primary:hover {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+
     .modal-header {
       border-bottom: 1px solid #f0f0f0;
       padding: 1.5rem;
+      background-color: var(--primary);
+      color: white;
     }
 
     .modal-footer {
@@ -226,6 +258,14 @@
 
     .form-floating label {
       color: #6c757d;
+    }
+
+    .progress {
+      background-color: var(--primary-light);
+    }
+
+    .progress-bar {
+      background-color: var(--primary);
     }
 
     @media (max-width: 992px) {
@@ -269,17 +309,16 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Mon Profil</h2>
-          <!-- <p class="text-muted mb-0" id="currentDate"></p> -->
+          <p class="text-muted mb-0" id="currentDate"></p>
         </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary"><i class="bi bi-download me-2"></i>Télécharger CV</button>
+        {{-- <div class="d-flex gap-2">
           <button class="btn btn-primary"><i class="bi bi-pencil me-2"></i>Modifier Profil</button>
-        </div>
+        </div> --}}
       </div>
       
       <!-- Section Profil -->
       <div class="profile-header mb-4">
-        <button class="edit-btn">
+        <button class="edit-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
           <i class="bi bi-pencil"></i>
         </button>
         <div class="row align-items-center">
@@ -324,9 +363,11 @@
           <div class="profile-section">
             <h4 class="profile-section-title d-flex justify-content-between align-items-center">
               <span>À propos</span>
-              <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAboutModal">
+                <i class="bi bi-pencil"></i>
+              </button>
             </h4>
-            <p>
+            <p id="aboutText">
               Développeur Full Stack passionné avec 5 ans d'expérience dans la création d'applications web performantes. 
               Spécialisé en JavaScript (React, Node.js) et architectures cloud. 
               J'aime résoudre des problèmes complexes et créer des solutions innovantes qui améliorent l'expérience utilisateur.
@@ -349,6 +390,10 @@
                   <i class="bi bi-briefcase"></i>
                 </div>
                 <div class="timeline-content">
+                  <div class="timeline-actions">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience(0)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteExperience(0)"><i class="bi bi-trash"></i></button>
+                  </div>
                   <div class="d-flex justify-content-between">
                     <h5 class="mb-1">Développeur Full Stack Senior</h5>
                     <span class="badge bg-primary">Actuel</span>
@@ -368,6 +413,10 @@
                   <i class="bi bi-briefcase"></i>
                 </div>
                 <div class="timeline-content">
+                  <div class="timeline-actions">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience(1)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteExperience(1)"><i class="bi bi-trash"></i></button>
+                  </div>
                   <h5 class="mb-1">Développeur Frontend</h5>
                   <p class="mb-1 text-muted">WebVision - Rabat</p>
                   <small class="text-muted">Mars 2019 - Décembre 2020</small>
@@ -397,6 +446,10 @@
                   <i class="bi bi-mortarboard"></i>
                 </div>
                 <div class="timeline-content">
+                  <div class="timeline-actions">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation(0)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation(0)"><i class="bi bi-trash"></i></button>
+                  </div>
                   <h5 class="mb-1">Master en Ingénierie Logicielle</h5>
                   <p class="mb-1 text-muted">Université Mohammed V - Rabat</p>
                   <small class="text-muted">2017 - 2019</small>
@@ -412,6 +465,10 @@
                   <i class="bi bi-mortarboard"></i>
                 </div>
                 <div class="timeline-content">
+                  <div class="timeline-actions">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation(1)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation(1)"><i class="bi bi-trash"></i></button>
+                  </div>
                   <h5 class="mb-1">Licence en Informatique</h5>
                   <p class="mb-1 text-muted">Université Hassan II - Casablanca</p>
                   <small class="text-muted">2014 - 2017</small>
@@ -437,14 +494,14 @@
                 <h6 class="mb-2">Techniques</h6>
                 <div class="d-flex flex-wrap gap-2" id="technical-skills">
                   <!-- Compétences techniques seront ajoutées ici -->
-                  <span class="skill-badge">JavaScript <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">React <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">Node.js <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">TypeScript <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">GraphQL <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">MongoDB <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">Docker <i class="bi bi-check-circle ms-1"></i></span>
-                  <span class="skill-badge">AWS <i class="bi bi-check-circle ms-1"></i></span>
+                  <span class="skill-badge">JavaScript <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('JavaScript', 'technical')"></i></span>
+                  <span class="skill-badge">React <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('React', 'technical')"></i></span>
+                  <span class="skill-badge">Node.js <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('Node.js', 'technical')"></i></span>
+                  <span class="skill-badge">TypeScript <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('TypeScript', 'technical')"></i></span>
+                  <span class="skill-badge">GraphQL <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('GraphQL', 'technical')"></i></span>
+                  <span class="skill-badge">MongoDB <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('MongoDB', 'technical')"></i></span>
+                  <span class="skill-badge">Docker <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('Docker', 'technical')"></i></span>
+                  <span class="skill-badge">AWS <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('AWS', 'technical')"></i></span>
                 </div>
               </div>
               
@@ -452,10 +509,10 @@
                 <h6 class="mb-2">Soft Skills</h6>
                 <div class="d-flex flex-wrap gap-2" id="soft-skills">
                   <!-- Soft skills seront ajoutées ici -->
-                  <span class="skill-badge">Leadership</span>
-                  <span class="skill-badge">Communication</span>
-                  <span class="skill-badge">Travail d'équipe</span>
-                  <span class="skill-badge">Résolution de problèmes</span>
+                  <span class="skill-badge">Leadership <i class="bi bi-x delete-btn" onclick="deleteSkill('Leadership', 'soft')"></i></span>
+                  <span class="skill-badge">Communication <i class="bi bi-x delete-btn" onclick="deleteSkill('Communication', 'soft')"></i></span>
+                  <span class="skill-badge">Travail d'équipe <i class="bi bi-x delete-btn" onclick="deleteSkill('Travail d'équipe', 'soft')"></i></span>
+                  <span class="skill-badge">Résolution de problèmes <i class="bi bi-x delete-btn" onclick="deleteSkill('Résolution de problèmes', 'soft')"></i></span>
                 </div>
               </div>
             </div>
@@ -473,30 +530,42 @@
             <div id="languages-container">
               <!-- Les langues seront ajoutées ici dynamiquement -->
               <div class="mb-3">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center">
                   <span>Arabe</span>
-                  <small>Langue maternelle</small>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(0)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(0)"><i class="bi bi-trash"></i></button>
+                  </div>
                 </div>
+                <small>Langue maternelle</small>
                 <div class="language-level">
                   <div class="language-level-fill" style="width: 100%"></div>
                 </div>
               </div>
               
               <div class="mb-3">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center">
                   <span>Français</span>
-                  <small>Courant</small>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(1)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(1)"><i class="bi bi-trash"></i></button>
+                  </div>
                 </div>
+                <small>Courant</small>
                 <div class="language-level">
                   <div class="language-level-fill" style="width: 90%"></div>
                 </div>
               </div>
               
               <div class="mb-3">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center">
                   <span>Anglais</span>
-                  <small>Professionnel</small>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(2)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(2)"><i class="bi bi-trash"></i></button>
+                  </div>
                 </div>
+                <small>Professionnel</small>
                 <div class="language-level">
                   <div class="language-level-fill" style="width: 80%"></div>
                 </div>
@@ -516,18 +585,42 @@
             <div id="certifications-container">
               <!-- Les certifications seront ajoutées ici dynamiquement -->
               <div class="mb-3">
-                <h6 class="mb-1">AWS Certified Developer</h6>
-                <small class="text-muted">Amazon Web Services - 2022</small>
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 class="mb-1">AWS Certified Developer</h6>
+                    <small class="text-muted">Amazon Web Services - 2022</small>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(0)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(0)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
               </div>
               
               <div class="mb-3">
-                <h6 class="mb-1">React Advanced Concepts</h6>
-                <small class="text-muted">Frontend Masters - 2021</small>
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 class="mb-1">React Advanced Concepts</h6>
+                    <small class="text-muted">Frontend Masters - 2021</small>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(1)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(1)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
               </div>
               
               <div>
-                <h6 class="mb-1">Node.js: Microservices Architecture</h6>
-                <small class="text-muted">Udemy - 2020</small>
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 class="mb-1">Node.js: Microservices Architecture</h6>
+                    <small class="text-muted">Udemy - 2020</small>
+                  </div>
+                  <div>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(2)"><i class="bi bi-pencil"></i></button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(2)"><i class="bi bi-trash"></i></button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -536,9 +629,90 @@
     </div>
   </div>
 
-  <!-- Modals pour l'ajout d'éléments -->
+  <!-- Modals pour l'ajout et modification d'éléments -->
 
-  <!-- Modal Ajout Expérience -->
+  <!-- Modal Édition Profil -->
+  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProfileModalLabel">Modifier le profil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="profileForm">
+            <div class="mb-3">
+              <label for="profilePhoto" class="form-label">Photo de profil</label>
+              <input class="form-control" type="file" id="profilePhoto">
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="fullName" placeholder="Nom complet" value="Omar Mansouri">
+              <label for="fullName">Nom complet</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="jobTitle" placeholder="Titre du poste" value="Développeur Full Stack">
+              <label for="jobTitle">Titre du poste</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="location" placeholder="Localisation" value="Casablanca, Maroc">
+              <label for="location">Localisation</label>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Réseaux sociaux</label>
+              <div class="input-group mb-2">
+                <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
+                <input type="text" class="form-control" placeholder="LinkedIn" value="linkedin.com/in/omar-mansouri">
+              </div>
+              <div class="input-group mb-2">
+                <span class="input-group-text"><i class="bi bi-github"></i></span>
+                <input type="text" class="form-control" placeholder="GitHub" value="github.com/omarmansouri">
+              </div>
+              <div class="input-group mb-2">
+                <span class="input-group-text"><i class="bi bi-twitter-x"></i></span>
+                <input type="text" class="form-control" placeholder="Twitter/X" value="twitter.com/omarmansouri">
+              </div>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                <input type="text" class="form-control" placeholder="Site web" value="omarmansouri.ma">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" onclick="saveProfile()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Édition À propos -->
+  <div class="modal fade" id="editAboutModal" tabindex="-1" aria-labelledby="editAboutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editAboutModalLabel">Modifier la section À propos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="aboutForm">
+            <div class="form-floating">
+              <textarea class="form-control" id="aboutTextArea" style="height: 200px">Développeur Full Stack passionné avec 5 ans d'expérience dans la création d'applications web performantes. 
+Spécialisé en JavaScript (React, Node.js) et architectures cloud. 
+J'aime résoudre des problèmes complexes et créer des solutions innovantes qui améliorent l'expérience utilisateur.</textarea>
+              <label for="aboutTextArea">À propos de moi</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" onclick="saveAbout()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ajout/Modification Expérience -->
   <div class="modal fade" id="addExperienceModal" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -548,49 +722,50 @@
         </div>
         <div class="modal-body">
           <form id="experienceForm">
+            <input type="hidden" id="experienceId">
             <div class="row g-3">
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="jobTitle" placeholder="Titre du poste" required>
-                  <label for="jobTitle">Titre du poste</label>
+                  <input type="text" class="form-control" id="expJobTitle" placeholder="Titre du poste" required>
+                  <label for="expJobTitle">Titre du poste</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="companyName" placeholder="Nom de l'entreprise" required>
-                  <label for="companyName">Entreprise</label>
+                  <input type="text" class="form-control" id="expCompanyName" placeholder="Nom de l'entreprise" required>
+                  <label for="expCompanyName">Entreprise</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="location" placeholder="Lieu" required>
-                  <label for="location">Lieu</label>
+                  <input type="text" class="form-control" id="expLocation" placeholder="Lieu" required>
+                  <label for="expLocation">Lieu</label>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="startDate" placeholder="Date de début" required>
-                  <label for="startDate">Date de début</label>
+                  <input type="month" class="form-control" id="expStartDate" placeholder="Date de début" required>
+                  <label for="expStartDate">Date de début</label>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="endDate" placeholder="Date de fin">
-                  <label for="endDate">Date de fin</label>
+                  <input type="month" class="form-control" id="expEndDate" placeholder="Date de fin">
+                  <label for="expEndDate">Date de fin</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="currentJob">
-                  <label class="form-check-label" for="currentJob">
+                  <input class="form-check-input" type="checkbox" id="expCurrentJob">
+                  <label class="form-check-label" for="expCurrentJob">
                     J'occupe actuellement ce poste
                   </label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <textarea class="form-control" id="jobDescription" style="height: 120px" placeholder="Description" required></textarea>
-                  <label for="jobDescription">Description</label>
+                  <textarea class="form-control" id="expDescription" style="height: 120px" placeholder="Description" required></textarea>
+                  <label for="expDescription">Description</label>
                 </div>
               </div>
             </div>
@@ -604,7 +779,7 @@
     </div>
   </div>
 
-  <!-- Modal Ajout Formation -->
+  <!-- Modal Ajout/Modification Formation -->
   <div class="modal fade" id="addEducationModal" tabindex="-1" aria-labelledby="addEducationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -614,35 +789,36 @@
         </div>
         <div class="modal-body">
           <form id="educationForm">
+            <input type="hidden" id="educationId">
             <div class="row g-3">
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="degree" placeholder="Diplôme" required>
-                  <label for="degree">Diplôme</label>
+                  <input type="text" class="form-control" id="eduDegree" placeholder="Diplôme" required>
+                  <label for="eduDegree">Diplôme</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="school" placeholder="Établissement" required>
-                  <label for="school">Établissement</label>
+                  <input type="text" class="form-control" id="eduSchool" placeholder="Établissement" required>
+                  <label for="eduSchool">Établissement</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="educationStartDate" placeholder="Date de début" required>
-                  <label for="educationStartDate">Date de début</label>
+                  <input type="month" class="form-control" id="eduStartDate" placeholder="Date de début" required>
+                  <label for="eduStartDate">Date de début</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="educationEndDate" placeholder="Date de fin">
-                  <label for="educationEndDate">Date de fin</label>
+                  <input type="month" class="form-control" id="eduEndDate" placeholder="Date de fin">
+                  <label for="eduEndDate">Date de fin</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <textarea class="form-control" id="educationDescription" style="height: 100px" placeholder="Description"></textarea>
-                  <label for="educationDescription">Description</label>
+                  <textarea class="form-control" id="eduDescription" style="height: 100px" placeholder="Description"></textarea>
+                  <label for="eduDescription">Description</label>
                 </div>
               </div>
             </div>
@@ -656,7 +832,7 @@
     </div>
   </div>
 
-  <!-- Modal Ajout Compétence -->
+  <!-- Modal Ajout/Modification Compétence -->
   <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -666,6 +842,7 @@
         </div>
         <div class="modal-body">
           <form id="skillForm">
+            <input type="hidden" id="skillId">
             <div class="row g-3">
               <div class="col-12">
                 <div class="form-floating">
@@ -704,7 +881,7 @@
     </div>
   </div>
 
-  <!-- Modal Ajout Langue -->
+  <!-- Modal Ajout/Modification Langue -->
   <div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -714,23 +891,24 @@
         </div>
         <div class="modal-body">
           <form id="languageForm">
+            <input type="hidden" id="languageId">
             <div class="row g-3">
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="languageName" placeholder="Langue" required>
-                  <label for="languageName">Langue</label>
+                  <input type="text" class="form-control" id="langName" placeholder="Langue" required>
+                  <label for="langName">Langue</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <select class="form-select" id="languageLevel" required>
+                  <select class="form-select" id="langLevel" required>
                     <option value="native">Langue maternelle</option>
                     <option value="fluent">Courant</option>
                     <option value="professional">Professionnel</option>
                     <option value="intermediate">Intermédiaire</option>
                     <option value="basic">Basique</option>
                   </select>
-                  <label for="languageLevel">Niveau</label>
+                  <label for="langLevel">Niveau</label>
                 </div>
               </div>
             </div>
@@ -744,7 +922,7 @@
     </div>
   </div>
 
-  <!-- Modal Ajout Certification -->
+  <!-- Modal Ajout/Modification Certification -->
   <div class="modal fade" id="addCertificationModal" tabindex="-1" aria-labelledby="addCertificationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -754,29 +932,30 @@
         </div>
         <div class="modal-body">
           <form id="certificationForm">
+            <input type="hidden" id="certificationId">
             <div class="row g-3">
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="certificationName" placeholder="Nom de la certification" required>
-                  <label for="certificationName">Certification</label>
+                  <input type="text" class="form-control" id="certName" placeholder="Nom de la certification" required>
+                  <label for="certName">Certification</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="certificationOrg" placeholder="Organisation" required>
-                  <label for="certificationOrg">Organisation</label>
+                  <input type="text" class="form-control" id="certOrg" placeholder="Organisation" required>
+                  <label for="certOrg">Organisation</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="certificationDate" placeholder="Date d'obtention" required>
-                  <label for="certificationDate">Date d'obtention</label>
+                  <input type="month" class="form-control" id="certDate" placeholder="Date d'obtention" required>
+                  <label for="certDate">Date d'obtention</label>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="certificationId" placeholder="ID de certification">
-                  <label for="certificationId">ID de certification (optionnel)</label>
+                  <input type="text" class="form-control" id="certId" placeholder="ID de certification">
+                  <label for="certId">ID de certification (optionnel)</label>
                 </div>
               </div>
             </div>
@@ -792,68 +971,411 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Fonctions pour gérer l'ajout dynamique d'éléments
+    // Données temporaires pour le profil
+    let profileData = {
+      name: "Omar Mansouri",
+      title: "Développeur Full Stack",
+      location: "Casablanca, Maroc",
+      about: "Développeur Full Stack passionné avec 5 ans d'expérience dans la création d'applications web performantes. Spécialisé en JavaScript (React, Node.js) et architectures cloud. J'aime résoudre des problèmes complexes et créer des solutions innovantes qui améliorent l'expérience utilisateur.",
+      social: {
+        linkedin: "linkedin.com/in/omar-mansouri",
+        github: "github.com/omarmansouri",
+        twitter: "twitter.com/omarmansouri",
+        website: "omarmansouri.ma"
+      },
+      experiences: [
+        {
+          id: 0,
+          jobTitle: "Développeur Full Stack Senior",
+          companyName: "TechSolutions Inc.",
+          location: "Casablanca",
+          startDate: "2021-01",
+          endDate: "",
+          current: true,
+          description: "- Conception et développement d'une plateforme SaaS pour la gestion des ressources humaines\n- Encadrement d'une équipe de 3 développeurs juniors\n- Optimisation des performances (réduction du temps de chargement de 40%)"
+        },
+        {
+          id: 1,
+          jobTitle: "Développeur Frontend",
+          companyName: "WebVision",
+          location: "Rabat",
+          startDate: "2019-03",
+          endDate: "2020-12",
+          current: false,
+          description: "- Développement d'interfaces utilisateur avec React et Redux\n- Collaboration avec les designers pour implémenter des maquettes Figma\n- Participation aux revues de code et amélioration des processus CI/CD"
+        }
+      ],
+      educations: [
+        {
+          id: 0,
+          degree: "Master en Ingénierie Logicielle",
+          school: "Université Mohammed V",
+          location: "Rabat",
+          startDate: "2017",
+          endDate: "2019",
+          description: "Spécialisation en architectures distribuées et cloud computing. Projet de fin d'études sur l'optimisation des requêtes GraphQL dans les applications microservices."
+        },
+        {
+          id: 1,
+          degree: "Licence en Informatique",
+          school: "Université Hassan II",
+          location: "Casablanca",
+          startDate: "2014",
+          endDate: "2017",
+          description: ""
+        }
+      ],
+      skills: {
+        technical: ["JavaScript", "React", "Node.js", "TypeScript", "GraphQL", "MongoDB", "Docker", "AWS"],
+        soft: ["Leadership", "Communication", "Travail d'équipe", "Résolution de problèmes"]
+      },
+      languages: [
+        {
+          id: 0,
+          name: "Arabe",
+          level: "native"
+        },
+        {
+          id: 1,
+          name: "Français",
+          level: "fluent"
+        },
+        {
+          id: 2,
+          name: "Anglais",
+          level: "professional"
+        }
+      ],
+      certifications: [
+        {
+          id: 0,
+          name: "AWS Certified Developer",
+          organization: "Amazon Web Services",
+          date: "2022",
+          certId: ""
+        },
+        {
+          id: 1,
+          name: "React Advanced Concepts",
+          organization: "Frontend Masters",
+          date: "2021",
+          certId: ""
+        },
+        {
+          id: 2,
+          name: "Node.js: Microservices Architecture",
+          organization: "Udemy",
+          date: "2020",
+          certId: ""
+        }
+      ]
+    };
+
+    // Variables pour gérer l'édition
+    let currentEditId = null;
+    let currentEditType = null;
+
+    // Fonction pour formater la date
+    function formatDate(dateStr) {
+      if (!dateStr) return "Présent";
+      const date = new Date(dateStr);
+      const options = { year: 'numeric', month: 'long' };
+      return date.toLocaleDateString('fr-FR', options);
+    }
+
+    // Fonction pour formater la date en format YYYY-MM
+    function formatDateForInput(dateStr) {
+      if (!dateStr) return "";
+      const date = new Date(dateStr);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      return `${year}-${month}`;
+    }
+
+    // Fonctions pour sauvegarder les données
+    function saveProfile() {
+      const form = document.getElementById('profileForm');
+      profileData.name = document.getElementById('fullName').value;
+      profileData.title = document.getElementById('jobTitle').value;
+      profileData.location = document.getElementById('location').value;
+      profileData.social.linkedin = document.querySelector('#profileForm .input-group:nth-child(1) input').value;
+      profileData.social.github = document.querySelector('#profileForm .input-group:nth-child(2) input').value;
+      profileData.social.twitter = document.querySelector('#profileForm .input-group:nth-child(3) input').value;
+      profileData.social.website = document.querySelector('#profileForm .input-group:nth-child(4) input').value;
+      
+      // Mettre à jour l'affichage
+      document.querySelector('.profile-header h3').textContent = profileData.name;
+      document.querySelector('.profile-header p:nth-of-type(1)').innerHTML = `<i class="bi bi-briefcase me-2"></i>${profileData.title}`;
+      document.querySelector('.profile-header p:nth-of-type(2)').innerHTML = `<i class="bi bi-geo-alt me-2"></i>${profileData.location}`;
+      
+      // Fermer le modal
+      bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+    }
+
+    function saveAbout() {
+      const aboutText = document.getElementById('aboutTextArea').value;
+      profileData.about = aboutText;
+      document.getElementById('aboutText').textContent = aboutText;
+      bootstrap.Modal.getInstance(document.getElementById('editAboutModal')).hide();
+    }
+
+    // Fonctions pour gérer les expériences
     function addExperience(experience) {
+      experience.id = profileData.experiences.length > 0 ? 
+        Math.max(...profileData.experiences.map(e => e.id)) + 1 : 0;
+      profileData.experiences.unshift(experience);
+      renderExperiences();
+    }
+
+    function editExperience(id) {
+      const experience = profileData.experiences.find(e => e.id === id);
+      if (!experience) return;
+      
+      currentEditId = id;
+      currentEditType = 'experience';
+      
+      document.getElementById('experienceId').value = id;
+      document.getElementById('expJobTitle').value = experience.jobTitle;
+      document.getElementById('expCompanyName').value = experience.companyName;
+      document.getElementById('expLocation').value = experience.location;
+      document.getElementById('expStartDate').value = formatDateForInput(experience.startDate);
+      document.getElementById('expEndDate').value = formatDateForInput(experience.endDate);
+      document.getElementById('expCurrentJob').checked = experience.current;
+      document.getElementById('expDescription').value = experience.description;
+      
+      const modal = new bootstrap.Modal(document.getElementById('addExperienceModal'));
+      modal.show();
+    }
+
+    function updateExperience(id, updatedExperience) {
+      const index = profileData.experiences.findIndex(e => e.id === id);
+      if (index !== -1) {
+        profileData.experiences[index] = updatedExperience;
+        renderExperiences();
+      }
+    }
+
+    function deleteExperience(id) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer cette expérience ?")) {
+        profileData.experiences = profileData.experiences.filter(e => e.id !== id);
+        renderExperiences();
+      }
+    }
+
+    function renderExperiences() {
       const container = document.getElementById('experiences-container');
+      container.innerHTML = '';
       
-      const experienceItem = document.createElement('div');
-      experienceItem.className = 'timeline-item';
-      
-      const isCurrent = experience.endDate === '' || experience.currentJob;
-      const endDateText = isCurrent ? 'Présent' : experience.endDate;
-      
-      experienceItem.innerHTML = `
-        <div class="timeline-badge">
-          <i class="bi bi-briefcase"></i>
-        </div>
-        <div class="timeline-content">
-          <div class="d-flex justify-content-between">
-            <h5 class="mb-1">${experience.jobTitle}</h5>
-            ${isCurrent ? '<span class="badge bg-primary">Actuel</span>' : ''}
+      profileData.experiences.forEach(exp => {
+        const isCurrent = exp.endDate === '' || exp.current;
+        const endDateText = isCurrent ? 'Présent' : formatDate(exp.endDate);
+        
+        const expItem = document.createElement('div');
+        expItem.className = 'timeline-item';
+        expItem.innerHTML = `
+          <div class="timeline-badge">
+            <i class="bi bi-briefcase"></i>
           </div>
-          <p class="mb-1 text-muted">${experience.companyName} - ${experience.location}</p>
-          <small class="text-muted">${experience.startDate} - ${endDateText}</small>
-          <p class="mt-2 mb-0">${experience.jobDescription.replace(/\n/g, '<br>')}</p>
-        </div>
-      `;
-      
-      container.insertBefore(experienceItem, container.firstChild);
+          <div class="timeline-content">
+            <div class="timeline-actions">
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience(${exp.id})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteExperience(${exp.id})"><i class="bi bi-trash"></i></button>
+            </div>
+            <div class="d-flex justify-content-between">
+              <h5 class="mb-1">${exp.jobTitle}</h5>
+              ${isCurrent ? '<span class="badge bg-primary">Actuel</span>' : ''}
+            </div>
+            <p class="mb-1 text-muted">${exp.companyName} - ${exp.location}</p>
+            <small class="text-muted">${formatDate(exp.startDate)} - ${endDateText}</small>
+            <p class="mt-2 mb-0">${exp.description.replace(/\n/g, '<br>')}</p>
+          </div>
+        `;
+        container.appendChild(expItem);
+      });
     }
 
+    // Fonctions pour gérer les formations
     function addEducation(education) {
+      education.id = profileData.educations.length > 0 ? 
+        Math.max(...profileData.educations.map(e => e.id)) + 1 : 0;
+      profileData.educations.unshift(education);
+      renderEducations();
+    }
+
+    function editEducation(id) {
+      const education = profileData.educations.find(e => e.id === id);
+      if (!education) return;
+      
+      currentEditId = id;
+      currentEditType = 'education';
+      
+      document.getElementById('educationId').value = id;
+      document.getElementById('eduDegree').value = education.degree;
+      document.getElementById('eduSchool').value = education.school;
+      document.getElementById('eduStartDate').value = formatDateForInput(education.startDate);
+      document.getElementById('eduEndDate').value = formatDateForInput(education.endDate);
+      document.getElementById('eduDescription').value = education.description;
+      
+      const modal = new bootstrap.Modal(document.getElementById('addEducationModal'));
+      modal.show();
+    }
+
+    function updateEducation(id, updatedEducation) {
+      const index = profileData.educations.findIndex(e => e.id === id);
+      if (index !== -1) {
+        profileData.educations[index] = updatedEducation;
+        renderEducations();
+      }
+    }
+
+    function deleteEducation(id) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer cette formation ?")) {
+        profileData.educations = profileData.educations.filter(e => e.id !== id);
+        renderEducations();
+      }
+    }
+
+    function renderEducations() {
       const container = document.getElementById('educations-container');
+      container.innerHTML = '';
       
-      const educationItem = document.createElement('div');
-      educationItem.className = 'timeline-item';
-      
-      educationItem.innerHTML = `
-        <div class="timeline-badge">
-          <i class="bi bi-mortarboard"></i>
-        </div>
-        <div class="timeline-content">
-          <h5 class="mb-1">${education.degree}</h5>
-          <p class="mb-1 text-muted">${education.school}</p>
-          <small class="text-muted">${education.startDate} - ${education.endDate || 'Présent'}</small>
-          ${education.description ? `<p class="mt-2 mb-0">${education.description.replace(/\n/g, '<br>')}</p>` : ''}
-        </div>
-      `;
-      
-      container.insertBefore(educationItem, container.firstChild);
+      profileData.educations.forEach(edu => {
+        const eduItem = document.createElement('div');
+        eduItem.className = 'timeline-item';
+        eduItem.innerHTML = `
+          <div class="timeline-badge">
+            <i class="bi bi-mortarboard"></i>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-actions">
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation(${edu.id})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation(${edu.id})"><i class="bi bi-trash"></i></button>
+            </div>
+            <h5 class="mb-1">${edu.degree}</h5>
+            <p class="mb-1 text-muted">${edu.school} - ${edu.location}</p>
+            <small class="text-muted">${formatDate(edu.startDate)} - ${edu.endDate ? formatDate(edu.endDate) : 'Présent'}</small>
+            ${edu.description ? `<p class="mt-2 mb-0">${edu.description.replace(/\n/g, '<br>')}</p>` : ''}
+          </div>
+        `;
+        container.appendChild(eduItem);
+      });
     }
 
+    // Fonctions pour gérer les compétences
     function addSkill(skill) {
-      const containerId = skill.type === 'technical' ? 'technical-skills' : 'soft-skills';
-      const container = document.getElementById(containerId);
-      
-      const skillBadge = document.createElement('span');
-      skillBadge.className = 'skill-badge';
-      skillBadge.innerHTML = `${skill.name} <i class="bi bi-check-circle ms-1"></i>`;
-      
-      container.appendChild(skillBadge);
+      if (skill.type === 'technical') {
+        if (!profileData.skills.technical.includes(skill.name)) {
+          profileData.skills.technical.push(skill.name);
+        }
+      } else {
+        if (!profileData.skills.soft.includes(skill.name)) {
+          profileData.skills.soft.push(skill.name);
+        }
+      }
+      renderSkills();
     }
 
+    function editSkill(name, type) {
+      currentEditId = name;
+      currentEditType = type;
+      
+      document.getElementById('skillId').value = name;
+      document.getElementById('skillName').value = name;
+      document.getElementById('skillType').value = type;
+      
+      const modal = new bootstrap.Modal(document.getElementById('addSkillModal'));
+      modal.show();
+    }
+
+    function updateSkill(oldName, newSkill) {
+      if (newSkill.type === 'technical') {
+        profileData.skills.technical = profileData.skills.technical.filter(s => s !== oldName);
+        if (!profileData.skills.technical.includes(newSkill.name)) {
+          profileData.skills.technical.push(newSkill.name);
+        }
+      } else {
+        profileData.skills.soft = profileData.skills.soft.filter(s => s !== oldName);
+        if (!profileData.skills.soft.includes(newSkill.name)) {
+          profileData.skills.soft.push(newSkill.name);
+        }
+      }
+      renderSkills();
+    }
+
+    function deleteSkill(name, type) {
+      if (confirm(`Êtes-vous sûr de vouloir supprimer la compétence "${name}" ?`)) {
+        if (type === 'technical') {
+          profileData.skills.technical = profileData.skills.technical.filter(s => s !== name);
+        } else {
+          profileData.skills.soft = profileData.skills.soft.filter(s => s !== name);
+        }
+        renderSkills();
+      }
+    }
+
+    function renderSkills() {
+      const technicalContainer = document.getElementById('technical-skills');
+      const softContainer = document.getElementById('soft-skills');
+      
+      technicalContainer.innerHTML = '';
+      softContainer.innerHTML = '';
+      
+      profileData.skills.technical.forEach(skill => {
+        const skillBadge = document.createElement('span');
+        skillBadge.className = 'skill-badge';
+        skillBadge.innerHTML = `${skill} <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('${skill}', 'technical')"></i>`;
+        technicalContainer.appendChild(skillBadge);
+      });
+      
+      profileData.skills.soft.forEach(skill => {
+        const skillBadge = document.createElement('span');
+        skillBadge.className = 'skill-badge';
+        skillBadge.innerHTML = `${skill} <i class="bi bi-x delete-btn" onclick="deleteSkill('${skill}', 'soft')"></i>`;
+        softContainer.appendChild(skillBadge);
+      });
+    }
+
+    // Fonctions pour gérer les langues
     function addLanguage(language) {
+      language.id = profileData.languages.length > 0 ? 
+        Math.max(...profileData.languages.map(l => l.id)) + 1 : 0;
+      profileData.languages.unshift(language);
+      renderLanguages();
+    }
+
+    function editLanguage(id) {
+      const language = profileData.languages.find(l => l.id === id);
+      if (!language) return;
+      
+      currentEditId = id;
+      currentEditType = 'language';
+      
+      document.getElementById('languageId').value = id;
+      document.getElementById('langName').value = language.name;
+      document.getElementById('langLevel').value = language.level;
+      
+      const modal = new bootstrap.Modal(document.getElementById('addLanguageModal'));
+      modal.show();
+    }
+
+    function updateLanguage(id, updatedLanguage) {
+      const index = profileData.languages.findIndex(l => l.id === id);
+      if (index !== -1) {
+        profileData.languages[index] = updatedLanguage;
+        renderLanguages();
+      }
+    }
+
+    function deleteLanguage(id) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer cette langue ?")) {
+        profileData.languages = profileData.languages.filter(l => l.id !== id);
+        renderLanguages();
+      }
+    }
+
+    function renderLanguages() {
       const container = document.getElementById('languages-container');
+      container.innerHTML = '';
       
       const levelMap = {
         'native': {text: 'Langue maternelle', width: '100%'},
@@ -863,35 +1385,90 @@
         'basic': {text: 'Basique', width: '40%'}
       };
       
-      const levelInfo = levelMap[language.level] || levelMap['basic'];
-      
-      const languageItem = document.createElement('div');
-      languageItem.className = 'mb-3';
-      languageItem.innerHTML = `
-        <div class="d-flex justify-content-between">
-          <span>${language.name}</span>
+      profileData.languages.forEach(lang => {
+        const levelInfo = levelMap[lang.level] || levelMap['basic'];
+        
+        const langItem = document.createElement('div');
+        langItem.className = 'mb-3';
+        langItem.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <span>${lang.name}</span>
+            <div>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(${lang.id})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(${lang.id})"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
           <small>${levelInfo.text}</small>
-        </div>
-        <div class="language-level">
-          <div class="language-level-fill" style="width: ${levelInfo.width}"></div>
-        </div>
-      `;
-      
-      container.insertBefore(languageItem, container.firstChild);
+          <div class="language-level">
+            <div class="language-level-fill" style="width: ${levelInfo.width}"></div>
+          </div>
+        `;
+        container.appendChild(langItem);
+      });
     }
 
+    // Fonctions pour gérer les certifications
     function addCertification(certification) {
+      certification.id = profileData.certifications.length > 0 ? 
+        Math.max(...profileData.certifications.map(c => c.id)) + 1 : 0;
+      profileData.certifications.unshift(certification);
+      renderCertifications();
+    }
+
+    function editCertification(id) {
+      const certification = profileData.certifications.find(c => c.id === id);
+      if (!certification) return;
+      
+      currentEditId = id;
+      currentEditType = 'certification';
+      
+      document.getElementById('certificationId').value = id;
+      document.getElementById('certName').value = certification.name;
+      document.getElementById('certOrg').value = certification.organization;
+      document.getElementById('certDate').value = formatDateForInput(certification.date);
+      document.getElementById('certId').value = certification.certId || '';
+      
+      const modal = new bootstrap.Modal(document.getElementById('addCertificationModal'));
+      modal.show();
+    }
+
+    function updateCertification(id, updatedCertification) {
+      const index = profileData.certifications.findIndex(c => c.id === id);
+      if (index !== -1) {
+        profileData.certifications[index] = updatedCertification;
+        renderCertifications();
+      }
+    }
+
+    function deleteCertification(id) {
+      if (confirm("Êtes-vous sûr de vouloir supprimer cette certification ?")) {
+        profileData.certifications = profileData.certifications.filter(c => c.id !== id);
+        renderCertifications();
+      }
+    }
+
+    function renderCertifications() {
       const container = document.getElementById('certifications-container');
+      container.innerHTML = '';
       
-      const certItem = document.createElement('div');
-      certItem.className = 'mb-3';
-      certItem.innerHTML = `
-        <h6 class="mb-1">${certification.name}</h6>
-        <small class="text-muted">${certification.organization} - ${certification.date}</small>
-        ${certification.id ? `<small class="d-block text-muted">ID: ${certification.id}</small>` : ''}
-      `;
-      
-      container.insertBefore(certItem, container.firstChild);
+      profileData.certifications.forEach(cert => {
+        const certItem = document.createElement('div');
+        certItem.className = 'mb-3';
+        certItem.innerHTML = `
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="mb-1">${cert.name}</h6>
+              <small class="text-muted">${cert.organization} - ${formatDate(cert.date)}</small>
+              ${cert.certId ? `<small class="d-block text-muted">ID: ${cert.certId}</small>` : ''}
+            </div>
+            <div>
+              <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(${cert.id})"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(${cert.id})"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+        `;
+        container.appendChild(certItem);
+      });
     }
 
     // Gestion des événements
@@ -904,54 +1481,72 @@
         dateElement.textContent = today.toLocaleDateString('fr-FR', options);
       }
 
-      // Gestion du menu mobile
-      document.getElementById('menuToggle').addEventListener('click', function() {
-        document.querySelector('.side-menu').classList.toggle('show');
-      });
+      // Initialiser les données
+      renderExperiences();
+      renderEducations();
+      renderSkills();
+      renderLanguages();
+      renderCertifications();
 
-      // Gestion de l'ajout d'expérience
+      // Gestion de l'ajout/modification d'expérience
       document.getElementById('saveExperience').addEventListener('click', function() {
         const form = document.getElementById('experienceForm');
         if (form.checkValidity()) {
           const experience = {
-            jobTitle: document.getElementById('jobTitle').value,
-            companyName: document.getElementById('companyName').value,
-            location: document.getElementById('location').value,
-            startDate: document.getElementById('startDate').value,
-            endDate: document.getElementById('endDate').value,
-            currentJob: document.getElementById('currentJob').checked,
-            jobDescription: document.getElementById('jobDescription').value
+            id: parseInt(document.getElementById('experienceId').value),
+            jobTitle: document.getElementById('expJobTitle').value,
+            companyName: document.getElementById('expCompanyName').value,
+            location: document.getElementById('expLocation').value,
+            startDate: document.getElementById('expStartDate').value,
+            endDate: document.getElementById('expCurrentJob').checked ? '' : document.getElementById('expEndDate').value,
+            current: document.getElementById('expCurrentJob').checked,
+            description: document.getElementById('expDescription').value
           };
           
-          addExperience(experience);
+          if (currentEditId !== null) {
+            updateExperience(currentEditId, experience);
+          } else {
+            addExperience(experience);
+          }
+          
           bootstrap.Modal.getInstance(document.getElementById('addExperienceModal')).hide();
           form.reset();
+          currentEditId = null;
+          currentEditType = null;
         } else {
           form.reportValidity();
         }
       });
 
-      // Gestion de l'ajout de formation
+      // Gestion de l'ajout/modification de formation
       document.getElementById('saveEducation').addEventListener('click', function() {
         const form = document.getElementById('educationForm');
         if (form.checkValidity()) {
           const education = {
-            degree: document.getElementById('degree').value,
-            school: document.getElementById('school').value,
-            startDate: document.getElementById('educationStartDate').value,
-            endDate: document.getElementById('educationEndDate').value,
-            description: document.getElementById('educationDescription').value
+            id: parseInt(document.getElementById('educationId').value),
+            degree: document.getElementById('eduDegree').value,
+            school: document.getElementById('eduSchool').value,
+            startDate: document.getElementById('eduStartDate').value,
+            endDate: document.getElementById('eduEndDate').value,
+            description: document.getElementById('eduDescription').value
           };
           
-          addEducation(education);
+          if (currentEditId !== null) {
+            updateEducation(currentEditId, education);
+          } else {
+            addEducation(education);
+          }
+          
           bootstrap.Modal.getInstance(document.getElementById('addEducationModal')).hide();
           form.reset();
+          currentEditId = null;
+          currentEditType = null;
         } else {
           form.reportValidity();
         }
       });
 
-      // Gestion de l'ajout de compétence
+      // Gestion de l'ajout/modification de compétence
       document.getElementById('saveSkill').addEventListener('click', function() {
         const form = document.getElementById('skillForm');
         if (form.checkValidity()) {
@@ -961,48 +1556,81 @@
             level: document.getElementById('skillLevel').value
           };
           
-          addSkill(skill);
+          if (currentEditId !== null) {
+            updateSkill(currentEditId, skill);
+          } else {
+            addSkill(skill);
+          }
+          
           bootstrap.Modal.getInstance(document.getElementById('addSkillModal')).hide();
           form.reset();
+          currentEditId = null;
+          currentEditType = null;
         } else {
           form.reportValidity();
         }
       });
 
-      // Gestion de l'ajout de langue
+      // Gestion de l'ajout/modification de langue
       document.getElementById('saveLanguage').addEventListener('click', function() {
         const form = document.getElementById('languageForm');
         if (form.checkValidity()) {
           const language = {
-            name: document.getElementById('languageName').value,
-            level: document.getElementById('languageLevel').value
+            id: parseInt(document.getElementById('languageId').value),
+            name: document.getElementById('langName').value,
+            level: document.getElementById('langLevel').value
           };
           
-          addLanguage(language);
+          if (currentEditId !== null) {
+            updateLanguage(currentEditId, language);
+          } else {
+            addLanguage(language);
+          }
+          
           bootstrap.Modal.getInstance(document.getElementById('addLanguageModal')).hide();
           form.reset();
+          currentEditId = null;
+          currentEditType = null;
         } else {
           form.reportValidity();
         }
       });
 
-      // Gestion de l'ajout de certification
+      // Gestion de l'ajout/modification de certification
       document.getElementById('saveCertification').addEventListener('click', function() {
         const form = document.getElementById('certificationForm');
         if (form.checkValidity()) {
           const certification = {
-            name: document.getElementById('certificationName').value,
-            organization: document.getElementById('certificationOrg').value,
-            date: document.getElementById('certificationDate').value,
-            id: document.getElementById('certificationId').value
+            id: parseInt(document.getElementById('certificationId').value),
+            name: document.getElementById('certName').value,
+            organization: document.getElementById('certOrg').value,
+            date: document.getElementById('certDate').value,
+            certId: document.getElementById('certId').value
           };
           
-          addCertification(certification);
+          if (currentEditId !== null) {
+            updateCertification(currentEditId, certification);
+          } else {
+            addCertification(certification);
+          }
+          
           bootstrap.Modal.getInstance(document.getElementById('addCertificationModal')).hide();
           form.reset();
+          currentEditId = null;
+          currentEditType = null;
         } else {
           form.reportValidity();
         }
+      });
+
+      // Réinitialiser les modals lorsqu'ils sont fermés
+      document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', function() {
+          const form = this.querySelector('form');
+          if (form) form.reset();
+          currentEditId = null;
+          currentEditType = null;
+        });
       });
     });
   </script>
