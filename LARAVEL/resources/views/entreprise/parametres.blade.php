@@ -12,12 +12,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-compoEntreprise.side-menu activePage='9' />
+    <x-compoEntreprise.side-menu activePage='9' :entreprise="$entreprise" />
   </div>
 
   <!-- Barre de navigation supérieure enrichie -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-compoEntreprise.navbar />
+    <x-compoEntreprise.navbar :entreprise="$entreprise"/>
   </nav>
 
   <!-- Contenu principal -->
@@ -67,7 +67,7 @@
                 <h3 class="settings-title"><i class="bi bi-person"></i> Informations du compte</h3>
                 
                 <div class="text-center mb-4">
-                  <img src="https://via.placeholder.com/120" alt="Photo de profil" class="account-img rounded-circle mb-3">
+                  <img src="{{asset('storage/'.$entreprise->logo)}}" alt="Photo de profil" class="account-img rounded-circle mb-3">
                   <div>
                     <button class="btn btn-sm btn-outline-primary me-2">Changer la photo</button>
                     <button class="btn btn-sm btn-outline-secondary">Supprimer</button>
@@ -88,17 +88,17 @@
                   
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" value="mohamed.elamrani@example.com">
+                    <input type="email" class="form-control" id="email" value="{{$entreprise->email}}">
                   </div>
                   
                   <div class="mb-3">
                     <label for="phone" class="form-label">Téléphone</label>
-                    <input type="tel" class="form-control" id="phone" value="+212 6 12 34 56 78">
+                    <input type="tel" class="form-control" id="phone" value="{{$entreprise->phone}}">
                   </div>
                   
                   <div class="mb-3">
                     <label for="company" class="form-label">Entreprise</label>
-                    <input type="text" class="form-control" id="company" value="Tech Solutions Maroc">
+                    <input type="text" class="form-control" id="company" value="{{$entreprise->nomEntreprise}}">
                   </div>
                   
                   <div class="mb-3">

@@ -27,14 +27,17 @@ class loginController extends Controller
         ]);
 
         if(Auth::guard('candidats')->attempt($credentials)){
-
+            $request->session()->regenerate();
             return to_route('candidat.dashboard');
 
         }else
         if(Auth::guard('entreprises')->attempt($credentials)){
-            return to_route('entreprise.dashboard');
+            $request->session()->regenerate();
+            $entreprise = Auth::guard('entreprises')->user();
+            return to_route('entreprise.dashboard', ['entreprise' => $entreprise->id]);
         }else
         if(Auth::guard('admins')->attempt($credentials)){
+            $request->session()->regenerate();
             return to_route('admin.dashboard');
         }else
             return back()->withErrors([

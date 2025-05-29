@@ -11,12 +11,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-compoEntreprise.side-menu activePage='5' />
+    <x-compoEntreprise.side-menu activePage='5' :entreprise="$entreprise" />
   </div>
 
   <!-- Barre de navigation supérieure -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-compoEntreprise.navbar />
+    <x-compoEntreprise.navbar :entreprise="$entreprise"/>
   </nav>
 
   <!-- Contenu principal -->

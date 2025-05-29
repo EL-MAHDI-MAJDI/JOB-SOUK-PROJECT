@@ -139,16 +139,16 @@
             <label for="secteur" class="form-label">Secteur d'activité*</label>
             <select class="form-select @error('SecteurActivite') is-invalid @enderror" id="secteur" name="SecteurActivite" required>
               <option value="" >Sélectionnez un secteur</option>
-              <option value="technologie" {{ old('SecteurActivite') == 'technologie' ? 'selected' : '' }}>Technologie</option>
-              <option value="finance" {{ old('SecteurActivite') == 'finance' ? 'selected' : '' }}>Finance</option>
-              <option value="sante" {{ old('SecteurActivite') == 'sante' ? 'selected' : '' }}>Santé</option>
-              <option value="education" {{ old('SecteurActivite') == 'education' ? 'selected' : '' }}>Éducation</option>
-              <option value="industrie" {{ old('SecteurActivite') == 'industrie' ? 'selected' : '' }}>Industrie</option>
-              <option value="commerce" {{ old('SecteurActivite') == 'commerce' ? 'selected' : '' }}>Commerce</option>
-              <option value="autre" {{ !in_array(old('SecteurActivite'), ['technologie','finance','sante','education','industrie','commerce','']) ? 'selected' : '' }}>Autre</option>
+              <option value="Technologie" {{ old('SecteurActivite') == 'Technologie' ? 'selected' : '' }}>Technologie</option>
+              <option value="Finance" {{ old('SecteurActivite') == 'Finance' ? 'selected' : '' }}>Finance</option>
+              <option value="Santé" {{ old('SecteurActivite') == 'Santé' ? 'selected' : '' }}>Santé</option>
+              <option value="Éducation" {{ old('SecteurActivite') == 'Éducation' ? 'selected' : '' }}>Éducation</option>
+              <option value="Industrie" {{ old('SecteurActivite') == 'Industrie' ? 'selected' : '' }}>Industrie</option>
+              <option value="Commerce" {{ old('SecteurActivite') == 'Commerce' ? 'selected' : '' }}>Commerce</option>
+              <option value="autre" {{ !in_array(old('SecteurActivite'), ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? 'selected' : '' }}>Autre</option>
             </select>
             <div id="autreSecteurContainer" class="mt-2">
-              <input type="text" class="form-select @error('SecteurActivite') is-invalid @enderror" id="autreSecteur" placeholder="Veuillez préciser votre secteur d'activité" value="{{ old('SecteurActivite') && !in_array(old('SecteurActivite'), ['technologie','finance','sante','education','industrie','commerce','']) ? old('SecteurActivite') : '' }}" required>
+              <input type="text" class="form-select @error('SecteurActivite') is-invalid @enderror" id="autreSecteur" placeholder="Veuillez préciser votre secteur d'activité" value="{{ old('SecteurActivite') && !in_array(old('SecteurActivite'), ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? old('SecteurActivite') : '' }}" required>
             </div>
             @error('SecteurActivite')
                 <div class="invalid-feedback">{{ $message }}</div>

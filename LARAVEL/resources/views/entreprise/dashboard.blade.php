@@ -12,12 +12,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-compoEntreprise.side-menu activePage='1' />
+    <x-compoEntreprise.side-menu activePage='1' :entreprise="$entreprise" />
   </div>
 
   <!-- Barre de navigation supérieure enrichie -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-compoEntreprise.navbar />
+    <x-compoEntreprise.navbar :entreprise="$entreprise"/>
   </nav>
 
   <!-- Contenu principal -->
@@ -30,7 +30,7 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Tableau de bord</h2>
-          <p class="text-muted mb-0">Bienvenue, voici votre activité récente</p>
+          <p class="text-muted mb-0">Bienvenue {{$entreprise->nomEntreprise}}, voici votre activité récente</p>
         </div>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOfferModal">
           <i class="bi bi-plus"></i> Nouvelle offre

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\entreprise;
 use App\Http\Controllers\Controller;
-
+use App\Models\Entreprise;
 use Illuminate\Http\Request;
 
 class dashboardController extends Controller
 {
-    public function index(Request $request){
-        // $profiles=Profile::paginate(10);
-        // $profiles=Profile::all();
-        return view('entreprise.dashboard');
+    public function show(Entreprise $entreprise){
+        //  $id=(int) $request->id;
+        //  $entreprise=Entreprise::findOrFail($id);
+        // dd($entreprise);
+        return view('entreprise.dashboard',compact('entreprise'));
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Entreprise;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class inscriptionEntrepriseController extends Controller
 {
@@ -63,7 +64,7 @@ class inscriptionEntrepriseController extends Controller
         ]);
         // dd($nomEntreprise,$email,$SecteurActivite,$tailleEntreprise,$siteWeb,$ville,$adresse,$dateCreation,$description,$logo,$phone,$password);
         // insertion
-        Entreprise::create([
+        $entreprise = Entreprise::create([
             'nomEntreprise' => $nomEntreprise,
             'email' => $email,
             'SecteurActivite' => $SecteurActivite,
@@ -77,8 +78,9 @@ class inscriptionEntrepriseController extends Controller
             'phone' => $phone,
             'password' => bcrypt($password),
         ]);
-
+        Auth::guard('entreprises')->login($entreprise);
+        
         // redirection
-        return redirect()->route('entreprise.dashboard')->with('success', 'Votre compte entreprise a été créé avec succès !');
+        return to_route('entreprise.dashboard', ['entreprise' => $entreprise->id])->with('success', 'Votre compte entreprise a été créé avec succès !');
     }
 }

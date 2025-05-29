@@ -396,7 +396,7 @@
                   </div>
                   <div class="d-flex justify-content-between">
                     <h5 class="mb-1">Développeur Full Stack Senior</h5>
-                    <span class="badge bg-primary">Actuel</span>
+                    <!-- <span class="badge bg-primary">Actuel</span> -->
                   </div>
                   <p class="mb-1 text-muted">TechSolutions Inc. - Casablanca</p>
                   <small class="text-muted">Janvier 2021 - Présent</small>
@@ -511,7 +511,7 @@
                   <!-- Soft skills seront ajoutées ici -->
                   <span class="skill-badge">Leadership <i class="bi bi-x delete-btn" onclick="deleteSkill('Leadership', 'soft')"></i></span>
                   <span class="skill-badge">Communication <i class="bi bi-x delete-btn" onclick="deleteSkill('Communication', 'soft')"></i></span>
-                  <span class="skill-badge">Travail d'équipe <i class="bi bi-x delete-btn" onclick="deleteSkill('Travail d'équipe', 'soft')"></i></span>
+                  <span class="skill-badge">Travail d'équipe <i class="bi bi-x delete-btn" onclick="deleteSkill('Travail d\'équipe', 'soft')"></i></span>
                   <span class="skill-badge">Résolution de problèmes <i class="bi bi-x delete-btn" onclick="deleteSkill('Résolution de problèmes', 'soft')"></i></span>
                 </div>
               </div>
@@ -1183,7 +1183,7 @@ J'aime résoudre des problèmes complexes et créer des solutions innovantes qui
             </div>
             <div class="d-flex justify-content-between">
               <h5 class="mb-1">${exp.jobTitle}</h5>
-              ${isCurrent ? '<span class="badge bg-primary">Actuel</span>' : ''}
+              
             </div>
             <p class="mb-1 text-muted">${exp.companyName} - ${exp.location}</p>
             <small class="text-muted">${formatDate(exp.startDate)} - ${endDateText}</small>

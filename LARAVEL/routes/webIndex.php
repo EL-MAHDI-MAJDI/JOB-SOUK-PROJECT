@@ -16,7 +16,7 @@ Route::get('/accueil', [accueilController::class,'index'])->name('accueil');
 
 Route::get('/offre', [offreController::class,'index'])->name('offre');
 
-Route::get('/login', [loginController::class,'show'])->name('login');
+Route::get('/login', [loginController::class,'show'])->name('loginShow');
 Route::post('/login', [loginController::class,'login'])->name('login');
 
 Route::get('/choixInscription', [choixInscriptionController::class,'index'])->name('choixInscription');

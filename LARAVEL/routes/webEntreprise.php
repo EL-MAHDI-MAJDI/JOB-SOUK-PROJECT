@@ -11,23 +11,41 @@ use App\Http\Controllers\entreprise\parametresController;
 use App\Http\Controllers\entreprise\notificationController;
 use App\Http\Controllers\entreprise\rechercherCandidatsController;
 
-Route::prefix('entreprise')->name('entreprise.')->group(function () {
-    Route::get('dashboard', [dashboardController::class,'index'])->name('dashboard');
+Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function () {
+    Route::get('dashboard', [dashboardController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('dashboard');
 
-    Route::get('entretiens', [entretiensController::class,'index'])->name('entretiens');
+    Route::get('monProfil', [monProfilController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('monProfil');
 
-    Route::get('offresEmploi', [offresEmploiController::class,'index'])->name('offresEmploi');
+    Route::get('offresEmploi', [offresEmploiController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('offresEmploi');
+    
+    Route::get('messages', [messagesController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('messages');
+    
+    Route::get('entretiens', [entretiensController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('entretiens');
 
-    Route::get('messages', [messagesController::class,'index'])->name('messages');
+    Route::get('evaluerCandidat', [evaluerCandidatController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('evaluerCandidat');
 
-    Route::get('monProfil', [monProfilController::class,'index'])->name('monProfil');
+    Route::get('parametres', [parametresController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('parametres');
 
-    Route::get('evaluerCandidat', [evaluerCandidatController::class,'index'])->name('evaluerCandidat');
+    Route::get('notification', [notificationController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('notification');
 
-    Route::get('parametres', [parametresController::class,'index'])->name('parametres');
-
-    Route::get('notification', [notificationController::class,'index'])->name('notification');
-
-    Route::get('rechercherCandidats', [rechercherCandidatsController::class,'index'])->name('rechercherCandidats');
+    Route::get('rechercherCandidats', [rechercherCandidatsController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('rechercherCandidats');
 
 });

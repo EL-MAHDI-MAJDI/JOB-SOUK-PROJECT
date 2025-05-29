@@ -11,12 +11,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-compoEntreprise.side-menu activePage='2' />
+    <x-compoEntreprise.side-menu activePage='2' :entreprise="$entreprise" />
   </div>
 
   <!-- Barre de navigation supérieure enrichie -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-compoEntreprise.navbar />
+    <x-compoEntreprise.navbar :entreprise="$entreprise"/>
   </nav>
 
   <!-- Contenu principal -->
@@ -37,17 +37,17 @@
       <div class="dashboard-card p-4 mb-4 profile-header">
         <div class="row align-items-center">
           <div class="col-md-2 text-center position-relative">
-            <img src="https://via.placeholder.com/150" alt="Logo entreprise" class="profile-picture rounded-circle mb-3">
+            <img src="{{asset('storage/'.$entreprise->logo)}}" alt="Logo entreprise" class="profile-picture rounded-circle mb-3">
             <div class="edit-icon">
               <i class="bi bi-camera"></i>
             </div>
           </div>
           <div class="col-md-6">
-            <h3 class="fw-bold mb-1">TechnoSoft Solutions</h3>
-            <p class="text-muted mb-2"><i class="bi bi-geo-alt me-2"></i>Casablanca, Maroc</p>
+            <h3 class="fw-bold mb-1">{{ $entreprise->nomEntreprise}}</h3>
+            <p class="text-muted mb-2"><i class="bi bi-geo-alt me-2"></i>{{ $entreprise->ville}}, Maroc</p>
             <div class="mb-3">
-              <span class="badge bg-primary me-2">Informatique</span>
-              <span class="badge bg-secondary">50-200 employés</span>
+              <span class="badge bg-primary me-2">{{$entreprise->SecteurActivite}}</span>
+              <span class="badge bg-secondary">{{$entreprise->tailleEntreprise}} employés</span>
             </div>
             <div class="d-flex">
               <a href="#" class="social-icon"><i class="bi bi-globe"></i></a>
@@ -94,24 +94,24 @@
               <h4 class="section-title fw-bold">À propos</h4>
               <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
             </div>
-            <p class="mb-4">TechnoSoft Solutions est une entreprise spécialisée dans le développement de solutions logicielles innovantes pour les entreprises. Fondée en 2010, nous avons accompagné plus de 200 clients dans leur transformation digitale.</p>
+            <p class="mb-4">___{{$entreprise->description}}</p>
             
             <div class="row">
               <div class="col-md-6 mb-3">
                 <h6 class="fw-bold"><i class="bi bi-building me-2"></i> Secteur d'activité</h6>
-                <p>Technologie de l'information et services</p>
+                <p>{{$entreprise->SecteurActivite}}</p>
               </div>
               <div class="col-md-6 mb-3">
                 <h6 class="fw-bold"><i class="bi bi-people me-2"></i> Taille de l'entreprise</h6>
-                <p>150 employés</p>
+                <p>{{$entreprise->tailleEntreprise}}</p>
               </div>
               <div class="col-md-6 mb-3">
                 <h6 class="fw-bold"><i class="bi bi-calendar me-2"></i> Date de création</h6>
-                <p>15 Mars 2010</p>
+                <p>{{$entreprise->dateCreation}}</p>
               </div>
               <div class="col-md-6 mb-3">
                 <h6 class="fw-bold"><i class="bi bi-globe me-2"></i> Site web</h6>
-                <p><a href="https://www.technosoft.ma" target="_blank">www.technosoft.ma</a></p>
+                <p><a href="{{$entreprise->siteWeb}}" target="_blank">{{$entreprise->siteWeb}}</a></p>
               </div>
             </div>
           </div>

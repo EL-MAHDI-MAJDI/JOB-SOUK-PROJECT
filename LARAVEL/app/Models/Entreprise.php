@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Entreprise extends Model
+class Entreprise extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -41,6 +41,11 @@ class Entreprise extends Model
         'password',
         'remember_token',
     ];
+
+    public function getLogoAttribute($value)
+    {
+        return $value ?? 'logoEntreprise/logo.png'; // Default logo path if not set
+    }
 
     /**
      * Get the attributes that should be cast.
