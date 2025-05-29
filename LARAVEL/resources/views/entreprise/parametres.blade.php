@@ -65,27 +65,12 @@
             <div class="tab-pane fade show active" id="account">
               <div class="dashboard-card settings-card">
                 <h3 class="settings-title"><i class="bi bi-person"></i> Informations du compte</h3>
-                
-                <div class="text-center mb-4">
-                  <img src="{{asset('storage/'.$entreprise->logo)}}" alt="Photo de profil" class="account-img rounded-circle mb-3">
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-2">Changer la photo</button>
-                    <button class="btn btn-sm btn-outline-secondary">Supprimer</button>
+                <form>  
+                  <div class="mb-3">
+                    <label for="company" class="form-label">Entreprise</label>
+                    <input type="text" class="form-control" id="company" value="{{$entreprise->nomEntreprise}}">
                   </div>
-                </div>
-                
-                <form>
-                  <div class="row mb-3">
-                    <div class="col-md-6">
-                      <label for="firstName" class="form-label">Prénom</label>
-                      <input type="text" class="form-control" id="firstName" value="Mohamed">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="lastName" class="form-label">Nom</label>
-                      <input type="text" class="form-control" id="lastName" value="El Amrani">
-                    </div>
-                  </div>
-                  
+
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control" id="email" value="{{$entreprise->email}}">
@@ -95,16 +80,10 @@
                     <label for="phone" class="form-label">Téléphone</label>
                     <input type="tel" class="form-control" id="phone" value="{{$entreprise->phone}}">
                   </div>
-                  
                   <div class="mb-3">
-                    <label for="company" class="form-label">Entreprise</label>
-                    <input type="text" class="form-control" id="company" value="{{$entreprise->nomEntreprise}}">
-                  </div>
-                  
-                  <div class="mb-3">
-                    <label for="position" class="form-label">Poste</label>
-                    <input type="text" class="form-control" id="position" value="Responsable RH">
-                  </div>
+                    <label for="address" class="form-label">Adresse</label>
+                    <input type="text" class="form-control" id="address" value="{{$entreprise->adresse}}">
+                  </div>  
                   
                   <div class="text-end">
                     <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
@@ -401,5 +380,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   @vite(['resources/js/entrepriseJs/parametres.js'])
+  @vite(['resources/js/indexJs/numero-telephone.js'])
 </body>
 </html>
