@@ -23,6 +23,9 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('offresEmploi', [offresEmploiController::class,'show'])
     ->where('entreprise','\d+')
     ->name('offresEmploi');
+    Route::post('offresEmploi', [offresEmploiController::class,'store'])
+    ->where('entreprise','\d+')
+    ->name('offresEmploi.store');
     
     Route::get('messages', [messagesController::class,'show'])
     ->where('entreprise','\d+')

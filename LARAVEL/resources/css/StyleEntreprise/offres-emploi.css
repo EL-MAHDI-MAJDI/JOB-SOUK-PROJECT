@@ -247,3 +247,14 @@ body {
 .p-3 {
   padding: 14px !important;
 }
+
+/* Couleur des numéros de pagination */
+    .pagination .page-link {
+        color: var(--primary, #0d6efd) !important; /* Utilise la couleur Bootstrap "primary" ou remplace par ta couleur */
+    }
+    /* Couleur du numéro actif */
+    .pagination .active .page-link {
+        background-color: var(--primary, #0d6efd) !important;
+        color: #fff !important;
+        border-color: var(--primary, #0d6efd) !important;
+    }

@@ -22,6 +22,22 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
+      
+      {{-- Afficher les erreurs de validation --}}
+      @if ($errors->any())
+        <x-alert type="danger">
+          <h5 class="alert-heading">Erreur de validation</h5>
+          <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </x-alert>
+      @endif
+
+      <!-- Afficher message "Offre d'emploi créée avec succès." -->
+      @include('partials.flashbag')
+
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -105,165 +121,81 @@
       <div class="dashboard-card p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h4 class="section-title fw-bold">Vos offres d'emploi</h4>
-          <div class="d-flex">
-            <div class="input-group me-2" style="width: 250px;">
-              <span class="input-group-text"><i class="bi bi-search"></i></span>
-              <input type="text" class="form-control" placeholder="Rechercher...">
+          @if(!$offres->isEmpty())
+            <div class="d-flex">
+              <div class="input-group me-2" style="width: 250px;">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" placeholder="Rechercher...">
+              </div>
+              <button class="btn btn-outline-secondary">
+                <i class="bi bi-sort-down"></i> Trier
+              </button>
             </div>
-            <button class="btn btn-outline-secondary">
-              <i class="bi bi-sort-down"></i> Trier
-            </button>
+          @endif
+        </div>
+
+
+        @if($offres->isEmpty())
+            <div class="text-center text-muted py-5">
+              <i class="bi bi-briefcase fs-2 mb-2"></i><br>
+              <span>Aucune offre d'emploi trouvée.</span>
+            </div>
+        @else
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Poste</th>
+                  <th>Candidats</th>
+                  <th>Localisation</th>
+                  <th>Type</th>
+                  <th>Statut</th>
+                  <th>Date limite de candidature</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @foreach($offres as $offre)
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <h6 class="fw-bold mb-0">{{$offre->intitule_offre_emploi}}</h6>
+                        <small class="text-muted">TechnoSoft Solutions</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">24 candidats</span>
+                  </td>
+                  <td>{{$offre->localisation}}</td>
+                  <td>{{$offre->type_contrat}}</td>
+                  <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
+                  <td>{{$offre->date_limite_candidature}}</td>
+                  <td>
+                    <div class="dropdown">
+                      <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-center mt-3">
+              {{ $offres->links('pagination::bootstrap-4') }}
+            </div>
           </div>
-        </div>
-        
-        <div class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th>Poste</th>
-                <th>Candidats</th>
-                <th>Localisation</th>
-                <th>Type</th>
-                <th>Statut</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
-                    <div>
-                      <h6 class="fw-bold mb-0">Développeur Full Stack</h6>
-                      <small class="text-muted">TechnoSoft Solutions</small>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge bg-primary bg-opacity-10 text-primary">24 candidats</span>
-                </td>
-                <td>Casablanca</td>
-                <td>CDI</td>
-                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
-                <td>15/06/2023</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
-                    <div>
-                      <h6 class="fw-bold mb-0">Chef de Projet IT</h6>
-                      <small class="text-muted">TechnoSoft Solutions</small>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge bg-primary bg-opacity-10 text-primary">18 candidats</span>
-                </td>
-                <td>Rabat</td>
-                <td>CDI</td>
-                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
-                <td>10/06/2023</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
-                    <div>
-                      <h6 class="fw-bold mb-0">Designer UI/UX</h6>
-                      <small class="text-muted">TechnoSoft Solutions</small>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge bg-primary bg-opacity-10 text-primary">32 candidats</span>
-                </td>
-                <td>Remote</td>
-                <td>CDD</td>
-                <td><span class="badge bg-secondary bg-opacity-10 text-secondary">Clôturée</span></td>
-                <td>25/05/2023</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-              
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle me-3" width="40" height="40">
-                    <div>
-                      <h6 class="fw-bold mb-0">Data Scientist</h6>
-                      <small class="text-muted">TechnoSoft Solutions</small>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span class="badge bg-primary bg-opacity-10 text-primary">12 candidats</span>
-                </td>
-                <td>Casablanca</td>
-                <td>CDI</td>
-                <td><span class="badge bg-warning bg-opacity-10 text-warning">Brouillon</span></td>
-                <td>05/06/2023</td>
-                <td>
-                  <div class="dropdown">
-                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>Candidats</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        @endif
       </div>
     </div>
   </div>
@@ -277,92 +209,115 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
+          <form method="POST" action="{{ route('entreprise.offresEmploi.store', $entreprise) }}">
+            @csrf
             <div class="row mb-3">
               <div class="col-md-6">
                 <label for="jobTitle" class="form-label">Intitulé du poste*</label>
-                <input type="text" class="form-control" id="jobTitle" placeholder="Ex: Développeur Full Stack" required>
+                <input type="text" class="form-control @error('intitule_offre_emploi') is-invalid @enderror" id="jobTitle" name="intitule_offre_emploi" placeholder="Ex: Développeur Full Stack" required value="{{ old('intitule_offre_emploi') }}">
+                @error('intitule_offre_emploi')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-6">
                 <label for="jobType" class="form-label">Type de contrat*</label>
-                <select class="form-select" id="jobType" required>
-                  <option value="" selected disabled>Sélectionner</option>
-                  <option>CDI</option>
-                  <option>CDD</option>
-                  <option>Freelance</option>
-                  <option>Stage</option>
-                  <option>Alternance</option>
+                <select class="form-select @error('type_contrat') is-invalid @enderror" id="jobType" name="type_contrat" required>
+                  <option value="" disabled {{ old('type_contrat') ? '' : 'selected' }}>Sélectionner</option>
+                  <option value="CDI" {{ old('type_contrat') == 'CDI' ? 'selected' : '' }}>CDI</option>
+                  <option value="CDD" {{ old('type_contrat') == 'CDD' ? 'selected' : '' }}>CDD</option>
+                  <option value="Freelance" {{ old('type_contrat') == 'Freelance' ? 'selected' : '' }}>Freelance</option>
+                  <option value="Stage" {{ old('type_contrat') == 'Stage' ? 'selected' : '' }}>Stage</option>
+                  <option value="Alternance" {{ old('type_contrat') == 'Alternance' ? 'selected' : '' }}>Alternance</option>
                 </select>
+                @error('type_contrat')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-            
-
-            
             <div class="row mb-3">
               <div class="col-md-6">
                 <label for="salaryRange" class="form-label">Salaire (optionnel)</label>
-                <input type="text" class="form-control" id="salaryRange" placeholder="Ex: 15 000 - 20 000 MAD">
+                <input type="text" class="form-control @error('salaire_offre_emploi') is-invalid @enderror" id="salaryRange" name="salaire_offre_emploi" placeholder="Ex: 15 000 - 20 000 MAD" value="{{ old('salaire_offre_emploi') }}">
+                @error('salaire_offre_emploi')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-6">
                 <label for="experienceLevel" class="form-label">Niveau d'expérience*</label>
-                <select class="form-select" id="experienceLevel" required>
-                  <option value="" selected disabled>Sélectionner</option>
-                  <option>Débutant (0-2 ans)</option>
-                  <option>Intermédiaire (2-5 ans)</option>
-                  <option>Confirmé (5-10 ans)</option>
-                  <option>Senior (+10 ans)</option>
+                <select class="form-select @error('niveau_experience_demander') is-invalid @enderror" id="experienceLevel" name="niveau_experience_demander" required>
+                  <option value="" disabled {{ old('niveau_experience_demander') ? '' : 'selected' }}>Sélectionner</option>
+                  <option value="Débutant (0-2 ans)" {{ old('niveau_experience_demander') == 'Débutant (0-2 ans)' ? 'selected' : '' }}>Débutant (0-2 ans)</option>
+                  <option value="Intermédiaire (2-5 ans)" {{ old('niveau_experience_demander') == 'Intermédiaire (2-5 ans)' ? 'selected' : '' }}>Intermédiaire (2-5 ans)</option>
+                  <option value="Confirmé (5-10 ans)" {{ old('niveau_experience_demander') == 'Confirmé (5-10 ans)' ? 'selected' : '' }}>Confirmé (5-10 ans)</option>
+                  <option value="Senior (+10 ans)" {{ old('niveau_experience_demander') == 'Senior (+10 ans)' ? 'selected' : '' }}>Senior (+10 ans)</option>
                 </select>
+                @error('niveau_experience_demander')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-            
             <div class="mb-3">
               <label for="jobDescription" class="form-label">Description du poste*</label>
-              <textarea class="form-control" id="jobDescription" rows="5" placeholder="Décrivez en détail les missions et responsabilités du poste..." required></textarea>
+              <textarea class="form-control @error('description_offre_emploi') is-invalid @enderror" id="jobDescription" name="description_offre_emploi" rows="5" placeholder="Décrivez en détail les missions et responsabilités du poste..." required>{{ old('description_offre_emploi') }}</textarea>
+              @error('description_offre_emploi')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            
             <div class="mb-3">
               <label for="jobRequirements" class="form-label">Compétences requises*</label>
-              <textarea class="form-control" id="jobRequirements" rows="3" placeholder="Listez les compétences et qualifications nécessaires..." required></textarea>
+              <textarea class="form-control @error('competences_requises') is-invalid @enderror" id="jobRequirements" name="competences_requises" rows="3" placeholder="Listez les compétences et qualifications nécessaires..." required>{{ old('competences_requises') }}</textarea>
               <div class="form-text">Séparez les compétences par des virgules</div>
+              @error('competences_requises')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            
             <div class="mb-3">
               <label for="jobBenefits" class="form-label">Avantages (optionnel)</label>
-              <textarea class="form-control" id="jobBenefits" rows="2" placeholder="Listez les avantages proposés..."></textarea>
+              <textarea class="form-control @error('avantage_offre_emploi') is-invalid @enderror" id="jobBenefits" name="avantage_offre_emploi" rows="2" placeholder="Listez les avantages proposés...">{{ old('avantage_offre_emploi') }}</textarea>
+              @error('avantage_offre_emploi')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            
             <div class="row mb-4">
               <div class="col-md-6">
-                <label for="applicationDeadline" class="form-label">Date limite de candidature</label>
-                <input type="date" class="form-control" id="applicationDeadline">
+                <label for="applicationDeadline" class="form-label">Date limite de candidature*</label>
+                <input type="date" class="form-control @error('date_limite_candidature') is-invalid @enderror" id="applicationDeadline" name="date_limite_candidature" required value="{{ old('date_limite_candidature') }}">
+                @error('date_limite_candidature')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
               <div class="col-md-6">
-                <label for="jobStatus" class="form-label">Statut de publication</label>
-                <select class="form-select" id="jobStatus">
-                  <option value="active" selected>Publier immédiatement</option>
-                  <option value="draft">Enregistrer comme brouillon</option>
-                </select>
+                <label for="localisation" class="form-label">Localisation*</label>
+                <input type="text" class="form-control @error('localisation') is-invalid @enderror" id="localisation" name="localisation" placeholder="Ex: Casablanca, Remote" required value="{{ old('localisation') }}">
+                @error('localisation')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-            
             <div class="border-top pt-3 mb-3">
               <h6 class="fw-bold">Informations supplémentaires</h6>
               <div class="row">
                 <div class="col-md-6">
-                  <label for="contactEmail" class="form-label">Email de contact*</label>
-                  <input type="email" class="form-control" id="contactEmail" placeholder="contact@entreprise.com" required>
+                  <label for="contactEmail" class="form-label">Email de contact (optionnel)</label>
+                  <input type="email" class="form-control @error('email_contact') is-invalid @enderror" id="contactEmail" name="email_contact" placeholder="contact@entreprise.com" value="{{ old('email_contact') }}">
+                  @error('email_contact')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
                 <div class="col-md-6">
                   <label for="contactPhone" class="form-label">Téléphone (optionnel)</label>
-                  <input type="tel" class="form-control" id="contactPhone" placeholder="06 12 34 56 78">
+                  <input type="tel" class="form-control @error('telephone_contact') is-invalid @enderror" id="contactPhone" name="telephone_contact" placeholder="06 12 34 56 78" value="{{ old('telephone_contact') }}">
+                  @error('telephone_contact')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Publier l'offre</button>
+            </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Publier l'offre</button>
         </div>
       </div>
     </div>

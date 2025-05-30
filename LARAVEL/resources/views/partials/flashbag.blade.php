@@ -1,9 +1,5 @@
 @if (session()->has('success'))
-        <div class="container">
-          <div class="row my-3">
             <x-alert type="success" >
-                {{ session('success') }}
+                <h5>{{ session('success') }}</h5>
             </x-alert>
-          </div>
-        </div>
 @endif
