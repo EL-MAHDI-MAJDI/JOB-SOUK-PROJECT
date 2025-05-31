@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\entreprise;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OffreEmploiRequest;
 use App\Models\Entreprise;
+use App\Models\OffreEmploi;
 
 use Illuminate\Http\Request;
 
@@ -16,43 +18,40 @@ class offresEmploiController extends Controller
         return view('entreprise.offresEmploi', compact('entreprise', 'offres'));
 
     }
-    public function store(Request $request, Entreprise $entreprise)
+    public function store(OffreEmploiRequest $request, Entreprise $entreprise)
     {   
-
-            // ✅ Validation des données
-        $request->validate([
-            'intitule_offre_emploi' => 'required|string|max:100',
-            'description_offre_emploi' => 'required|string',
-            'type_contrat' => 'required|string|max:50',
-            'salaire_offre_emploi' => 'nullable|string|max:50',
-            'niveau_experience_demander' => 'required|string|max:50',
-            'avantage_offre_emploi' => 'nullable|string',
-            'date_limite_candidature' => 'required|date|after_or_equal:today',
-            'email_contact' => 'nullable|email|max:100',
-            'telephone_contact' => 'nullable|string|max:30',
-            'localisation' => 'required|string|max:100',
-            'competences_requises' => 'required|string',
-        ], [
-            'date_limite_candidature.after_or_equal' => 'La date limite de candidature doit être une date postérieure ou égale à aujourd\'hui.',
-        ]);
-
+        // ✅ Validation des données
+        $formfields = $request->validated();
+        $formfields['entreprise_id'] = $entreprise->id; // Ajoute l'entreprise_id
         // ✅ Création de l'offre d'emploi
-        $entreprise->offreEmplois()->create([
-            'intitule_offre_emploi' => $request->intitule_offre_emploi,
-            'description_offre_emploi' => $request->description_offre_emploi,
-            'type_contrat' => $request->type_contrat,
-            'salaire_offre_emploi' => $request->salaire_offre_emploi,
-            'niveau_experience_demander' => $request->niveau_experience_demander,
-            'avantage_offre_emploi' => $request->avantage_offre_emploi,
-            'date_limite_candidature' => $request->date_limite_candidature,
-            'email_contact' => $request->email_contact,
-            'telephone_contact' => $request->telephone_contact,
-            'localisation' => $request->localisation,
-            'competences_requises' => $request->competences_requises,
-            'entreprise_id' => $entreprise->id, // Associer l'offre à l'entreprise
-        ]);
-
+        OffreEmploi::create($formfields);
         // ✅ Redirection avec un message de succès
         return back()->with('success', 'Offre d\'emploi créée avec succès.');
+    }
+    public function details(Entreprise $entreprise,OffreEmploi $offre)
+    {
+        // Récupérer l'offre d'emploi spécifique
+        // $offre = $entreprise->offreEmplois()->findOrFail($offreId);
+
+        // Retourner la vue avec les détails de l'offre
+        return view('entreprise.offreDetails', compact('entreprise', 'offre'));
+    }
+    public function update(Entreprise $entreprise, OffreEmploi $offre, OffreEmploiRequest $request)
+    {
+        $formfields = $request->validated();
+        // ✅ Edite de l'offre d'emploi
+        $isUpdated = $offre->fill($formfields)->save();
+        // dd($isUpdated);
+        // Retourner la vue pour éditer l'offre d'emploi
+        return back()->with('success', 'La modification de l\'offre d\'emploi a été effectuée avec succès.'); 
+    }
+
+    public function destroy(Entreprise $entreprise, OffreEmploi $offre)
+    {
+        // Supprimer l'offre d'emploi
+        $offre->delete();
+        // Rediriger avec un message de succès
+        return redirect()->route('entreprise.offresEmploi', $entreprise->id)
+            ->with('danger', 'Offre d\'emploi supprimée avec succès.');
     }
 }

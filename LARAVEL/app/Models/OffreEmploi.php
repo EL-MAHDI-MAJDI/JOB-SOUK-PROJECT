@@ -27,5 +27,6 @@ class OffreEmploi extends Model
         'telephone_contact',
         'localisation',
         'competences_requises',
+        'entreprise_id',
     ];
 }
