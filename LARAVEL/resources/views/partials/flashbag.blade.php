@@ -1,9 +1,11 @@
 @if (session()->has('success'))
-        <div class="container">
-          <div class="row my-3">
             <x-alert type="success" >
-                {{ session('success') }}
+                <h5>{{ session('success') }}</h5>
             </x-alert>
-          </div>
-        </div>
+@else
+    @if (session()->has('danger'))
+        <x-alert type="danger" >
+            <h5>{{ session('danger') }}</h5>
+        </x-alert> 
+    @endif
 @endif

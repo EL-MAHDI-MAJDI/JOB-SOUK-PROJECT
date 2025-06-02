@@ -23,6 +23,9 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('offresEmploi', [offresEmploiController::class,'show'])
     ->where('entreprise','\d+')
     ->name('offresEmploi');
+    Route::post('offresEmploi', [offresEmploiController::class,'store'])
+    ->where('entreprise','\d+')
+    ->name('offresEmploi.store');
     
     Route::get('messages', [messagesController::class,'show'])
     ->where('entreprise','\d+')
@@ -48,4 +51,14 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     ->where('entreprise','\d+')
     ->name('rechercherCandidats');
 
+    // afficher page detail de l'offre d'emploi
+    Route::get('offresEmploi/{offre}', [offresEmploiController::class,'details'])
+    ->where(['entreprise' => '\d+', 'offre' => '\d+'])
+    ->name('offresEmploi.details');
+    Route::put('offresEmploi/{offre}', [offresEmploiController::class,'update'])
+    ->where(['entreprise' => '\d+', 'offre' => '\d+'])
+    ->name('offresEmploi.edit');
+    Route::delete('offresEmploi/{offre}', [offresEmploiController::class,'destroy'])
+    ->where(['entreprise' => '\d+', 'offre' => '\d+'])
+    ->name('offresEmploi.destroy');
 });

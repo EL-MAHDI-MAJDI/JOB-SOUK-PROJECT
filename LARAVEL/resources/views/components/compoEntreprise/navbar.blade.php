@@ -75,7 +75,7 @@
         <div class="dropdown">
           <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
             <img src="{{asset('storage/'.$entreprise->logo)}}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
-            <span class="d-none d-md-inline">Mon compte</span>
+            <span class="d-none d-md-inline">{{$entreprise->nomEntreprise}}</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="{{ route('entreprise.monProfil',$entreprise) }}"><i class="bi bi-person me-2"></i>Profil</a></li>

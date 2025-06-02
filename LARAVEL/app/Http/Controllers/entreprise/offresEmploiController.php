@@ -2,15 +2,56 @@
 
 namespace App\Http\Controllers\entreprise;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OffreEmploiRequest;
 use App\Models\Entreprise;
+use App\Models\OffreEmploi;
 
 use Illuminate\Http\Request;
 
 class offresEmploiController extends Controller
 {
     public function show(Entreprise $entreprise){
-        // $profiles=Profile::paginate(10);
-        // $profiles=Profile::all();
-        return view('entreprise.offresEmploi',compact('entreprise'));
+
+        $offres = $entreprise->offreEmplois()
+        ->orderBy('created_at', 'desc') // Tri par date de création, les plus récentes en premier
+        ->paginate(4); // 10 offres par page
+        return view('entreprise.offresEmploi', compact('entreprise', 'offres'));
+
+    }
+    public function store(OffreEmploiRequest $request, Entreprise $entreprise)
+    {   
+        // ✅ Validation des données
+        $formfields = $request->validated();
+        $formfields['entreprise_id'] = $entreprise->id; // Ajoute l'entreprise_id
+        // ✅ Création de l'offre d'emploi
+        OffreEmploi::create($formfields);
+        // ✅ Redirection avec un message de succès
+        return back()->with('success', 'Offre d\'emploi créée avec succès.');
+    }
+    public function details(Entreprise $entreprise,OffreEmploi $offre)
+    {
+        // Récupérer l'offre d'emploi spécifique
+        // $offre = $entreprise->offreEmplois()->findOrFail($offreId);
+
+        // Retourner la vue avec les détails de l'offre
+        return view('entreprise.offreDetails', compact('entreprise', 'offre'));
+    }
+    public function update(Entreprise $entreprise, OffreEmploi $offre, OffreEmploiRequest $request)
+    {
+        $formfields = $request->validated();
+        // ✅ Edite de l'offre d'emploi
+        $isUpdated = $offre->fill($formfields)->save();
+        // dd($isUpdated);
+        // Retourner la vue pour éditer l'offre d'emploi
+        return back()->with('success', 'La modification de l\'offre d\'emploi a été effectuée avec succès.'); 
+    }
+
+    public function destroy(Entreprise $entreprise, OffreEmploi $offre)
+    {
+        // Supprimer l'offre d'emploi
+        $offre->delete();
+        // Rediriger avec un message de succès
+        return redirect()->route('entreprise.offresEmploi', $entreprise->id)
+            ->with('danger', 'Offre d\'emploi supprimée avec succès.');
     }
 }

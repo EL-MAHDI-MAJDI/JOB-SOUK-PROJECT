@@ -32,9 +32,9 @@
           <h2 class="fw-bold mb-1">Tableau de bord</h2>
           <p class="text-muted mb-0">Bienvenue {{$entreprise->nomEntreprise}}, voici votre activité récente</p>
         </div>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createOfferModal">
-          <i class="bi bi-plus"></i> Nouvelle offre
-        </button>
+        <a class="btn btn-primary" href="{{ route('entreprise.offresEmploi', $entreprise) }}">
+          <i class="bi bi-briefcase"></i> Mes offres d'emploi
+        </a>
       </div>
       
       <!-- Statistiques principales -->
@@ -229,134 +229,6 @@
     </div>
   </div>
 
-  <!-- Modal Créer Offre -->
-  <div class="modal fade" id="createOfferModal" tabindex="-1" aria-labelledby="createOfferModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="createOfferModalLabel">Créer une nouvelle offre d'emploi</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-        </div>
-        <div class="modal-body">
-          <form id="createOfferForm">
-            <div class="row g-3">
-              <div class="col-md-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="jobTitle" placeholder="Titre du poste">
-                  <label for="jobTitle">Titre du poste</label>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <select class="form-select" id="jobCategory">
-                    <option selected disabled value="">Sélectionner...</option>
-                    <option value="it">Informatique & IT</option>
-                    <option value="marketing">Marketing & Communication</option>
-                    <option value="finance">Finance & Comptabilité</option>
-                    <option value="sales">Ventes & Commercial</option>
-                    <option value="hr">Ressources Humaines</option>
-                    <option value="other">Autre</option>
-                  </select>
-                  <label for="jobCategory">Catégorie</label>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <select class="form-select" id="jobType">
-                    <option selected disabled value="">Sélectionner...</option>
-                    <option value="cdi">CDI</option>
-                    <option value="cdd">CDD</option>
-                    <option value="freelance">Freelance</option>
-                    <option value="internship">Stage</option>
-                    <option value="parttime">Temps partiel</option>
-                  </select>
-                  <label for="jobType">Type de contrat</label>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="jobLocation" placeholder="Localisation">
-                  <label for="jobLocation">Localisation</label>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <select class="form-select" id="jobExperience">
-                    <option selected disabled value="">Sélectionner...</option>
-                    <option value="entry">Débutant (0-2 ans)</option>
-                    <option value="mid">Intermédiaire (2-5 ans)</option>
-                    <option value="senior">Confirmé (5-8 ans)</option>
-                    <option value="expert">Expert (8+ ans)</option>
-                  </select>
-                  <label for="jobExperience">Expérience requise</label>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="jobSalary" placeholder="Salaire (optionnel)">
-                  <label for="jobSalary">Salaire (optionnel)</label>
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="date" class="form-control" id="jobDeadline">
-                  <label for="jobDeadline">Date limite de candidature</label>
-                </div>
-              </div>
-              
-              <div class="col-12">
-                <label class="form-label">Compétences requises</label>
-                <div class="input-group mb-2">
-                  <input type="text" class="form-control" id="skillInput" placeholder="Ajouter une compétence">
-                  <button class="btn btn-outline-secondary" type="button" id="addSkillBtn">Ajouter</button>
-                </div>
-                <div class="tag-list" id="skillsList">
-                  <span class="tag">HTML/CSS <i class="bi bi-x"></i></span>
-                  <span class="tag">JavaScript <i class="bi bi-x"></i></span>
-                  <span class="tag">React <i class="bi bi-x"></i></span>
-                </div>
-              </div>
-              
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea class="form-control" id="jobDescription" style="height: 150px" placeholder="Description du poste"></textarea>
-                  <label for="jobDescription">Description du poste</label>
-                </div>
-              </div>
-              
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="remoteJob">
-                  <label class="form-check-label" for="remoteJob">
-                    Poste en télétravail
-                  </label>
-                </div>
-              </div>
-              
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="featuredJob">
-                  <label class="form-check-label" for="featuredJob">
-                    Mettre en avant cette offre
-                  </label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Publier l'offre</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal Planifier Entretien -->
   <div class="modal fade" id="scheduleInterviewModal" tabindex="-1" aria-labelledby="scheduleInterviewModalLabel" aria-hidden="true">

@@ -28,18 +28,17 @@
           <h2 class="fw-bold mb-1">Mon Profil Entreprise</h2>
           <p class="text-muted mb-0">Gérez les informations de votre entreprise</p>
         </div>
-        <button class="btn btn-primary">
-          <i class="bi bi-pencil"></i> Modifier le profil
-        </button>
       </div>
       
       <!-- Section Profil -->
       <div class="dashboard-card p-4 mb-4 profile-header">
         <div class="row align-items-center">
           <div class="col-md-2 text-center position-relative">
-            <img src="{{asset('storage/'.$entreprise->logo)}}" alt="Logo entreprise" class="profile-picture rounded-circle mb-3">
-            <div class="edit-icon">
-              <i class="bi bi-camera"></i>
+            <div style="position:relative; display:inline-block;">
+              <img id="logoPreview" src="{{asset('storage/'.$entreprise->logo)}}" alt="Logo entreprise" class="profile-picture rounded-circle mb-3" style="object-fit:cover;">
+              <input type="file" id="logoInput" accept=".png,.jpg,.jpeg,.svg" style="display:none;">
+              <button id="changeLogoBtn" class="btn btn-sm btn-outline-primary me-2" type="button">Changer</button>
+              <button id="removeLogoBtn" class="btn btn-sm btn-outline-secondary" type="button">Supprimer</button>
             </div>
           </div>
           <div class="col-md-6">
@@ -92,10 +91,9 @@
           <div class="dashboard-card p-4 mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="section-title fw-bold">À propos</h4>
-              <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i> Modifier</button>
+              <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAproposModal"><i class="bi bi-pencil"></i> Modifier</button>
             </div>
             <p class="mb-4">___{{$entreprise->description}}</p>
-            
             <div class="row">
               <div class="col-md-6 mb-3">
                 <h6 class="fw-bold"><i class="bi bi-building me-2"></i> Secteur d'activité</h6>
@@ -113,6 +111,68 @@
                 <h6 class="fw-bold"><i class="bi bi-globe me-2"></i> Site web</h6>
                 <p><a href="{{$entreprise->siteWeb}}" target="_blank">{{$entreprise->siteWeb}}</a></p>
               </div>
+            </div>
+          </div>
+          <!-- Modal Modification À propos -->
+          <div class="modal fade" id="editAproposModal" tabindex="-1" aria-labelledby="editAproposModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <form method="POST" action="{{-- route('entreprise.updateApropos', $entreprise->id) --}}">
+                @csrf
+                @method('PUT')
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editAproposModalLabel">Modifier À propos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label for="descriptionEdit" class="form-label">Description</label>
+                      <textarea class="form-control" id="descriptionEdit" name="description" rows="4">{{ $entreprise->description }}</textarea>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label for="secteurEdit" class="form-label">Secteur d'activité*</label>
+                        <select class="form-select" id="secteurEdit" name="SecteurActivite" required>
+                          <option value="">Sélectionnez un secteur</option>
+                          <option value="Technologie" {{ $entreprise->SecteurActivite == 'Technologie' ? 'selected' : '' }}>Technologie</option>
+                          <option value="Finance" {{ $entreprise->SecteurActivite == 'Finance' ? 'selected' : '' }}>Finance</option>
+                          <option value="Santé" {{ $entreprise->SecteurActivite == 'Santé' ? 'selected' : '' }}>Santé</option>
+                          <option value="Éducation" {{ $entreprise->SecteurActivite == 'Éducation' ? 'selected' : '' }}>Éducation</option>
+                          <option value="Industrie" {{ $entreprise->SecteurActivite == 'Industrie' ? 'selected' : '' }}>Industrie</option>
+                          <option value="Commerce" {{ $entreprise->SecteurActivite == 'Commerce' ? 'selected' : '' }}>Commerce</option>
+                          <option value="autre" {{ !in_array($entreprise->SecteurActivite, ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? 'selected' : '' }}>Autre</option>
+                        </select>
+                        <div id="autreSecteurContainerEdit" class="mt-2" style="display:none;">
+                          <input type="text" class="form-control" id="autreSecteurEdit" placeholder="Veuillez préciser votre secteur d'activité" value="{{ !in_array($entreprise->SecteurActivite, ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? $entreprise->SecteurActivite : '' }}">
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="tailleEdit" class="form-label">Taille de l'entreprise*</label>
+                        <select class="form-select" id="tailleEdit" name="tailleEntreprise" required>
+                          <option value="">Sélectionnez la taille</option>
+                          <option value="1-10" {{ $entreprise->tailleEntreprise == '1-10' ? 'selected' : '' }}>1-10 employés</option>
+                          <option value="11-50" {{ $entreprise->tailleEntreprise == '11-50' ? 'selected' : '' }}>11-50 employés</option>
+                          <option value="51-200" {{ $entreprise->tailleEntreprise == '51-200' ? 'selected' : '' }}>51-200 employés</option>
+                          <option value="201-500" {{ $entreprise->tailleEntreprise == '201-500' ? 'selected' : '' }}>201-500 employés</option>
+                          <option value="501+" {{ $entreprise->tailleEntreprise == '501+' ? 'selected' : '' }}>Plus de 500 employés</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="dateCreationEdit" class="form-label">Date de création</label>
+                        <input type="date" class="form-control" id="dateCreationEdit" name="dateCreation" value="{{ $entreprise->dateCreation }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="siteWebEdit" class="form-label">Site web</label>
+                        <input type="url" class="form-control" id="siteWebEdit" name="siteWeb" value="{{ $entreprise->siteWeb }}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
           
@@ -162,7 +222,7 @@
           <div class="dashboard-card p-4 mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="section-title fw-bold">Compétences recherchées</h4>
-              <button class="btn btn-sm btn-outline-primary"><i class="bi bi-plus"></i> Ajouter</button>
+              <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addSkillModal"><i class="bi bi-plus"></i> Ajouter</button>
             </div>
             
             <div class="mb-3">
@@ -172,6 +232,30 @@
               <span class="badge-tag"><i class="bi bi-layers"></i> UX Design</span>
               <span class="badge-tag"><i class="bi bi-kanban"></i> Gestion de projet</span>
               <span class="badge-tag"><i class="bi bi-cloud"></i> AWS</span>
+            </div>
+          </div>
+          <!-- Modal Ajouter Compétence -->
+          <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <form method="POST" action="#">
+                @csrf
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addSkillModalLabel">Ajouter une compétence</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label for="newSkill" class="form-label">Compétence</label>
+                      <input type="text" class="form-control" id="newSkill" name="competence" placeholder="Ex: Python, Scrum, etc.">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
           
@@ -211,5 +295,58 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   @vite(['resources/js/entrepriseJs/monProfil.js'])
+  <script>
+    // Gestion du changement de logo sur la page profil entreprise
+    const logoInput = document.getElementById('logoInput');
+    const logoPreview = document.getElementById('logoPreview');
+    const changeLogoBtn = document.getElementById('changeLogoBtn');
+    const removeLogoBtn = document.getElementById('removeLogoBtn');
+
+    // Ouvre le sélecteur de fichier quand on clique sur "Changer"
+    changeLogoBtn.addEventListener('click', function() {
+      logoInput.click();
+    });
+
+    // Affiche la prévisualisation du nouveau logo
+    logoInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          logoPreview.src = e.target.result;
+        }
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+
+    // Supprime le logo (remet une image par défaut ou vide)
+    removeLogoBtn.addEventListener('click', function() {
+      logoInput.value = '';
+      logoPreview.src = "{{ asset('storage/logoEntreprise/logo.png') }}";
+    });
+
+    // Gestion du champ "Autre" secteur dans le modal
+    const secteurEdit = document.getElementById('secteurEdit');
+    const autreSecteurContainerEdit = document.getElementById('autreSecteurContainerEdit');
+    const autreSecteurEdit = document.getElementById('autreSecteurEdit');
+
+    function updateSecteurEdit() {
+      if (secteurEdit.value === 'autre') {
+        autreSecteurContainerEdit.style.display = 'block';
+        autreSecteurEdit.setAttribute('required', 'required');
+        autreSecteurEdit.setAttribute('name', 'SecteurActivite');
+        secteurEdit.removeAttribute('name');
+      } else {
+        autreSecteurContainerEdit.style.display = 'none';
+        autreSecteurEdit.removeAttribute('required');
+        autreSecteurEdit.removeAttribute('name');
+        secteurEdit.setAttribute('name', 'SecteurActivite');
+      }
+    }
+
+    secteurEdit && secteurEdit.addEventListener('change', updateSecteurEdit);
+    document.addEventListener('DOMContentLoaded', function() {
+      updateSecteurEdit();
+    });
+  </script>
 </body>
 </html>
