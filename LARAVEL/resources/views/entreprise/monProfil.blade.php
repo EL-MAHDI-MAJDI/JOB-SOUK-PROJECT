@@ -23,6 +23,20 @@
   <div class="main-content">
     <div class="container-fluid">
       <!-- En-tête -->
+       {{-- Afficher les erreurs de validation --}}
+      @if ($errors->any())
+        <x-alert type="danger">
+          <h5 class="alert-heading">Erreur de validation</h5>
+          <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </x-alert>
+      @endif
+        <!-- Afficher message "votre modification a été faite avec succès" -->
+      @include('partials.flashbag')
+
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Mon Profil Entreprise</h2>
@@ -34,12 +48,39 @@
       <div class="dashboard-card p-4 mb-4 profile-header">
         <div class="row align-items-center">
           <div class="col-md-2 text-center position-relative">
-            <div style="position:relative; display:inline-block;">
-              <img id="logoPreview" src="{{asset('storage/'.$entreprise->logo)}}" alt="Logo entreprise" class="profile-picture rounded-circle mb-3" style="object-fit:cover;">
-              <input type="file" id="logoInput" accept=".png,.jpg,.jpeg,.svg" style="display:none;">
-              <button id="changeLogoBtn" class="btn btn-sm btn-outline-primary me-2" type="button">Changer</button>
-              <button id="removeLogoBtn" class="btn btn-sm btn-outline-secondary" type="button">Supprimer</button>
-            </div>
+            <form method="POST" enctype="multipart/form-data" action="{{ route('entreprise.updateEntreprise', $entreprise) }}">
+              @csrf
+              @method('PUT')
+              <input type="hidden" name="action_type" value="logo">
+              <div style="position:relative; display:inline-block; width:100%;">
+                <img id="logoPreview" src="{{asset('storage/'.$entreprise->logo)}}" alt="Logo entreprise" class="profile-picture rounded-circle mb-3" style="object-fit:cover;">
+                <!-- Formulaire pour changer le logo -->
+                <form id="changeLogoForm" method="POST" enctype="multipart/form-data" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" style="display:inline;">
+                  @csrf
+                  @method('PUT')
+                  <input type="hidden" name="action_type" value="logo">
+                  <input type="file" id="logoInput" name="logo" accept=".png,.jpg,.jpeg,.svg" style="display:none;">
+                  <div class="d-flex flex-column align-items-center">
+                    <button id="changeLogoBtn" class="btn btn-sm btn-outline-primary mb-2" type="button" style="margin-left:auto;margin-right:auto;">
+                      <i class="bi bi-pencil me-1"></i> Changer
+                    </button>
+                    <div id="logoActionBtns" style="display:none; width:100%; text-align:center;">
+                      <button id="saveLogoBtn" class="btn btn-sm btn-primary mt-2 me-2" type="submit">Enregistrer</button>
+                      <button id="cancelLogoBtn" class="btn btn-sm btn-secondary mt-2" type="button">Annuler</button>
+                    </div>
+                  </div>
+                </form>
+                <!-- Formulaire pour supprimer le logo -->
+                <form id="removeLogoForm" method="POST" action="{{ route('entreprise.destroyLogo', $entreprise) }}" style="display:inline;">
+                  @csrf
+                  @method('DELETE')
+                  <input type="hidden" name="action_type" value="logo">
+                  <button id="removeLogoBtn" class="btn btn-sm btn-outline-secondary" type="submit" name="remove_logo" value="1">
+                    <i class="bi bi-trash me-1"></i> Supprimer
+                  </button>
+                </form>
+              </div>
+            </form>
           </div>
           <div class="col-md-6">
             <h3 class="fw-bold mb-1">{{ $entreprise->nomEntreprise}}</h3>
@@ -116,9 +157,10 @@
           <!-- Modal Modification À propos -->
           <div class="modal fade" id="editAproposModal" tabindex="-1" aria-labelledby="editAproposModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
-              <form method="POST" action="{{-- route('entreprise.updateApropos', $entreprise->id) --}}">
+              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="action_type" value="apropos">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="editAproposModalLabel">Modifier À propos</h5>
@@ -127,43 +169,61 @@
                   <div class="modal-body">
                     <div class="mb-3">
                       <label for="descriptionEdit" class="form-label">Description</label>
-                      <textarea class="form-control" id="descriptionEdit" name="description" rows="4">{{ $entreprise->description }}</textarea>
+                      <textarea class="form-control @error('description') is-invalid @enderror" id="descriptionEdit" name="description" rows="4">{{ old('description', $entreprise->description ?? '') }}</textarea>
+                      @error('description')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                      @enderror
                     </div>
                     <div class="row">
                       <div class="col-md-6 mb-3">
                         <label for="secteurEdit" class="form-label">Secteur d'activité*</label>
-                        <select class="form-select" id="secteurEdit" name="SecteurActivite" required>
+                        <select class="form-select @error('SecteurActivite') is-invalid @enderror" id="secteurEdit" name="SecteurActivite" required>
                           <option value="">Sélectionnez un secteur</option>
-                          <option value="Technologie" {{ $entreprise->SecteurActivite == 'Technologie' ? 'selected' : '' }}>Technologie</option>
-                          <option value="Finance" {{ $entreprise->SecteurActivite == 'Finance' ? 'selected' : '' }}>Finance</option>
-                          <option value="Santé" {{ $entreprise->SecteurActivite == 'Santé' ? 'selected' : '' }}>Santé</option>
-                          <option value="Éducation" {{ $entreprise->SecteurActivite == 'Éducation' ? 'selected' : '' }}>Éducation</option>
-                          <option value="Industrie" {{ $entreprise->SecteurActivite == 'Industrie' ? 'selected' : '' }}>Industrie</option>
-                          <option value="Commerce" {{ $entreprise->SecteurActivite == 'Commerce' ? 'selected' : '' }}>Commerce</option>
-                          <option value="autre" {{ !in_array($entreprise->SecteurActivite, ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? 'selected' : '' }}>Autre</option>
+                          <option value="Technologie" {{ old('SecteurActivite', $entreprise->SecteurActivite ?? '') == 'Technologie' ? 'selected' : '' }}>Technologie</option>
+                          <option value="Finance" {{ old('SecteurActivite', $entreprise->SecteurActivite ?? '') == 'Finance' ? 'selected' : '' }}>Finance</option>
+                          <option value="Santé" {{ old('SecteurActivite', $entreprise->SecteurActivite ?? '') == 'Santé' ? 'selected' : '' }}>Santé</option>
+                          <option value="Éducation" {{ old('SecteurActivite', $entreprise->SecteurActivite ?? '') == 'Éducation' ? 'selected' : '' }}>Éducation</option>
+                          <option value="Industrie" {{ old('SecteurActivite', $entreprise->SecteurActivite ?? '') == 'Industrie' ? 'selected' : '' }}>Industrie</option>
+                          <option value="Commerce" {{ old('SecteurActivite', $entreprise->SecteurActivite ?? '') == 'Commerce' ? 'selected' : '' }}>Commerce</option>
+                          <option value="autre" {{ !in_array(old('SecteurActivite', $entreprise->SecteurActivite ?? ''), ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? 'selected' : '' }}>Autre</option>
                         </select>
+                        @error('SecteurActivite')
+                          <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                         <div id="autreSecteurContainerEdit" class="mt-2" style="display:none;">
-                          <input type="text" class="form-control" id="autreSecteurEdit" placeholder="Veuillez préciser votre secteur d'activité" value="{{ !in_array($entreprise->SecteurActivite, ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? $entreprise->SecteurActivite : '' }}">
+                          <input type="text" class="form-control @error('SecteurActivite') is-invalid @enderror" id="autreSecteurEdit" placeholder="Veuillez préciser votre secteur d'activité" value="{{ !in_array(old('SecteurActivite', $entreprise->SecteurActivite ?? ''), ['Technologie','Finance','Santé','Éducation','Industrie','Commerce','']) ? old('SecteurActivite', $entreprise->SecteurActivite ?? '') : '' }}">
+                          @error('SecteurActivite')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                          @enderror
                         </div>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label for="tailleEdit" class="form-label">Taille de l'entreprise*</label>
-                        <select class="form-select" id="tailleEdit" name="tailleEntreprise" required>
+                        <select class="form-select @error('tailleEntreprise') is-invalid @enderror" id="tailleEdit" name="tailleEntreprise" required>
                           <option value="">Sélectionnez la taille</option>
-                          <option value="1-10" {{ $entreprise->tailleEntreprise == '1-10' ? 'selected' : '' }}>1-10 employés</option>
-                          <option value="11-50" {{ $entreprise->tailleEntreprise == '11-50' ? 'selected' : '' }}>11-50 employés</option>
-                          <option value="51-200" {{ $entreprise->tailleEntreprise == '51-200' ? 'selected' : '' }}>51-200 employés</option>
-                          <option value="201-500" {{ $entreprise->tailleEntreprise == '201-500' ? 'selected' : '' }}>201-500 employés</option>
-                          <option value="501+" {{ $entreprise->tailleEntreprise == '501+' ? 'selected' : '' }}>Plus de 500 employés</option>
+                          <option value="1-10" {{ old('tailleEntreprise', $entreprise->tailleEntreprise ?? '') == '1-10' ? 'selected' : '' }}>1-10 employés</option>
+                          <option value="11-50" {{ old('tailleEntreprise', $entreprise->tailleEntreprise ?? '') == '11-50' ? 'selected' : '' }}>11-50 employés</option>
+                          <option value="51-200" {{ old('tailleEntreprise', $entreprise->tailleEntreprise ?? '') == '51-200' ? 'selected' : '' }}>51-200 employés</option>
+                          <option value="201-500" {{ old('tailleEntreprise', $entreprise->tailleEntreprise ?? '') == '201-500' ? 'selected' : '' }}>201-500 employés</option>
+                          <option value="501+" {{ old('tailleEntreprise', $entreprise->tailleEntreprise ?? '') == '501+' ? 'selected' : '' }}>Plus de 500 employés</option>
                         </select>
+                        @error('tailleEntreprise')
+                          <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                       </div>
                       <div class="col-md-6 mb-3">
                         <label for="dateCreationEdit" class="form-label">Date de création</label>
-                        <input type="date" class="form-control" id="dateCreationEdit" name="dateCreation" value="{{ $entreprise->dateCreation }}">
+                        <input type="date" class="form-control @error('dateCreation') is-invalid @enderror" id="dateCreationEdit" name="dateCreation" value="{{ old('dateCreation', $entreprise->dateCreation ?? '') }}">
+                        @error('dateCreation')
+                          <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                       </div>
                       <div class="col-md-6 mb-3">
                         <label for="siteWebEdit" class="form-label">Site web</label>
-                        <input type="url" class="form-control" id="siteWebEdit" name="siteWeb" value="{{ $entreprise->siteWeb }}">
+                        <input type="url" class="form-control @error('siteWeb') is-invalid @enderror" id="siteWebEdit" name="siteWeb" value="{{ old('siteWeb', $entreprise->siteWeb ?? '') }}">
+                        @error('siteWeb')
+                          <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                       </div>
                     </div>
                   </div>
@@ -301,27 +361,47 @@
     const logoPreview = document.getElementById('logoPreview');
     const changeLogoBtn = document.getElementById('changeLogoBtn');
     const removeLogoBtn = document.getElementById('removeLogoBtn');
+    const saveLogoBtn = document.getElementById('saveLogoBtn');
+    const cancelLogoBtn = document.getElementById('cancelLogoBtn');
+    const logoActionBtns = document.getElementById('logoActionBtns');
+    let originalLogoSrc = logoPreview.src;
 
     // Ouvre le sélecteur de fichier quand on clique sur "Changer"
     changeLogoBtn.addEventListener('click', function() {
       logoInput.click();
     });
 
-    // Affiche la prévisualisation du nouveau logo
+    // Affiche la prévisualisation du nouveau logo et affiche "Enregistrer" et "Annuler", cache "Supprimer"
     logoInput.addEventListener('change', function() {
       if (this.files && this.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
           logoPreview.src = e.target.result;
+          logoActionBtns.style.display = 'block';
+          removeLogoBtn.style.display = 'none';
         }
         reader.readAsDataURL(this.files[0]);
       }
     });
 
-    // Supprime le logo (remet une image par défaut ou vide)
-    removeLogoBtn.addEventListener('click', function() {
+    // Affiche/masque les boutons selon la sélection
+    logoInput.addEventListener('input', function() {
+      if (this.files.length) {
+        logoActionBtns.style.display = 'block';
+        removeLogoBtn.style.display = 'none';
+      } else {
+        logoActionBtns.style.display = 'none';
+        removeLogoBtn.style.display = 'inline-block';
+        logoPreview.src = originalLogoSrc;
+      }
+    });
+
+    // Annuler le changement de logo
+    cancelLogoBtn.addEventListener('click', function() {
       logoInput.value = '';
-      logoPreview.src = "{{ asset('storage/logoEntreprise/logo.png') }}";
+      logoPreview.src = originalLogoSrc;
+      logoActionBtns.style.display = 'none';
+      removeLogoBtn.style.display = 'inline-block';
     });
 
     // Gestion du champ "Autre" secteur dans le modal

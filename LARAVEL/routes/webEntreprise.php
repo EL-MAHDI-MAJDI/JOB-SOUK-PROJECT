@@ -19,6 +19,12 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('monProfil', [monProfilController::class,'show'])
     ->where('entreprise','\d+')
     ->name('monProfil');
+    Route::put('monProfil', [monProfilController::class,'update'])
+    ->where('entreprise','\d+')
+    ->name('updateEntreprise');
+    Route::delete('monProfil', [monProfilController::class,'destroyLogo'])
+    ->where('entreprise','\d+')
+    ->name('destroyLogo');
 
     Route::get('offresEmploi', [offresEmploiController::class,'show'])
     ->where('entreprise','\d+')
@@ -39,17 +45,21 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     ->where('entreprise','\d+')
     ->name('evaluerCandidat');
 
-    Route::get('parametres', [parametresController::class,'show'])
-    ->where('entreprise','\d+')
-    ->name('parametres');
-
+    
     Route::get('notification', [notificationController::class,'show'])
     ->where('entreprise','\d+')
     ->name('notification');
-
+    
     Route::get('rechercherCandidats', [rechercherCandidatsController::class,'show'])
     ->where('entreprise','\d+')
     ->name('rechercherCandidats');
+    
+    Route::get('parametres', [parametresController::class,'show'])
+    ->where('entreprise','\d+')
+    ->name('parametres');
+    Route::put('parametres', [parametresController::class,'update'])
+    ->where('entreprise','\d+')
+    ->name('parametres.update');
 
     // afficher page detail de l'offre d'emploi
     Route::get('offresEmploi/{offre}', [offresEmploiController::class,'details'])

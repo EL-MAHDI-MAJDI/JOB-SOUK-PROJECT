@@ -65,28 +65,55 @@
             <div class="tab-pane fade show active" id="account">
               <div class="dashboard-card settings-card">
                 <h3 class="settings-title"><i class="bi bi-person"></i> Informations du compte</h3>
-                <form>  
+                
+                {{-- Afficher les messages de succès --}}
+                @include('partials.flashbag')
+
+                <form method="POST" action="{{ route('entreprise.parametres.update', $entreprise) }}">
+                  @csrf
+                  @method('PUT') 
                   <div class="mb-3">
                     <label for="company" class="form-label">Entreprise</label>
-                    <input type="text" class="form-control" id="company" value="{{$entreprise->nomEntreprise}}">
+                    <input type="text" class="form-control @error('nomEntreprise') is-invalid @enderror" id="company" name="nomEntreprise" value="{{ old('nomEntreprise', $entreprise->nomEntreprise ?? '') }}">
+                    @error('nomEntreprise')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                   </div>
 
                   <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" value="{{$entreprise->email}}">
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $entreprise->email ?? '') }}">
+                    @error('email')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="ville" class="form-label">Ville</label>
+                    <input type="text" class="form-control @error('ville') is-invalid @enderror" id="ville" name="ville" value="{{ old('ville', $entreprise->ville ?? '') }}">
+                    @error('ville')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                   </div>
                   
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Téléphone</label>
-                    <input type="tel" class="form-control" id="phone" value="{{$entreprise->phone}}">
-                  </div>
                   <div class="mb-3">
                     <label for="address" class="form-label">Adresse</label>
-                    <input type="text" class="form-control" id="address" value="{{$entreprise->adresse}}">
+                    <input type="text" class="form-control @error('adresse') is-invalid @enderror" id="address" name="adresse" value="{{ old('adresse', $entreprise->adresse ?? '') }}">
+                    @error('adresse')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                   </div>  
+
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Téléphone</label>
+                    <input type="tel" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', $entreprise->phone ?? '') }}">
+                    @error('phone')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
                   
                   <div class="text-end">
-                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
                   </div>
                 </form>
               </div>

@@ -30,10 +30,6 @@ class offresEmploiController extends Controller
     }
     public function details(Entreprise $entreprise,OffreEmploi $offre)
     {
-        // Récupérer l'offre d'emploi spécifique
-        // $offre = $entreprise->offreEmplois()->findOrFail($offreId);
-
-        // Retourner la vue avec les détails de l'offre
         return view('entreprise.offreDetails', compact('entreprise', 'offre'));
     }
     public function update(Entreprise $entreprise, OffreEmploi $offre, OffreEmploiRequest $request)
