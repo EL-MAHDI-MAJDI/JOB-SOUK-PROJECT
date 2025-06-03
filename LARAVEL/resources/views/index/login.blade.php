@@ -50,20 +50,9 @@
         </form>
         
         <div class="divider">ou</div>
-        
-        <div class="social-login">
-          <button class="btn btn-outline-dark mb-2">
-            <i class="bi bi-google"></i>
-            Continuer avec Google
-          </button>
-          <button class="btn btn-outline-primary">
-            <i class="bi bi-linkedin"></i>
-            Continuer avec LinkedIn
-          </button>
-        </div>
 
         <div class="text-center mt-4">
-          Pas encore de compte ? <a href="choix-inscription.html" class="text-decoration-none">S'inscrire</a>
+          Pas encore de compte ? <a href="{{ route('choixInscription') }}" class="text-decoration-none">S'inscrire</a>
         </div>
       </div>
     </div>
