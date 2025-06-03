@@ -39,6 +39,11 @@ class Candidat extends Authenticatable
         'remember_token',
     ];
 
+    public function getLogoAttribute($value)
+    {
+        return $value ?? 'photoProfile/profile.png'; // Default logo path if not set
+    }
+
     /**
      * Get the attributes that should be cast.
      *

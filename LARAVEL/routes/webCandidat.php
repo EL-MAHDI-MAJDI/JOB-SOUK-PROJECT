@@ -55,4 +55,15 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     ->where('candidat','\d+')
     ->name('parametre');
 
+    //modifier Profil
+    Route::get('Profil', [profilController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('Profil');
+    Route::put('Profil', [profilController::class,'update'])
+    ->where('candidat','\d+')
+    ->name('updatecandidat');
+    Route::delete('Profil', [profilController::class,'destroyLogo'])
+    ->where('candidat','\d+')
+    ->name('destroyLogo');
+
 });

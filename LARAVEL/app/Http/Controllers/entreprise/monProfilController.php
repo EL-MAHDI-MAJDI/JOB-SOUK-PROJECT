@@ -13,7 +13,7 @@ class monProfilController extends Controller
         // $profiles=Profile::all();
         return view('entreprise.monProfil',compact('entreprise'));
     }
-    public function update(Request $request, Entreprise $entreprise)
+public function update(Request $request, Entreprise $entreprise)
     {
          if ($request->action_type === 'apropos') {
              // Validation des données

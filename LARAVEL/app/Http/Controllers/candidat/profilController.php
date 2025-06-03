@@ -12,4 +12,35 @@ class profilController extends Controller
         // $profiles=Profile::all();
         return view('candidat.profil',compact('candidat'));
     }
+    public function update(Request $request, Candidat $candidat)
+    {
+        if ($request->action_type === 'profile') {
+             // Validation des données
+             $request->validate([
+                    'prenom' => 'required|string|max:50',
+                    'nom' => 'required|string|max:50',
+                    'titre_professionnel' => 'nullable|string|max:100',
+                    'phone' => 'nullable|string|max:20',
+                    'ville' => 'nullable|string|max:100',
+             ]);
+              // Mise à jour des informations de l'entreprise
+             $candidat->update($request->all());
+             // Redirection avec un message de succès
+             return back()->with('success', 'votre modification a été faite avec succès');
+        }elseif ($request->action_type === 'photo') {
+            // Validation de l'image
+            $request->validate([
+                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+        
+            // Stockage de l'image
+            $path = $request->file('photo')->store('photoCandidat', 'public');
+        
+            // Mise à jour de la photo du candidat
+            $candidat->update(['photo' => $path]);
+        
+            // Redirection avec un message de succès
+            return back()->with('success', 'Photo mise à jour avec succès');
+        }
+    }
 }

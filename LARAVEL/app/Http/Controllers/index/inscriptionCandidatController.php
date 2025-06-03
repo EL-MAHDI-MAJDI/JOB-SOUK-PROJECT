@@ -74,6 +74,6 @@ class inscriptionCandidatController extends Controller
        Auth::guard('candidats')->login($candidat);
         
         // redirection
-        return redirect()->route('candidat.dashboard',['candidats'=> $candidat->id])->with('success', 'Votre compte a été créé avec succès !');
+        return redirect()->route('candidat.dashboard',['candidat'=> $candidat->id])->with('success', 'Votre compte a été créé avec succès !');
     }
 }

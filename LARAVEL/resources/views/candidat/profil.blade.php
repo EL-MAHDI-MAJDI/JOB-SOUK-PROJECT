@@ -304,12 +304,17 @@
 
   <!-- Contenu principal -->
   <div class="main-content">
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="container-fluid">
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Mon Profil</h2>
-          <p class="text-muted mb-0" id="currentDate"></p>
+          {{-- <p class="text-muted mb-0" id="currentDate"></p> --}}
         </div>
         {{-- <div class="d-flex gap-2">
           <button class="btn btn-primary"><i class="bi bi-pencil me-2"></i>Modifier Profil</button>
@@ -323,12 +328,12 @@
         </button>
         <div class="row align-items-center">
           <div class="col-md-2 text-center text-md-start">
-            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Photo de profil" class="profile-avatar rounded-circle mb-3 mb-md-0">
+            <img src="{{asset('storage/'.$candidat->photoProfile)}}" alt="Photo de profil" class="profile-avatar rounded-circle mb-3 mb-md-0">
           </div>
           <div class="col-md-6">
-            <h3 class="mb-1">Omar Mansouri</h3>
-            <p class="mb-2"><i class="bi bi-briefcase me-2"></i>Développeur Full Stack</p>
-            <p class="mb-2"><i class="bi bi-geo-alt me-2"></i>Casablanca, Maroc</p>
+            <h3 class="mb-1">{{ $candidat->prenom }} {{ $candidat->nom }}</h3>
+            <p class="mb-2"><i class="bi bi-briefcase me-2"></i>{{ $candidat->titre_professionnel }}</p>
+            <p class="mb-2"><i class="bi bi-geo-alt me-2"></i>{{ $candidat->ville }}, Maroc</p>
             <div class="d-flex mt-3">
               <a href="#" class="social-icon"><i class="bi bi-linkedin"></i></a>
               <a href="#" class="social-icon"><i class="bi bi-github"></i></a>
@@ -632,59 +637,43 @@
   <!-- Modals pour l'ajout et modification d'éléments -->
 
   <!-- Modal Édition Profil -->
-  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editProfileModal">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editProfileModalLabel">Modifier le profil</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier le profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm" method="POST" action="{{ route('candidat.updatecandidat', $candidat) }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="action_type" value="profile">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="nom" name="nom" value="{{ $candidat->nom }}" required>
+                        <label for="nom">Nom</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="prenom" name="prenom" value="{{ $candidat->prenom }}" required>
+                        <label for="prenom">Prénom</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="titre_professionnel" name="titre_professionnel" value="{{ $candidat->titre_professionnel }}">
+                        <label for="titre_professionnel">Titre professionnel</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="ville" name="ville" value="{{ $candidat->ville }}">
+                        <label for="ville">Ville</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="profileForm">
-            <div class="mb-3">
-              <label for="profilePhoto" class="form-label">Photo de profil</label>
-              <input class="form-control" type="file" id="profilePhoto">
-            </div>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="fullName" placeholder="Nom complet" value="Omar Mansouri">
-              <label for="fullName">Nom complet</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="jobTitle" placeholder="Titre du poste" value="Développeur Full Stack">
-              <label for="jobTitle">Titre du poste</label>
-            </div>
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="location" placeholder="Localisation" value="Casablanca, Maroc">
-              <label for="location">Localisation</label>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Réseaux sociaux</label>
-              <div class="input-group mb-2">
-                <span class="input-group-text"><i class="bi bi-linkedin"></i></span>
-                <input type="text" class="form-control" placeholder="LinkedIn" value="linkedin.com/in/omar-mansouri">
-              </div>
-              <div class="input-group mb-2">
-                <span class="input-group-text"><i class="bi bi-github"></i></span>
-                <input type="text" class="form-control" placeholder="GitHub" value="github.com/omarmansouri">
-              </div>
-              <div class="input-group mb-2">
-                <span class="input-group-text"><i class="bi bi-twitter-x"></i></span>
-                <input type="text" class="form-control" placeholder="Twitter/X" value="twitter.com/omarmansouri">
-              </div>
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-globe"></i></span>
-                <input type="text" class="form-control" placeholder="Site web" value="omarmansouri.ma">
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" onclick="saveProfile()">Enregistrer</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
   <!-- Modal Édition À propos -->
   <div class="modal fade" id="editAboutModal" tabindex="-1" aria-labelledby="editAboutModalLabel" aria-hidden="true">

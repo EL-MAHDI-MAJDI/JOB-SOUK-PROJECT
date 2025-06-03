@@ -298,14 +298,7 @@
             <div class="settings-section">
               <h2>Informations du compte</h2>
               
-              <div class="avatar-upload">
-                <div class="avatar-preview">
-                  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Avatar">
-                </div>
-                <button class="btn-upload" data-bs-toggle="modal" data-bs-target="#avatarModal">
-                  <i class="bi bi-camera"></i>
-                </button>
-              </div>
+              
               
               <form>
                 <div class="row mb-3">
@@ -338,15 +331,6 @@
                   <div class="col-md-6">
                     <label for="city" class="form-label">Ville</label>
                     <input type="text" class="form-control" id="city" value="Casablanca">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="country" class="form-label">Pays</label>
-                    <select class="form-select" id="country">
-                      <option selected>Maroc</option>
-                      <option>France</option>
-                      <option>Canada</option>
-                      <option>Autre</option>
-                    </select>
                   </div>
                 </div>
                 
