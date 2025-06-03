@@ -198,12 +198,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-compoCandidat.side-menu activePage=4 />
+    <x-compoCandidat.side-menu activePage=4 :candidat='$candidat' />
   </div>
 
   <!-- Barre de navigation supérieure enrichie -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-compoCandidat.navbar />
+    <x-compoCandidat.navbar :candidat='$candidat' />
   </nav>
 
   <!-- Contenu principal -->

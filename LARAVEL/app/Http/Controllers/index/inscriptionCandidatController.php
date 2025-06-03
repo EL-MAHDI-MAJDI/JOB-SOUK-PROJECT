@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidat;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 
 class inscriptionCandidatController extends Controller
@@ -59,7 +60,7 @@ class inscriptionCandidatController extends Controller
         // dd($photoProfile,$prenom,$nom,$email,$phone,$ville,$adresse,$titre_professionnel,$password);
         // dd($testPhone);
         // insertion
-        Candidat::create([
+        $candidat=Candidat::create([
             'prenom'=>$prenom,
             'nom'=>$nom,
             'email'=>$email,
@@ -70,8 +71,9 @@ class inscriptionCandidatController extends Controller
             'photoProfile'=>$photoProfile,
             'password'=>bcrypt($password),
         ]);
-
+       Auth::guard('candidats')->login($candidat);
+        
         // redirection
-        return redirect()->route('candidat.dashboard')->with('success', 'Votre compte a été créé avec succès !');
+        return redirect()->route('candidat.dashboard',['candidats'=> $candidat->id])->with('success', 'Votre compte a été créé avec succès !');
     }
 }

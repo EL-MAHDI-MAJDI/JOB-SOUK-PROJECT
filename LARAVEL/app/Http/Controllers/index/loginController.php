@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\index;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,8 +27,8 @@ class loginController extends Controller
 
         if(Auth::guard('candidats')->attempt($credentials)){
             $request->session()->regenerate();
-            return to_route('candidat.dashboard');
-
+            $candidat = Auth::guard('candidats')->user();
+            return to_route('candidat.dashboard', ['candidat' => $candidat->id]);
         }else
         if(Auth::guard('entreprises')->attempt($credentials)){
             $request->session()->regenerate();

@@ -13,26 +13,46 @@ use App\Http\Controllers\candidat\notificationController;
 use App\Http\Controllers\candidat\parametreController;
 
 
-Route::prefix('candidat')->name('candidat.')->group(function () {
+Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
    
-    Route::get('dashboard',[dashboardController::class,'index'])->name('dashboard');
+    Route::get('dashboard',[dashboardController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('dashboard');
 
-    Route::get('profil',[profilController::class,'index'])->name('profil');
+    Route::get('profil',[profilController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('profil');
 
-    Route::get('cv',[cvController::class,'index'])->name('cv');
+    Route::get('cv',[cvController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('cv');
 
-    Route::get('mesCandidatures',[mesCandidaturesController::class,'index'])->name('mesCandidatures');
+    Route::get('mesCandidatures',[mesCandidaturesController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('mesCandidatures');
 
-    Route::get('chercherOffres',[chercherOffresController::class,'index'])->name('chercherOffres');
+    Route::get('chercherOffres',[chercherOffresController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('chercherOffres');
 
-    Route::get('offreSauvgarder',[offreSauvgarderController::class,'index'])->name('offreSauvgarder');
+    Route::get('offreSauvgarder',[offreSauvgarderController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('offreSauvgarder');
 
-    Route::get('mesEntretiens',[mesEntretiensController::class,'index'])->name('mesEntretiens');
+    Route::get('mesEntretiens',[mesEntretiensController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('mesEntretiens');
 
-    Route::get('message',[messageController::class,'index'])->name('message');
+    Route::get('message',[messageController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('message');
 
-    Route::get('notification',[notificationController::class,'index'])->name('notification');
+    Route::get('notification',[notificationController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('notification');
 
-    Route::get('parametre',[parametreController::class,'index'])->name('parametre');
+    Route::get('parametre',[parametreController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('parametre');
 
 });

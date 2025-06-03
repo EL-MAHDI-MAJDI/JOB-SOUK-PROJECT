@@ -282,12 +282,12 @@
 <body>
   <!-- Menu latéral fixe -->
   <div class="side-menu">
-    <x-compoCandidat.side-menu activePage=1/>
+    <x-compoCandidat.side-menu activePage=1 :candidat='$candidat' />
   </div>
 
   <!-- Barre de navigation supérieure enrichie -->
   <nav class="top-navbar navbar navbar-expand">
-    <x-compoCandidat.navbar />
+    <x-compoCandidat.navbar :candidat='$candidat' />
   </nav>
 
   <!-- Contenu principal -->
@@ -300,7 +300,7 @@
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 class="fw-bold mb-1">Bienvenue, Omar!</h2>
+          <h2 class="fw-bold mb-1">Bienvenue, {{$candidat->prenom }} !</h2>
         </div>
         <div class="d-flex gap-2">
           <button class="btn btn-outline-primary"><i class="bi bi-filter me-2"></i>Filtrer</button>
