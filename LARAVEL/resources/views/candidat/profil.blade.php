@@ -305,17 +305,17 @@
   <!-- Contenu principal -->
   <div class="main-content">
     @if ($errors->any())
-        <x-alert type="danger">
-          <h5 class="alert-heading">Erreur de validation</h5>
-          <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-            @endforeach
-          </ul>
-        </x-alert>
-      @endif
-        <!-- Afficher message "votre modification a été faite avec succès" -->
-      @include('partials.flashbag')
+      <x-alert type="danger">
+        <h5 class="alert-heading">Erreur de validation</h5>
+        <ul class="mb-0">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </x-alert>
+    @endif
+      <!-- Afficher message "votre modification a été faite avec succès" -->
+    @include('partials.flashbag')
     <div class="container-fluid">
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">

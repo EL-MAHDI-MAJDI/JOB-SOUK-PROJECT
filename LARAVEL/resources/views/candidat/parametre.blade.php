@@ -253,6 +253,18 @@
 
   <!-- Contenu principal -->
   <div class="main-content">
+      @if ($errors->any())
+        <x-alert type="danger">
+          <h5 class="alert-heading">Erreur de validation</h5>
+          <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </x-alert>
+      @endif
+        <!-- Afficher message "votre modification a été faite avec succès" -->
+      @include('partials.flashbag')
     <div class="container-fluid h-100">
       <div class="settings-container h-100">
         <!-- Menu des paramètres -->
@@ -300,39 +312,68 @@
               
               
               
-              <form>
+              <form action="{{ route('candidat.updatecandidat', $candidat->id) }}" method="POST" class="settings-card">
+                @csrf
+                @method('PUT')
+                
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <label for="firstName" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="firstName" value="Omar">
+                    <label for="nom" class="form-label">Prénom</label>
+                    <input type="text" class="form-control" id="nom" value="{{old('nom',$candidat->nom)}}" name="nom">
+                    @error('firstName')
+                      <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                   </div>
                   <div class="col-md-6">
-                    <label for="lastName" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="lastName" value="Mansouri">
+                    <label for="prenom" class="form-label">prenom</label>
+                    <input type="text" class="form-control" id="prenom" value="{{old('prenom',$candidat->prenom )}}" name="prenom">
+                    @error('lastName')
+                      <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 
                 <div class="mb-3">
                   <label for="email" class="form-label">Adresse email</label>
-                  <input type="email" class="form-control" id="email" value="omar.mansouri@example.com">
+                  <input type="email" class="form-control" id="email" name="email" value="{{ old('email',$candidat->email) }}">
+                  @error('email')
+                    <div class="text-danger mt-1">{{ $message }}</div>
+                  @enderror
                 </div>
-                
                 <div class="mb-3">
                   <label for="phone" class="form-label">Téléphone</label>
-                  <input type="tel" class="form-control" id="phone" value="+212 6 12 34 56 78">
+                  <input type="tel" class="form-control" id="phone" name="phone" value="{{ old('phone',$candidat->phone) }}" >
+                  @error('phone')
+                    <div class="text-danger mt-1">{{ $message }}</div>
+                  @enderror
                 </div>
                 
                 <div class="mb-3">
-                  <label for="address" class="form-label">Adresse</label>
-                  <input type="text" class="form-control" id="address" value="123 Rue Mohammed V, Casablanca">
+                  <label for="adresse" class="form-label">Adresse</label>
+                  <input type="text" class="form-control" id="adresse" value="{{ old('adresse',$candidat->adresse) }}" name="adresse">
+                  @error('address')
+                    <div class="text-danger mt-1">{{ $message }}</div>
+                  @enderror
                 </div>
                 
                 <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="city" class="form-label">Ville</label>
-                    <input type="text" class="form-control" id="city" value="Casablanca">
+                    <label for="ville" class="form-label">Ville</label>
+                    <input type="text" class="form-control" id="ville" value="{{ old('ville',$candidat->ville) }}" name="ville">
+                    @error('city')
+                      <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                   </div>
-                </div>
+
+                  <div class="row mb-3">
+                  <label for="titre_professionnel">Titre professionnel</label>
+                  <input type="text" class="form-control" id="titre_professionnel" name="titre_professionnel" value="{{ old('titre_professionnel',$candidat->titre_professionnel) }}">
+                        @error('titre_professionnel')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                  </div>
+
                 
                 <div class="text-end">
                   <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>

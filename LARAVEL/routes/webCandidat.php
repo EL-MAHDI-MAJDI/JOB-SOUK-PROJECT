@@ -66,4 +66,12 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     ->where('candidat','\d+')
     ->name('destroyLogo');
 
+    //modifier parametre
+    Route::get('parametre', [parametreController::class,'show'])
+    ->where('candidat','\d+')
+    ->name('parametre');
+    Route::put('parametre', [parametreController::class,'update'])
+    ->where('candidat','\d+')
+    ->name('updatecandidat');
+
 });
