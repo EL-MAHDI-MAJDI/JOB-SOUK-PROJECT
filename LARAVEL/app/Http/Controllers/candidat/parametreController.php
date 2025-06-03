@@ -26,11 +26,13 @@ class parametreController extends Controller
                             'max:100',
                             // Vérification de l'unicité de l'email dans la table candidats, en ignorant l'ID du candidat actuel
                             // pour éviter les conflits lors de la mise à jour
-                            Rule::unique('candidats')->ignore($candidat->id)
+                            Rule::unique('candidats')->ignore($candidat->id),
+                            Rule::unique('admins'),
+                            Rule::unique('entreprises'),
                         ],
                     'adresse' => 'required|string|max:255',
                     'titre_professionnel' => 'nullable|string|max:100',
-                    'phone' => 'required|string|max:20',
+                    'phone' => 'required|regex:/^\+?[0-9\-]+$/|max:20',
                     'ville' => 'required|string|max:100',
              ]);
         // Mise à jour des informations du candidat

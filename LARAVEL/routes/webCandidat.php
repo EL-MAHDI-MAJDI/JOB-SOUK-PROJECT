@@ -19,9 +19,16 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     ->where('candidat','\d+')
     ->name('dashboard');
 
-    Route::get('profil',[profilController::class,'show'])
+    //modifier Profil
+    Route::get('profil', [profilController::class,'show'])
     ->where('candidat','\d+')
     ->name('profil');
+    Route::put('profil', [profilController::class,'update'])
+    ->where('candidat','\d+')
+    ->name('updateprofil');
+    Route::delete('profil', [profilController::class,'destroyLogo'])
+    ->where('candidat','\d+')
+    ->name('destroyLogo');
 
     Route::get('cv',[cvController::class,'show'])
     ->where('candidat','\d+')
@@ -51,27 +58,11 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     ->where('candidat','\d+')
     ->name('notification');
 
-    Route::get('parametre',[parametreController::class,'show'])
-    ->where('candidat','\d+')
-    ->name('parametre');
-
-    //modifier Profil
-    Route::get('Profil', [profilController::class,'show'])
-    ->where('candidat','\d+')
-    ->name('Profil');
-    Route::put('Profil', [profilController::class,'update'])
-    ->where('candidat','\d+')
-    ->name('updatecandidat');
-    Route::delete('Profil', [profilController::class,'destroyLogo'])
-    ->where('candidat','\d+')
-    ->name('destroyLogo');
-
     //modifier parametre
     Route::get('parametre', [parametreController::class,'show'])
     ->where('candidat','\d+')
     ->name('parametre');
     Route::put('parametre', [parametreController::class,'update'])
     ->where('candidat','\d+')
-    ->name('updatecandidat');
-
+    ->name('updateparametre');
 });

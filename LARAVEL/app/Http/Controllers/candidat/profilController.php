@@ -20,7 +20,6 @@ class profilController extends Controller
                     'prenom' => 'required|string|max:50',
                     'nom' => 'required|string|max:50',
                     'titre_professionnel' => 'required|string|max:100',
-                    'phone' => 'required|string|max:20',
                     'ville' => 'required|string|max:100',
              ]);
               // Mise à jour des informations de l'entreprise

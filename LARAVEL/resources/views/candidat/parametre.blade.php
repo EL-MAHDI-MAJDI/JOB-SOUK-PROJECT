@@ -312,20 +312,20 @@
               
               
               
-              <form action="{{ route('candidat.updatecandidat', $candidat->id) }}" method="POST" class="settings-card">
+              <form action="{{ route('candidat.updateparametre', $candidat->id) }}" method="POST" class="settings-card">
                 @csrf
                 @method('PUT')
                 
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <label for="nom" class="form-label">Prénom</label>
+                    <label for="nom" class="form-label">Nom</label>
                     <input type="text" class="form-control" id="nom" value="{{old('nom',$candidat->nom)}}" name="nom">
                     @error('firstName')
                       <div class="text-danger mt-1">{{ $message }}</div>
                     @enderror
                   </div>
                   <div class="col-md-6">
-                    <label for="prenom" class="form-label">prenom</label>
+                    <label for="prenom" class="form-label">Prénom</label>
                     <input type="text" class="form-control" id="prenom" value="{{old('prenom',$candidat->prenom )}}" name="prenom">
                     @error('lastName')
                       <div class="text-danger mt-1">{{ $message }}</div>

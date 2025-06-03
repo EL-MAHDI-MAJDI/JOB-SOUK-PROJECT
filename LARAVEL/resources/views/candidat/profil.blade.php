@@ -652,7 +652,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="profileForm" method="POST" action="{{ route('candidat.updatecandidat', $candidat) }}">
+                <form id="profileForm" method="POST" action="{{ route('candidat.updateprofil', $candidat) }}">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="action_type" value="profile">
