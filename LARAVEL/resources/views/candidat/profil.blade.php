@@ -304,11 +304,18 @@
 
   <!-- Contenu principal -->
   <div class="main-content">
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+    @if ($errors->any())
+        <x-alert type="danger">
+          <h5 class="alert-heading">Erreur de validation</h5>
+          <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </x-alert>
+      @endif
+        <!-- Afficher message "votre modification a été faite avec succès" -->
+      @include('partials.flashbag')
     <div class="container-fluid">
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -652,18 +659,39 @@
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="nom" name="nom" value="{{ $candidat->nom }}" required>
                         <label for="nom">Nom</label>
+                        @error('nom')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="prenom" name="prenom" value="{{ $candidat->prenom }}" required>
                         <label for="prenom">Prénom</label>
+                        @error('prenom')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="titre_professionnel" name="titre_professionnel" value="{{ $candidat->titre_professionnel }}">
                         <label for="titre_professionnel">Titre professionnel</label>
+                        @error('titre_professionnel')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-floating mb-3">
+                      
                         <input type="text" class="form-control" id="ville" name="ville" value="{{ $candidat->ville }}">
                         <label for="ville">Ville</label>
+                        @error('ville')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>

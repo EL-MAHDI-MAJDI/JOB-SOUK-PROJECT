@@ -19,9 +19,9 @@ class profilController extends Controller
              $request->validate([
                     'prenom' => 'required|string|max:50',
                     'nom' => 'required|string|max:50',
-                    'titre_professionnel' => 'nullable|string|max:100',
-                    'phone' => 'nullable|string|max:20',
-                    'ville' => 'nullable|string|max:100',
+                    'titre_professionnel' => 'required|string|max:100',
+                    'phone' => 'required|string|max:20',
+                    'ville' => 'required|string|max:100',
              ]);
               // Mise à jour des informations de l'entreprise
              $candidat->update($request->all());
