@@ -657,7 +657,7 @@
                     @method('PUT')
                     <input type="hidden" name="action_type" value="profile">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="nom" name="nom" value="{{ $candidat->nom }}" required>
+                        <input type="text" class="form-control @error('nom') is-invalid @enderror" id="nom" name="nom" value="{{ $candidat->nom }}" required>
                         <label for="nom">Nom</label>
                         @error('nom')
                             <div class="invalid-feedback">
@@ -666,7 +666,7 @@
                         @enderror
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="prenom" name="prenom" value="{{ $candidat->prenom }}" required>
+                        <input type="text" class="form-control @error('prenom') is-invalid @enderror" id="prenom" name="prenom" value="{{ $candidat->prenom }}" required>
                         <label for="prenom">Prénom</label>
                         @error('prenom')
                             <div class="invalid-feedback">
@@ -675,7 +675,7 @@
                         @enderror
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" id="titre_professionnel" name="titre_professionnel" value="{{ $candidat->titre_professionnel }}">
+                        <input type="text" class="form-control @error('titre_professionnel') is-invalid @enderror" id="titre_professionnel" name="titre_professionnel" value="{{ $candidat->titre_professionnel }}">
                         <label for="titre_professionnel">Titre professionnel</label>
                         @error('titre_professionnel')
                             <div class="invalid-feedback">
@@ -685,7 +685,7 @@
                     </div>
                     <div class="form-floating mb-3">
                       
-                        <input type="text" class="form-control" id="ville" name="ville" value="{{ $candidat->ville }}">
+                        <input type="text" class="form-control @error('ville') is-invalid @enderror" id="ville" name="ville" value="{{ $candidat->ville }}">
                         <label for="ville">Ville</label>
                         @error('ville')
                             <div class="invalid-feedback">

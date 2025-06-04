@@ -29,4 +29,9 @@ class OffreEmploi extends Model
         'competences_requises',
         'entreprise_id',
     ];
+
+    public function entreprise()
+    {
+        return $this->belongsTo(Entreprise::class);
+    }
 }

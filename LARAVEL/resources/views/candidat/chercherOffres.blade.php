@@ -225,33 +225,39 @@
       <!-- Hero section -->
       <div class="search-hero">
         <h1 class="fw-bold mb-3">Trouvez le job de vos rêves</h1>
-        <div class="row g-3">
-          <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Métier, mots-clés">
+        <form method="GET" action="{{ route('candidat.chercherOffres', $candidat) }}">
+          <div class="row g-3">
+
+            <div class="col-md-10">
+              <input type="text" class="form-control" name="search" placeholder="Recherche intitulé, description, localisation, entreprise ou secteur d'activité" value="{{ old('search', request('search')) }}">
+            </div>
+
+            <!-- <div class="col-md-3">
+              <input type="text" class="form-control" name="lieu" placeholder="Lieu" value="{{ request('lieu') }}">
+            </div> -->
+
+            <!-- <div class="col-md-3">
+              <select class="form-select" name="secteur">
+                <option value="">Secteur d'activité</option>
+                <option value="Informatique" {{ request('secteur')=='Informatique'?'selected':'' }}>Informatique</option>
+                <option value="Finance" {{ request('secteur')=='Finance'?'selected':'' }}>Finance</option>
+                <option value="Santé" {{ request('secteur')=='Santé'?'selected':'' }}>Santé</option>
+                <option value="Education" {{ request('secteur')=='Education'?'selected':'' }}>Education</option>
+              </select>
+            </div> -->
+
+            <div class="col-md-2">
+              <button class="btn btn-light w-100" type="submit">
+                <i class="bi bi-search me-2"></i>Rechercher
+              </button>
+            </div>
           </div>
-          <div class="col-md-3">
-            <input type="text" class="form-control" placeholder="Lieu">
-          </div>
-          <div class="col-md-3">
-            <select class="form-select">
-              <option selected>Secteur d'activité</option>
-              <option>Informatique</option>
-              <option>Finance</option>
-              <option>Santé</option>
-              <option>Education</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button class="btn btn-light w-100">
-              <i class="bi bi-search me-2"></i>Rechercher
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
 
       <div class="row">
         <!-- Filtres -->
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
           <div class="filter-card">
             <h5 class="fw-bold mb-3">Filtrer les résultats</h5>
             
@@ -309,172 +315,67 @@
               <i class="bi bi-funnel me-2"></i>Appliquer les filtres
             </button>
           </div>
-        </div>
+        </div> -->
         
         <!-- Résultats -->
-        <div class="col-md-9">
+         <!-- <div class="col-md-9"> il remplace par 12 puisque on a supprimer Filtres  --> 
+        <div class="col-md-12">
           <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="fw-bold mb-0">124 offres disponibles</h5>
-            <div>
-              <span class="me-2">Trier par :</span>
-              <select class="form-select d-inline-block w-auto">
-                <option selected>Pertinence</option>
-                <option>Date de publication</option>
-                <option>Salaire (croissant)</option>
-                <option>Salaire (décroissant)</option>
-              </select>
-            </div>
+            <h5 class="fw-bold mb-0">@if($countoffres==1) une offre disponible @else {{$countoffres}} offres disponibles @endif</h5>
+            @if(!$offres->isEmpty())
+              <div>
+                <form method="GET" id="sortForm" >
+                  <span class="me-2">Trier par :</span>
+                  <select class="form-select d-inline-block w-auto" name="sortBy" onchange="document.getElementById('sortForm').submit()">
+                      <option disabled {{ (request('sortBy', $sortBy ?? 'created_at') == '') ? 'selected' : '' }}>Sélectionnez ici</option>
+                      <option value="created_at" {{ (request('sortBy', $sortBy ?? 'created_at') == 'created_at') ? 'selected' : '' }}>Date de publication</option>
+                      <option value="date_limite_candidature" {{ (request('sortBy', $sortBy ?? 'created_at') == 'date_limite_candidature') ? 'selected' : '' }}>Date limite de candidature</option>
+                  </select>
+                </form>
+              </div>
+            @endif
           </div>
-          
-          <!-- Offre 1 -->
-          <div class="job-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Développeur Full Stack Senior</h5>
-                  <p class="text-muted mb-2">TechSolutions Inc. - Casablanca</p>
-                  <div class="d-flex flex-wrap gap-2">
-                    <span class="job-type type-fulltime">Temps plein</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Casablanca</span>
-                    <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>25,000 - 30,000 MAD/mois</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée il y a 2 jours</span>
+          @if($offres->isEmpty())
+            <div class="text-center text-muted py-5">
+              <i class="bi bi-briefcase fs-1 mb-2"></i><br>
+              <span>Aucune offre d'emploi trouvée.</span>
+            </div>
+          @else
+            <!-- Offre  -->
+            @foreach($offres as $offre)
+            <div class="job-card card mb-3">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-md-1 text-center">
+                    <img src="{{ asset('storage/' . $offre->entreprise->logo) }}" alt="Logo" class="company-logo">
                   </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2">Postuler</button>
-                  <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
-                    <i class="bi bi-bookmark"></i>
-                  </button>
+                  <div class="col-md-7">
+                    <h5 class="mb-1">{{$offre->intitule_offre_emploi}}</h5>
+                    <p class="text-muted mb-2">{{$offre->entreprise->nomEntreprise}} - {{$offre->localisation}}</p>
+                    <div class="d-flex flex-wrap gap-2">
+                      <span class="job-type type-fulltime">{{$offre->type_contrat}}</span>
+                      <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>{{$offre->localisation}}</span>
+                      @if($offre->salaire_offre_emploi) <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>{{$offre->salaire_offre_emploi}} MAD/mois</span> @endif
+                      <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée {{ $offre->created_at->diffForHumans() }}</span>
+                      <span class="text-muted"><i class="bi bi-hourglass-bottom me-1"></i>Dernier délai {{$offre->date_limite_candidature}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4 text-end">
+                    <button class="btn btn-primary me-2">Postuler</button>
+                    <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
+                      <i class="bi bi-bookmark"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <!-- Offre 2 -->
-          <div class="job-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Data Scientist</h5>
-                  <p class="text-muted mb-2">AI Solutions - Rabat</p>
-                  <div class="d-flex flex-wrap gap-2">
-                    <span class="job-type type-fulltime">Temps plein</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Rabat</span>
-                    <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>22,000 - 28,000 MAD/mois</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée il y a 1 semaine</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2">Postuler</button>
-                  <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
-                    <i class="bi bi-bookmark"></i>
-                  </button>
-                </div>
-              </div>
+            @endforeach
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-3">
+              {{ $offres->links('pagination::bootstrap-4') }}
             </div>
-          </div>
-          
-          <!-- Offre 3 -->
-          <div class="job-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Développeur Frontend React</h5>
-                  <p class="text-muted mb-2">WebVision - Casablanca</p>
-                  <div class="d-flex flex-wrap gap-2">
-                    <span class="job-type type-parttime">Temps partiel</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Casablanca</span>
-                    <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>15,000 - 18,000 MAD/mois</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée il y a 3 jours</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2">Postuler</button>
-                  <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
-                    <i class="bi bi-bookmark"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Offre 4 -->
-          <div class="job-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Stagiaire en Développement</h5>
-                  <p class="text-muted mb-2">DigitalLab - Rabat</p>
-                  <div class="d-flex flex-wrap gap-2">
-                    <span class="job-type type-internship">Stage</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Rabat</span>
-                    <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>3,000 - 5,000 MAD/mois</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée aujourd'hui</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2">Postuler</button>
-                  <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
-                    <i class="bi bi-bookmark"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Offre 5 -->
-          <div class="job-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Chef de Projet IT</h5>
-                  <p class="text-muted mb-2">TechInnov - Casablanca</p>
-                  <div class="d-flex flex-wrap gap-2">
-                    <span class="job-type type-fulltime">Temps plein</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Casablanca</span>
-                    <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>30,000 - 35,000 MAD/mois</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée il y a 5 jours</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2">Postuler</button>
-                  <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
-                    <i class="bi bi-bookmark"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Pagination -->
-          <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Précédent</a>
-              </li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">Suivant</a>
-              </li>
-            </ul>
-          </nav>
+          @endif
         </div>
       </div>
     </div>
