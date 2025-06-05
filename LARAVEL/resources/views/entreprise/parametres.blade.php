@@ -19,10 +19,14 @@
   <nav class="top-navbar navbar navbar-expand">
     <x-compoEntreprise.navbar :entreprise="$entreprise"/>
   </nav>
-
+  
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
+      <!-- Afficher les erreurs de validation -->
+       <x-erreur />
+      {{-- Afficher les messages de succès --}}
+      @include('partials.flashbag')
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -30,7 +34,6 @@
           <p class="text-muted mb-0">Gérez vos préférences et vos informations de compte</p>
         </div>
       </div>
-      
       <div class="row">
         <!-- Colonne de navigation des paramètres -->
         <div class="col-lg-3">
@@ -65,10 +68,7 @@
             <div class="tab-pane fade show active" id="account">
               <div class="dashboard-card settings-card">
                 <h3 class="settings-title"><i class="bi bi-person"></i> Informations du compte</h3>
-                
-                {{-- Afficher les messages de succès --}}
-                @include('partials.flashbag')
-                <form method="POST" action="{{ route('entreprise.parametres.update', $entreprise) }}">
+                <form method="POST" action="{{ route('entreprise.parametres', $entreprise) }}">
                   @csrf
                   @method('PUT')
                   <input type="hidden" name="update" value="update_account">
@@ -123,14 +123,13 @@
             <div class="tab-pane fade" id="security">
               <div class="dashboard-card settings-card">
                 <h3 class="settings-title"><i class="bi bi-shield-lock"></i> Sécurité du compte</h3>
-                @include('partials.flashbag')
                 <div class="security-item">
                   <div class="security-badge bg-primary bg-opacity-10 text-primary">
                     <i class="bi bi-key fs-5"></i>
                   </div>
                   <div class="flex-grow-1">
                     <h6 class="mb-1">Mot de passe</h6>
-                    <p class="small text-muted mb-0">Dernière modification il y a 3 mois</p>
+                    <!-- <p class="small text-muted mb-0">Dernière modification il y a 3 mois</p> -->
                   </div>
                   <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#passwordModal">Modifier</button>
                 </div>
@@ -413,7 +412,7 @@
           <h5 class="modal-title" id="passwordModalLabel">Modifier le mot de passe</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form method="POST" action="{{ route('entreprise.parametres.update', $entreprise) }}">
+        <form method="POST" action="{{ route('entreprise.parametres', $entreprise) }}">
           @csrf
           @method('PUT')
           <input type="hidden" name="update" value="update_password">
