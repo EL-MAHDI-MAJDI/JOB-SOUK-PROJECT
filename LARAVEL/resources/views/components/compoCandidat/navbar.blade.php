@@ -62,10 +62,8 @@
         <!-- Profil utilisateur -->
         <div class="dropdown">
           <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 36px; height: 36px;">
-              <span>OM</span>
-            </div>
-            <span class="d-none d-md-inline">{{$candidat->prenom .' '. $candidat->nom}}</span>
+            <img src="{{asset('storage/'.$candidat->photoProfile)}}" alt="Profile" class="rounded-circle me-2" width="32" height="32">
+            <span class="d-none d-md-inline">{{$candidat->prenom}} {{$candidat->nom}}</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="{{ route('candidat.profil', $candidat) }}"><i class="bi bi-person me-2"></i>Profil</a></li>

@@ -289,6 +289,43 @@
     .p-3 {
         height: 47px;
     }
+
+    /* Nouveaux styles pour les actions de photo */
+    .photo-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .photo-actions .btn {
+      width: 120px;
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+
+    .photo-actions .btn-outline-primary {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+      color: #fff;
+    }
+
+    .photo-actions .btn-outline-primary:hover {
+      background-color: #fff;
+      color: var(--primary);
+    }
+
+    .photo-actions .btn-outline-secondary {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+      color: #fff;
+    }
+
+    .photo-actions .btn-outline-secondary:hover {
+      background-color: #fff;
+      color: #6c757d;
+    }
   </style>
 </head>
 <body>
@@ -335,7 +372,35 @@
         </button>
         <div class="row align-items-center">
           <div class="col-md-2 text-center text-md-start">
-            <img src="{{asset('storage/'.$candidat->photoProfile)}}" alt="Photo de profil" class="profile-avatar rounded-circle mb-3 mb-md-0">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('candidat.updateprofil', $candidat) }}">
+              @csrf
+              @method('PUT')
+              <input type="hidden" name="action_type" value="photo">
+              <div style="position:relative; display:inline-block; width:100%;">
+                <img id="photoPreview" src="{{ $candidat->photoProfile ? asset('storage/'.$candidat->photoProfile) : asset('public/storage/photoProfile/profile.png') }}" alt="Photo de profil" class="profile-avatar rounded-circle mb-3 mb-md-0" style="object-fit:cover;">
+                <!-- Formulaire pour changer la photo -->
+                <form id="changePhotoForm" method="POST" enctype="multipart/form-data" action="{{ route('candidat.updateprofil', $candidat) }}" style="display:inline;">
+                  @csrf
+                  @method('PUT')
+                  <input type="hidden" name="action_type" value="photo">
+                  <input type="file" id="photoInput" name="photoProfile" accept=".png,.jpg,.jpeg" style="display:none;">
+                  <div class="d-flex flex-column align-items-center gap-2 mt-2">
+                    <button id="changePhotoBtn" class="btn btn-sm btn-primary" type="button">
+                      <i class="bi bi-pencil me-1"></i> Changer
+                    </button>
+                    <button id="removePhotoBtn" class="btn btn-sm btn-danger" type="submit" name="remove_photo" value="1">
+                      <i class="bi bi-trash me-1"></i> Supprimer
+                    </button>
+                  </div>
+                  <div id="photoActionBtns" style="display:none; width:100%;" class="mt-2">
+                    <div class="d-flex flex-column align-items-center gap-2">
+                      <button id="savePhotoBtn" class="btn btn-sm btn-primary" type="submit">Enregistrer</button>
+                      <button id="cancelPhotoBtn" class="btn btn-sm btn-secondary" type="button">Annuler</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </form>
           </div>
           <div class="col-md-6">
             <h3 class="mb-1">{{ $candidat->prenom }} {{ $candidat->nom }}</h3>
@@ -1648,6 +1713,54 @@ J'aime résoudre des problèmes complexes et créer des solutions innovantes qui
           currentEditId = null;
           currentEditType = null;
         });
+      });
+
+      // Gestion du changement de photo de profil
+      const photoInput = document.getElementById('photoInput');
+      const photoPreview = document.getElementById('photoPreview');
+      const changePhotoBtn = document.getElementById('changePhotoBtn');
+      const removePhotoBtn = document.getElementById('removePhotoBtn');
+      const savePhotoBtn = document.getElementById('savePhotoBtn');
+      const cancelPhotoBtn = document.getElementById('cancelPhotoBtn');
+      const photoActionBtns = document.getElementById('photoActionBtns');
+      let originalPhotoSrc = photoPreview.src;
+
+      // Ouvre le sélecteur de fichier quand on clique sur "Changer"
+      changePhotoBtn.addEventListener('click', function() {
+        photoInput.click();
+      });
+
+      // Affiche la prévisualisation de la nouvelle photo et affiche "Enregistrer" et "Annuler", cache "Supprimer"
+      photoInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            photoPreview.src = e.target.result;
+            photoActionBtns.style.display = 'block';
+            removePhotoBtn.style.display = 'none';
+          }
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+
+      // Affiche/masque les boutons selon la sélection
+      photoInput.addEventListener('input', function() {
+        if (this.files.length) {
+          photoActionBtns.style.display = 'block';
+          removePhotoBtn.style.display = 'none';
+        } else {
+          photoActionBtns.style.display = 'none';
+          removePhotoBtn.style.display = 'inline-block';
+          photoPreview.src = originalPhotoSrc;
+        }
+      });
+
+      // Annuler le changement de photo
+      cancelPhotoBtn.addEventListener('click', function() {
+        photoInput.value = '';
+        photoPreview.src = originalPhotoSrc;
+        photoActionBtns.style.display = 'none';
+        removePhotoBtn.style.display = 'inline-block';
       });
     });
   </script>

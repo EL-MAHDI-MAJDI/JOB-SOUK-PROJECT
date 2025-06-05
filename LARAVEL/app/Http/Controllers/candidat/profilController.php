@@ -4,6 +4,8 @@ namespace App\Http\Controllers\candidat;
 use App\Http\Controllers\Controller;
 use App\Models\Candidat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class profilController extends Controller
 {
@@ -26,20 +28,36 @@ class profilController extends Controller
              $candidat->update($request->all());
              // Redirection avec un message de succès
              return back()->with('success', 'votre modification a été faite avec succès');
-        }elseif ($request->action_type === 'photo') {
-            // Validation de l'image
-            $request->validate([
-                'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-        
-            // Stockage de l'image
-            $path = $request->file('photo')->store('photoCandidat', 'public');
-        
-            // Mise à jour de la photo du candidat
-            $candidat->update(['photo' => $path]);
-        
-            // Redirection avec un message de succès
-            return back()->with('success', 'Photo mise à jour avec succès');
+        } elseif ($request->action_type === 'photo') {
+            if ($request->hasFile('photoProfile')) {
+                // Validation de l'image
+                $request->validate([
+                    'photoProfile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                ]);
+
+                // Supprimer l'ancienne photo si elle existe
+                if ($candidat->photoProfile) {
+                    Storage::delete('public/' . $candidat->photoProfile);
+                }
+
+                // Stockage de la nouvelle image
+                $path = $request->file('photoProfile')->store('photoProfile', 'public');
+
+                // Mise à jour de la photo du candidat
+                $candidat->update(['photoProfile' => $path]);
+
+                return back()->with('success', 'Photo mise à jour avec succès');
+            }
+
+            if ($request->has('remove_photo')) {
+                // Supprimer la photo existante
+                if ($candidat->photoProfile) {
+                    Storage::delete('public/' . $candidat->photoProfile);
+                    $candidat->update(['photoProfile' => null]);
+                }
+
+                return back()->with('success', 'Photo supprimée avec succès');
+            }
         }
     }
 }
