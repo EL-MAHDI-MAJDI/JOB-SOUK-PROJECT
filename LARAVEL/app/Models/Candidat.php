@@ -44,6 +44,10 @@ class Candidat extends Authenticatable
         return $value ?? 'photoProfile/profile.png'; // Default logo path if not set
     }
 
+    public function offresSauvegardees()
+    {
+        return $this->belongsToMany(OffreEmploi::class, 'offre_sauvegardes', 'candidat_id', 'offre_emploi_id');
+    }
     /**
      * Get the attributes that should be cast.
      *

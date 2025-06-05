@@ -361,10 +361,18 @@
                     </div>
                   </div>
                   <div class="col-md-4 text-end">
-                    <button class="btn btn-primary me-2">Postuler</button>
-                    <button class="btn btn-outline-secondary save-btn" title="Sauvegarder">
-                      <i class="bi bi-bookmark"></i>
-                    </button>
+                    <button class="btn btn-primary me-2" title="Postuler">Postuler</button>
+                    @php
+                        $isSaved = in_array($offre->id, $offresSauvegardeesIds ?? []);
+                    @endphp
+                    <form method="POST" action="{{ route('candidat.chercherOffres.sauvegarder', ['candidat' => $candidat->id, 'offre' => $offre->id]) }}" style="display:inline;">
+                        @csrf
+                        <button type="submit"
+                            class="btn save-btn {{ $isSaved ? 'btn-warning' : 'btn-outline-secondary' }}"
+                            title="Sauvegarder" name="save">
+                            <i class="bi {{ $isSaved ? 'bi-bookmark-fill' : 'bi-bookmark' }}"></i>
+                        </button>
+                    </form>
                   </div>
                 </div>
               </div>

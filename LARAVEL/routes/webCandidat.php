@@ -41,6 +41,9 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     Route::get('chercherOffres',[chercherOffresController::class,'show'])
     ->where('candidat','\d+')
     ->name('chercherOffres');
+    Route::post('chercherOffres/{offre}', [chercherOffresController::class,'sauvegarder'])
+    ->where(['candidat'=>'\d+', 'offre' => '\d+'])
+    ->name('chercherOffres.sauvegarder');
 
     Route::get('offreSauvgarder',[offreSauvgarderController::class,'show'])
     ->where('candidat','\d+')
