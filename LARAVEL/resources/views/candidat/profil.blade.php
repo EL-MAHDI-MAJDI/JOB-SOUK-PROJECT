@@ -445,9 +445,11 @@
               </button>
             </h4>
             <p id="aboutText">
-              Développeur Full Stack passionné avec 5 ans d'expérience dans la création d'applications web performantes. 
-              Spécialisé en JavaScript (React, Node.js) et architectures cloud. 
-              J'aime résoudre des problèmes complexes et créer des solutions innovantes qui améliorent l'expérience utilisateur.
+                @if($candidat->apropos)
+                    {{ $candidat->apropos->contenu }}
+                @else
+                    Aucune description ajoutée.
+                @endif
             </p>
           </div>
           
@@ -777,18 +779,30 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="aboutForm">
+          <form id="aboutForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="action_type" value="apropos">
             <div class="form-floating">
-              <textarea class="form-control" id="aboutTextArea" style="height: 200px">Développeur Full Stack passionné avec 5 ans d'expérience dans la création d'applications web performantes. 
-Spécialisé en JavaScript (React, Node.js) et architectures cloud. 
-J'aime résoudre des problèmes complexes et créer des solutions innovantes qui améliorent l'expérience utilisateur.</textarea>
+              <textarea 
+                class="form-control @error('contenu') is-invalid @enderror" 
+                id="aboutTextArea" 
+                name="contenu"
+                style="height: 200px"
+                placeholder="Décrivez votre profil professionnel, vos objectifs et vos principales compétences..."
+              >{{ old('contenu', $candidat->apropos ? $candidat->apropos->contenu : '') }}</textarea>
+              @error('contenu')
+                <div class="invalid-feedback">
+                  {{ $message }}
+                </div>
+              @enderror
               <label for="aboutTextArea">À propos de moi</label>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" onclick="saveAbout()">Enregistrer</button>
         </div>
       </div>
     </div>
@@ -1722,7 +1736,7 @@ J'aime résoudre des problèmes complexes et créer des solutions innovantes qui
       const removePhotoBtn = document.getElementById('removePhotoBtn');
       const savePhotoBtn = document.getElementById('savePhotoBtn');
       const cancelPhotoBtn = document.getElementById('cancelPhotoBtn');
-      const photoActionBtns = document.getElementById('photoActionBtns');
+      const photoActionBtns = document.getElementById("photoActionBtns");
       let originalPhotoSrc = photoPreview.src;
 
       // Ouvre le sélecteur de fichier quand on clique sur "Changer"

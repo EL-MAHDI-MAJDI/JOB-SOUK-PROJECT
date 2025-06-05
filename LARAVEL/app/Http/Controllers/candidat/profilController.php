@@ -58,6 +58,17 @@ class profilController extends Controller
 
                 return back()->with('success', 'Photo supprimée avec succès');
             }
-        }
+        }elseif ($request->action_type === 'apropos') {
+            $request->validate([
+            'contenu' => 'required|string|min:10',
+            ]);
+
+            $candidat->apropos()->updateOrCreate(
+                [], // aucun critère — un seul "à propos" par candidat
+                ['contenu' => $request->contenu]
+            );
+
+            return back()->with('success', 'À propos mis à jour avec succès.');
+                }
     }
 }

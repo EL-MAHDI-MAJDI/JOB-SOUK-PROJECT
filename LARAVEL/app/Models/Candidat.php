@@ -17,6 +17,10 @@ class Candidat extends Authenticatable
      *
      * @var list<string>
      */
+    public function apropos()
+    {
+        return $this->hasOne(Apropos::class);
+    }
     protected $fillable = [
             'prenom',
             'nom',

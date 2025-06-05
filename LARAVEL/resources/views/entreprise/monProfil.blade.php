@@ -134,7 +134,7 @@
               <h4 class="section-title fw-bold">À propos</h4>
               <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editAproposModal"><i class="bi bi-pencil"></i> Modifier</button>
             </div>
-            <p class="mb-4">___{{$entreprise->description}}</p>
+            <p class="mb-4">{{$entreprise->description}}</p>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <h6 class="fw-bold"><i class="bi bi-building me-2"></i> Secteur d'activité</h6>
