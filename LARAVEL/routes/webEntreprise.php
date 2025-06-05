@@ -57,9 +57,12 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('parametres', [parametresController::class,'show'])
     ->where('entreprise','\d+')
     ->name('parametres');
-    Route::put('parametres', [parametresController::class,'update'])
+    Route::put('parametres/account', [parametresController::class,'update'])
     ->where('entreprise','\d+')
     ->name('parametres.update');
+    Route::put('parametres/password', [parametresController::class,'update'])
+    ->where('entreprise','\d+')
+    ->name('parametres.update_password');
 
     // afficher page detail de l'offre d'emploi
     Route::get('offresEmploi/{offre}', [offresEmploiController::class,'details'])

@@ -68,10 +68,10 @@
                 
                 {{-- Afficher les messages de succès --}}
                 @include('partials.flashbag')
-
                 <form method="POST" action="{{ route('entreprise.parametres.update', $entreprise) }}">
                   @csrf
-                  @method('PUT') 
+                  @method('PUT')
+                  <input type="hidden" name="update" value="update_account">
                   <div class="mb-3">
                     <label for="company" class="form-label">Entreprise</label>
                     <input type="text" class="form-control @error('nomEntreprise') is-invalid @enderror" id="company" name="nomEntreprise" value="{{ old('nomEntreprise', $entreprise->nomEntreprise ?? '') }}">
@@ -123,7 +123,7 @@
             <div class="tab-pane fade" id="security">
               <div class="dashboard-card settings-card">
                 <h3 class="settings-title"><i class="bi bi-shield-lock"></i> Sécurité du compte</h3>
-                
+                @include('partials.flashbag')
                 <div class="security-item">
                   <div class="security-badge bg-primary bg-opacity-10 text-primary">
                     <i class="bi bi-key fs-5"></i>
@@ -132,7 +132,7 @@
                     <h6 class="mb-1">Mot de passe</h6>
                     <p class="small text-muted mb-0">Dernière modification il y a 3 mois</p>
                   </div>
-                  <button class="btn btn-sm btn-outline-primary">Modifier</button>
+                  <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#passwordModal">Modifier</button>
                 </div>
                 
                 <div class="security-item">
@@ -401,6 +401,50 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Modification Mot de passe -->
+  <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="passwordModalLabel">Modifier le mot de passe</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="{{ route('entreprise.parametres.update', $entreprise) }}">
+          @csrf
+          @method('PUT')
+          <input type="hidden" name="update" value="update_password">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="current_password" class="form-label">Mot de passe actuel</label>
+              <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password" required>
+              @error('current_password')
+                      <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="mb-3">
+              <label for="new_password" class="form-label">Nouveau mot de passe</label>
+              <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password" name="new_password" required>
+              @error('new_password')
+                      <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="mb-3">
+              <label for="new_password_confirmation" class="form-label">Confirmer le nouveau mot de passe</label>
+              <input type="password" class="form-control @error('new_password_confirmation') is-invalid @enderror" id="new_password_confirmation" name="new_password_confirmation" required>
+              @error('new_password_confirmation')
+                      <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

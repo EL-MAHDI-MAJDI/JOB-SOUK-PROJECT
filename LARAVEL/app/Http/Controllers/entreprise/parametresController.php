@@ -4,7 +4,7 @@ namespace App\Http\Controllers\entreprise;
 use App\Http\Controllers\Controller;
 use App\Models\Entreprise;
 use Illuminate\Validation\Rule;
-
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class parametresController extends Controller
@@ -16,6 +16,7 @@ class parametresController extends Controller
     }
     public function update(Request $request, Entreprise $entreprise)
     {
+        if($request->update === 'update_account') {
         // Validation des données
         $request->validate([
             'nomEntreprise' => 'required|string|max:100',
@@ -46,4 +47,29 @@ class parametresController extends Controller
         // Redirection avec un message de succès
         return back()->with('success', 'Vos paramètres ont été mis à jour avec succès');
     }
+    elseif ($request->update === 'update_password') {
+        // Validation des données
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:8|confirmed',
+        ]);
+
+        // Vérifier si l'ancien mot de passe est correct
+        if (!Hash::check($request->current_password, $entreprise->password)) {
+            return back()->withErrors(['current_password' => 'Le mot de passe actuel est incorrect']);
+        }
+
+        // Vérifier si le nouveau mot de passe est différent de l'ancien
+        if (Hash::check($request->new_password, $entreprise->password)) {
+            return back()->withErrors(['new_password' => 'Le nouveau mot de passe doit être différent de l\'ancien']);
+        }
+
+        // Mettre à jour le mot de passe
+        $entreprise->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with('success', 'Votre mot de passe a été mis à jour avec succès');
+    }
+}
 }

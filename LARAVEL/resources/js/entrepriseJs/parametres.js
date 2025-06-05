@@ -35,3 +35,20 @@ document.querySelectorAll('.btn-outline-danger').forEach(function(button) {
     }
   });
 });
+
+// Gestion du formulaire de modification du mot de passe
+document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validation côté client
+    const newPassword = document.getElementById('new_password').value;
+    const confirmPassword = document.getElementById('new_password_confirmation').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert('Les mots de passe ne correspondent pas');
+        return;
+    }
+    
+    // Si tout est ok, soumettre le formulaire
+    this.submit();
+});
