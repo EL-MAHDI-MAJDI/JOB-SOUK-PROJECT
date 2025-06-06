@@ -84,10 +84,16 @@ class profilController extends Controller
                 'niveau' => intval($request->niveau) // Ensure niveau is properly cast to integer
             ];
 
-            // Créer la nouvelle compétence
-            $candidat->competences()->create($data);
-
-            return back()->with('success', 'Compétence ajoutée avec succès');
+            if ($request->has('competence_id')) {
+                // Mettre à jour la compétence existante
+                $competence = $candidat->competences()->findOrFail($request->competence_id);
+                $competence->update($data);
+                return back()->with('success', 'Compétence modifiée avec succès');
+            } else {
+                // Créer une nouvelle compétence
+                $candidat->competences()->create($data);
+                return back()->with('success', 'Compétence ajoutée avec succès');
+            }
         } elseif ($request->action_type === 'delete_competence') {
             $request->validate([
                 'competence_id' => 'required|exists:competences,id'

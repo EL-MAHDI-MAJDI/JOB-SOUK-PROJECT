@@ -151,6 +151,20 @@
       opacity: 1;
     }
 
+    .skill-badge .btn-link {
+      color: var(--primary);
+      opacity: 0.7;
+      text-decoration: none;
+    }
+
+    .skill-badge .btn-link:hover {
+      opacity: 1;
+    }
+
+    .skill-badge .btn-link i {
+      font-size: 0.875rem;
+    }
+
     .language-level {
       height: 6px;
       border-radius: 3px;
@@ -575,6 +589,9 @@
                   @foreach($candidat->competences->where('type', 'technical') as $comp)
                     <span class="skill-badge">
                       {{ $comp->nom }}
+                      <button class="btn btn-sm btn-link p-0 ms-1" onclick="editSkill({{ $comp->id }}, '{{ $comp->nom }}', '{{ $comp->type }}', {{ $comp->niveau }})">
+                        <i class="bi bi-pencil"></i>
+                      </button>
                       <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
                     </span>
                   @endforeach
@@ -586,6 +603,9 @@
                   @foreach($candidat->competences->where('type', 'soft') as $comp)
                     <span class="skill-badge">
                       {{ $comp->nom }}
+                      <button class="btn btn-sm btn-link p-0 ms-1" onclick="editSkill({{ $comp->id }}, '{{ $comp->nom }}', '{{ $comp->type }}', {{ $comp->niveau }})">
+                        <i class="bi bi-pencil"></i>
+                      </button>
                       <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
                     </span>
                   @endforeach
@@ -938,6 +958,7 @@
           @csrf
           @method('PUT')
           <input type="hidden" name="action_type" value="competence">
+          <input type="hidden" name="competence_id" id="competenceId">
           <div class="row g-3">
             <div class="col-12">
               <div class="form-floating">
@@ -1292,14 +1313,17 @@
       renderSkills();
     }
 
-    function editSkill(name, type) {
-      currentEditId = name;
-      currentEditType = type;
-      
-      document.getElementById('skillId').value = name;
+    function editSkill(id, name, type, niveau) {
+      // Mettre à jour les valeurs du formulaire
+      document.getElementById('competenceId').value = id;
       document.getElementById('skillName').value = name;
       document.getElementById('skillType').value = type;
+      document.getElementById('skillLevel').value = niveau;
       
+      // Changer le titre du modal
+      document.getElementById('addSkillModalLabel').textContent = 'Modifier la compétence';
+      
+      // Ouvrir le modal
       const modal = new bootstrap.Modal(document.getElementById('addSkillModal'));
       modal.show();
     }
