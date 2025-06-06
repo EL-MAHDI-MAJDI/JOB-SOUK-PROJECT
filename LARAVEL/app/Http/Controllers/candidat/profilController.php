@@ -69,6 +69,34 @@ class profilController extends Controller
             );
 
             return back()->with('success', 'À propos mis à jour avec succès.');
-                }
+        } elseif ($request->action_type === 'competence') {
+            // Validation
+            $request->validate([
+                'nom' => 'required|string|max:255',
+                'type' => 'required|in:technical,soft',
+                'niveau' => 'required|integer|between:1,4',
+            ]);
+
+            // Convert values to proper types before creating
+            $data = [
+                'nom' => $request->nom,
+                'type' => strval($request->type), // Ensure type is properly cast to string
+                'niveau' => intval($request->niveau) // Ensure niveau is properly cast to integer
+            ];
+
+            // Créer la nouvelle compétence
+            $candidat->competences()->create($data);
+
+            return back()->with('success', 'Compétence ajoutée avec succès');
+        } elseif ($request->action_type === 'delete_competence') {
+            $request->validate([
+                'competence_id' => 'required|exists:competences,id'
+            ]);
+
+            $competence = $candidat->competences()->findOrFail($request->competence_id);
+            $competence->delete();
+
+            return back()->with('success', 'Compétence supprimée avec succès');
+        }
     }
 }

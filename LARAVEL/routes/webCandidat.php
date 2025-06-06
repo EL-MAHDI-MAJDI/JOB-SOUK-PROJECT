@@ -29,7 +29,6 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     Route::delete('profil', [profilController::class,'destroyLogo'])
     ->where('candidat','\d+')
     ->name('destroyLogo');
-    //modifier Apropos
     
 
     Route::get('cv',[cvController::class,'show'])

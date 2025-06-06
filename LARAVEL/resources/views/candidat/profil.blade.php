@@ -572,26 +572,23 @@
               <div class="mb-3">
                 <h6 class="mb-2">Techniques</h6>
                 <div class="d-flex flex-wrap gap-2" id="technical-skills">
-                  <!-- Compétences techniques seront ajoutées ici -->
-                  <span class="skill-badge">JavaScript <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('JavaScript', 'technical')"></i></span>
-                  <span class="skill-badge">React <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('React', 'technical')"></i></span>
-                  <span class="skill-badge">Node.js <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('Node.js', 'technical')"></i></span>
-                  <span class="skill-badge">TypeScript <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('TypeScript', 'technical')"></i></span>
-                  <span class="skill-badge">GraphQL <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('GraphQL', 'technical')"></i></span>
-                  <span class="skill-badge">MongoDB <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('MongoDB', 'technical')"></i></span>
-                  <span class="skill-badge">Docker <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('Docker', 'technical')"></i></span>
-                  <span class="skill-badge">AWS <i class="bi bi-check-circle ms-1"></i><i class="bi bi-x delete-btn" onclick="deleteSkill('AWS', 'technical')"></i></span>
+                  @foreach($candidat->competences->where('type', 'technical') as $comp)
+                    <span class="skill-badge">
+                      {{ $comp->nom }}
+                      <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
+                    </span>
+                  @endforeach
                 </div>
               </div>
-              
               <div class="mb-3">
                 <h6 class="mb-2">Soft Skills</h6>
                 <div class="d-flex flex-wrap gap-2" id="soft-skills">
-                  <!-- Soft skills seront ajoutées ici -->
-                  <span class="skill-badge">Leadership <i class="bi bi-x delete-btn" onclick="deleteSkill('Leadership', 'soft')"></i></span>
-                  <span class="skill-badge">Communication <i class="bi bi-x delete-btn" onclick="deleteSkill('Communication', 'soft')"></i></span>
-                  <span class="skill-badge">Travail d'équipe <i class="bi bi-x delete-btn" onclick="deleteSkill('Travail d\'équipe', 'soft')"></i></span>
-                  <span class="skill-badge">Résolution de problèmes <i class="bi bi-x delete-btn" onclick="deleteSkill('Résolution de problèmes', 'soft')"></i></span>
+                  @foreach($candidat->competences->where('type', 'soft') as $comp)
+                    <span class="skill-badge">
+                      {{ $comp->nom }}
+                      <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
+                    </span>
+                  @endforeach
                 </div>
               </div>
             </div>
@@ -929,53 +926,69 @@
   </div>
 
   <!-- Modal Ajout/Modification Compétence -->
-  <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addSkillModalLabel">Ajouter une compétence</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="skillForm">
-            <input type="hidden" id="skillId">
-            <div class="row g-3">
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="skillName" placeholder="Nom de la compétence" required>
-                  <label for="skillName">Compétence</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <select class="form-select" id="skillType" required>
-                    <option value="technical">Technique</option>
-                    <option value="soft">Soft Skill</option>
-                  </select>
-                  <label for="skillType">Type de compétence</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <select class="form-select" id="skillLevel" required>
-                    <option value="1">Débutant</option>
-                    <option value="2">Intermédiaire</option>
-                    <option value="3">Avancé</option>
-                    <option value="4">Expert</option>
-                  </select>
-                  <label for="skillLevel">Niveau</label>
-                </div>
+<div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addSkillModalLabel">Ajouter une compétence</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="skillForm" action="{{ route('candidat.updateprofil',['candidat' => $candidat->id]) }}" method="POST">
+          @csrf
+          @method('PUT')
+          <input type="hidden" name="action_type" value="competence">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="form-floating">
+                <input type="text" class="form-control @error('nom') is-invalid @enderror" 
+                       id="skillName" name="nom" placeholder="Nom de la compétence" required>
+                <label for="skillName">Compétence</label>
+                @error('nom')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="saveSkill">Enregistrer</button>
-        </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <select class="form-select @error('type') is-invalid @enderror" 
+                        id="skillType" name="type" required>
+                  <option value="">Sélectionnez un type</option>
+                  <option value="technical">Technique</option>
+                  <option value="soft">Soft Skill</option>
+                </select>
+                <label for="skillType">Type de compétence</label>
+                @error('type')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-floating">
+                <select class="form-select @error('niveau') is-invalid @enderror" 
+                        id="skillLevel" name="niveau" required>
+                  <option value="">Sélectionnez un niveau</option>
+                  <option value="1">Débutant</option>
+                  <option value="2">Intermédiaire</option>
+                  <option value="3">Avancé</option>
+                  <option value="4">Expert</option>
+                </select>
+                <label for="skillLevel">Niveau</label>
+                @error('niveau')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
   <!-- Modal Ajout/Modification Langue -->
   <div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
@@ -1065,108 +1078,16 @@
     </div>
   </div>
 
+  <!-- Ajouter après vos autres formulaires formulaire caché pour la suppression -->
+<form id="deleteSkillForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST" style="display: none;">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="action_type" value="delete_competence">
+    <input type="hidden" name="competence_id" id="competenceIdInput">
+</form>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Données temporaires pour le profil
-    let profileData = {
-      name: "Omar Mansouri",
-      title: "Développeur Full Stack",
-      location: "Casablanca, Maroc",
-      about: "Développeur Full Stack passionné avec 5 ans d'expérience dans la création d'applications web performantes. Spécialisé en JavaScript (React, Node.js) et architectures cloud. J'aime résoudre des problèmes complexes et créer des solutions innovantes qui améliorent l'expérience utilisateur.",
-      social: {
-        linkedin: "linkedin.com/in/omar-mansouri",
-        github: "github.com/omarmansouri",
-        twitter: "twitter.com/omarmansouri",
-        website: "omarmansouri.ma"
-      },
-      experiences: [
-        {
-          id: 0,
-          jobTitle: "Développeur Full Stack Senior",
-          companyName: "TechSolutions Inc.",
-          location: "Casablanca",
-          startDate: "2021-01",
-          endDate: "",
-          current: true,
-          description: "- Conception et développement d'une plateforme SaaS pour la gestion des ressources humaines\n- Encadrement d'une équipe de 3 développeurs juniors\n- Optimisation des performances (réduction du temps de chargement de 40%)"
-        },
-        {
-          id: 1,
-          jobTitle: "Développeur Frontend",
-          companyName: "WebVision",
-          location: "Rabat",
-          startDate: "2019-03",
-          endDate: "2020-12",
-          current: false,
-          description: "- Développement d'interfaces utilisateur avec React et Redux\n- Collaboration avec les designers pour implémenter des maquettes Figma\n- Participation aux revues de code et amélioration des processus CI/CD"
-        }
-      ],
-      educations: [
-        {
-          id: 0,
-          degree: "Master en Ingénierie Logicielle",
-          school: "Université Mohammed V",
-          location: "Rabat",
-          startDate: "2017",
-          endDate: "2019",
-          description: "Spécialisation en architectures distribuées et cloud computing. Projet de fin d'études sur l'optimisation des requêtes GraphQL dans les applications microservices."
-        },
-        {
-          id: 1,
-          degree: "Licence en Informatique",
-          school: "Université Hassan II",
-          location: "Casablanca",
-          startDate: "2014",
-          endDate: "2017",
-          description: ""
-        }
-      ],
-      skills: {
-        technical: ["JavaScript", "React", "Node.js", "TypeScript", "GraphQL", "MongoDB", "Docker", "AWS"],
-        soft: ["Leadership", "Communication", "Travail d'équipe", "Résolution de problèmes"]
-      },
-      languages: [
-        {
-          id: 0,
-          name: "Arabe",
-          level: "native"
-        },
-        {
-          id: 1,
-          name: "Français",
-          level: "fluent"
-        },
-        {
-          id: 2,
-          name: "Anglais",
-          level: "professional"
-        }
-      ],
-      certifications: [
-        {
-          id: 0,
-          name: "AWS Certified Developer",
-          organization: "Amazon Web Services",
-          date: "2022",
-          certId: ""
-        },
-        {
-          id: 1,
-          name: "React Advanced Concepts",
-          organization: "Frontend Masters",
-          date: "2021",
-          certId: ""
-        },
-        {
-          id: 2,
-          name: "Node.js: Microservices Architecture",
-          organization: "Udemy",
-          date: "2020",
-          certId: ""
-        }
-      ]
-    };
-
     // Variables pour gérer l'édition
     let currentEditId = null;
     let currentEditType = null;
@@ -1777,6 +1698,13 @@
         removePhotoBtn.style.display = 'inline-block';
       });
     });
+
+    function deleteSkill(competenceId) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) {
+            document.getElementById('competenceIdInput').value = competenceId;
+            document.getElementById('deleteSkillForm').submit();
+        }
+    }
   </script>
 </body>
 </html>

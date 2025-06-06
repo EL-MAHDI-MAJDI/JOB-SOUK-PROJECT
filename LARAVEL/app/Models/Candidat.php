@@ -17,10 +17,17 @@ class Candidat extends Authenticatable
      *
      * @var list<string>
      */
+    //relations APROPOS ET CANDIDAT
     public function apropos()
     {
         return $this->hasOne(Apropos::class);
     }
+    //RELATIONS CANDIDAT ET COMPETENCES
+    public function competences()
+    {
+        return $this->hasMany(Competence::class);
+    }
+
     protected $fillable = [
             'prenom',
             'nom',
