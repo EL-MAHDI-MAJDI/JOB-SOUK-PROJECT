@@ -103,6 +103,31 @@ class profilController extends Controller
             $competence->delete();
 
             return back()->with('success', 'Compétence supprimée avec succès');
+        }elseif ($request->action_type === 'langue') {
+        $request->validate([
+            'nom' => 'required|string|max:50',
+            'niveau' => 'required|in:native,fluent,professional,intermediate,basic',
+        ]);
+        if ($request->filled('langue_id')) {
+            // Mise à jour d'une langue existante
+            $langue = $candidat->langues()->findOrFail($request->langue_id);
+            $langue->update([
+                'nom' => $request->nom,
+                'niveau' => $request->niveau,
+            ]);
+            return redirect()->back()->with('success', 'Langue modifier avec succès');
+        } else {
+            // Création d'une nouvelle langue
+            $candidat->langues()->create([
+                'nom' => $request->nom,
+                'niveau' => $request->niveau,
+            ]);
+            return redirect()->back()->with('success', 'Langue ajoutée avec succès');
         }
+    }elseif ($request->action_type === 'delete_langue') {
+        $langue = $candidat->langues()->findOrFail($request->langue_id);
+        $langue->delete();
+        return redirect()->back()->with('success', 'Langue supprimée avec succès');
+    }
     }
 }

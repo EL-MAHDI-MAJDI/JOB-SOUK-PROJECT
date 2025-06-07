@@ -624,48 +624,35 @@
             </h4>
             
             <div id="languages-container">
-              <!-- Les langues seront ajoutées ici dynamiquement -->
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Arabe</span>
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(0)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(0)"><i class="bi bi-trash"></i></button>
-                  </div>
-                </div>
-                <small>Langue maternelle</small>
-                <div class="language-level">
-                  <div class="language-level-fill" style="width: 100%"></div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Français</span>
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(1)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(1)"><i class="bi bi-trash"></i></button>
-                  </div>
-                </div>
-                <small>Courant</small>
-                <div class="language-level">
-                  <div class="language-level-fill" style="width: 90%"></div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <span>Anglais</span>
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(2)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(2)"><i class="bi bi-trash"></i></button>
-                  </div>
-                </div>
-                <small>Professionnel</small>
-                <div class="language-level">
-                  <div class="language-level-fill" style="width: 80%"></div>
-                </div>
-              </div>
+                @foreach($candidat->langues as $langue)
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>{{ $langue->nom }}</span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage({{ $langue->id }}, '{{ $langue->nom }}', '{{ $langue->niveau }}')">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage({{ $langue->id }})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <small>{{ $langue->niveau }}</small>
+                        @php
+$niveauxLangue = [
+    'native' => 100,
+    'fluent' => 90,
+    'professional' => 80,
+    'intermediate' => 60,
+    'basic' => 40
+];
+@endphp
+
+<div class="language-level">
+    <div class="language-level-fill" style="width: {{ $niveauxLangue[$langue->niveau] ?? 40 }}%"></div>
+</div>
+                    </div>
+                @endforeach
             </div>
           </div>
           
@@ -1014,41 +1001,53 @@
   <!-- Modal Ajout/Modification Langue -->
   <div class="modal fade" id="addLanguageModal" tabindex="-1" aria-labelledby="addLanguageModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addLanguageModalLabel">Ajouter une langue</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="languageForm">
-            <input type="hidden" id="languageId">
-            <div class="row g-3">
-              <div class="col-12">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="langName" placeholder="Langue" required>
-                  <label for="langName">Langue</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <select class="form-select" id="langLevel" required>
-                    <option value="native">Langue maternelle</option>
-                    <option value="fluent">Courant</option>
-                    <option value="professional">Professionnel</option>
-                    <option value="intermediate">Intermédiaire</option>
-                    <option value="basic">Basique</option>
-                  </select>
-                  <label for="langLevel">Niveau</label>
-                </div>
-              </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addLanguageModalLabel">Ajouter une langue</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </form>
+            <div class="modal-body">
+                <form id="languageForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="action_type" value="langue">
+                    <input type="hidden" name="langue_id" id="languageId">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control @error('nom') is-invalid @enderror" 
+                                       id="langName" name="nom" placeholder="Langue" required>
+                                <label for="langName">Langue</label>
+                                @error('nom')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <select class="form-select @error('niveau') is-invalid @enderror" 
+                                        id="langLevel" name="niveau" required>
+                                    <option value="">Sélectionnez un niveau</option>
+                                    <option value="native">Langue maternelle</option>
+                                    <option value="fluent">Courant</option>
+                                    <option value="professional">Professionnel</option>
+                                    <option value="intermediate">Intermédiaire</option>
+                                    <option value="basic">Basique</option>
+                                </select>
+                                <label for="langLevel">Niveau</label>
+                                @error('niveau')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="saveLanguage">Enregistrer</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1105,6 +1104,14 @@
     @method('PUT')
     <input type="hidden" name="action_type" value="delete_competence">
     <input type="hidden" name="competence_id" id="competenceIdInput">
+</form>
+
+<!-- Formulaire caché pour la suppression -->
+<form id="deleteLanguageForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST" style="display: none;">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="action_type" value="delete_langue">
+    <input type="hidden" name="langue_id" id="deleteLanguageId">
 </form>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -1384,17 +1391,11 @@
       renderLanguages();
     }
 
-    function editLanguage(id) {
-      const language = profileData.languages.find(l => l.id === id);
-      if (!language) return;
-      
-      currentEditId = id;
-      currentEditType = 'language';
-      
+    function editLanguage(id, nom, niveau) {
       document.getElementById('languageId').value = id;
-      document.getElementById('langName').value = language.name;
-      document.getElementById('langLevel').value = language.level;
-      
+      document.getElementById('langName').value = nom;
+      document.getElementById('langLevel').value = niveau;
+      document.getElementById('addLanguageModalLabel').textContent = 'Modifier la langue';
       const modal = new bootstrap.Modal(document.getElementById('addLanguageModal'));
       modal.show();
     }
@@ -1409,8 +1410,8 @@
 
     function deleteLanguage(id) {
       if (confirm("Êtes-vous sûr de vouloir supprimer cette langue ?")) {
-        profileData.languages = profileData.languages.filter(l => l.id !== id);
-        renderLanguages();
+        document.getElementById('deleteLanguageId').value = id;
+        document.getElementById('deleteLanguageForm').submit();
       }
     }
 
@@ -1418,30 +1419,32 @@
       const container = document.getElementById('languages-container');
       container.innerHTML = '';
       
-      const levelMap = {
-        'native': {text: 'Langue maternelle', width: '100%'},
-        'fluent': {text: 'Courant', width: '90%'},
-        'professional': {text: 'Professionnel', width: '80%'},
-        'intermediate': {text: 'Intermédiaire', width: '60%'},
-        'basic': {text: 'Basique', width: '40%'}
-      };
+      const niveauxLangue = {
+    'native': 100,
+    'fluent': 90,
+    'professional': 80,
+    'intermediate': 60,
+    'basic': 40
+};
       
       profileData.languages.forEach(lang => {
-        const levelInfo = levelMap[lang.level] || levelMap['basic'];
+        const niveauPourcentage = niveauxLangue[lang.niveau] || 0;
         
         const langItem = document.createElement('div');
         langItem.className = 'mb-3';
         langItem.innerHTML = `
           <div class="d-flex justify-content-between align-items-center">
-            <span>${lang.name}</span>
+            <span>${lang.nom}</span>
             <div>
               <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage(${lang.id})"><i class="bi bi-pencil"></i></button>
-              <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(${lang.id})"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage(${lang.id})">
+                <i class="bi bi-trash"></i>
+              </button>
             </div>
           </div>
-          <small>${levelInfo.text}</small>
+          <small>${lang.niveau}</small>
           <div class="language-level">
-            <div class="language-level-fill" style="width: ${levelInfo.width}"></div>
+            <div class="language-level-fill" style="width: ${niveauPourcentage}%"></div>
           </div>
         `;
         container.appendChild(langItem);
@@ -1727,6 +1730,13 @@
         if (confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) {
             document.getElementById('competenceIdInput').value = competenceId;
             document.getElementById('deleteSkillForm').submit();
+        }
+    }
+
+    function deleteLanguage(langueId) {
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette langue ?')) {
+            document.getElementById('deleteLanguageId').value = langueId;
+            document.getElementById('deleteLanguageForm').submit();
         }
     }
   </script>

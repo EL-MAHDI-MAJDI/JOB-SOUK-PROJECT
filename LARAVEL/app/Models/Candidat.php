@@ -27,6 +27,11 @@ class Candidat extends Authenticatable
     {
         return $this->hasMany(Competence::class);
     }
+    //RELATIONS CANDIDAT ET LANGUES
+    public function langues()
+    {
+        return $this->hasMany(Langue::class);
+    }
 
     protected $fillable = [
             'prenom',
