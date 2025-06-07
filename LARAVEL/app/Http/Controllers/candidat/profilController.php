@@ -128,6 +128,39 @@ class profilController extends Controller
         $langue = $candidat->langues()->findOrFail($request->langue_id);
         $langue->delete();
         return redirect()->back()->with('success', 'Langue supprimée avec succès');
+    }elseif($request->action_type === 'experience') {
+        $request->validate([
+            'titre_poste' => 'required|string|max:100',
+            'entreprise' => 'required|string|max:100',
+            'ville' => 'required|string|max:100',
+            'date_debut' => 'required|date',
+            'date_fin' => 'nullable|date|after_or_equal:date_debut',
+            'poste_actuel' => 'boolean',
+            'description' => 'nullable|string'
+        ]);
+
+        $data = [
+            'titre_poste' => $request->titre_poste,
+            'entreprise' => $request->entreprise,
+            'ville' => $request->ville,
+            'date_debut' => $request->date_debut,
+            'date_fin' => $request->poste_actuel ? null : $request->date_fin,
+            'poste_actuel' => $request->has('poste_actuel'),
+            'description' => $request->description
+        ];
+
+        if ($request->filled('experience_id')) {
+            $experience = $candidat->experiences()->findOrFail($request->experience_id);
+            $experience->update($data);
+            return back()->with('success', 'Expérience mise à jour avec succès.');
+        } else {
+            $candidat->experiences()->create($data);
+            return back()->with('success', 'Expérience ajoutée avec succès.');
+        }
+    } elseif ($request->action_type === 'delete_experience') {
+        $experience = $candidat->experiences()->findOrFail($request->experience_id);
+        $experience->delete();
+        return back()->with('success', 'Expérience supprimée avec succès.');
     }
-    }
+}
 }

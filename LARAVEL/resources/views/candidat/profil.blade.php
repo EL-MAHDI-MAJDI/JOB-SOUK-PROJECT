@@ -475,52 +475,40 @@
                 <i class="bi bi-plus"></i> Ajouter
               </button>
             </h4>
-            
-            <div id="experiences-container">
-              <!-- Les expériences seront ajoutées ici dynamiquement -->
-              <div class="timeline-item">
-                <div class="timeline-badge">
-                  <i class="bi bi-briefcase"></i>
-                </div>
-                <div class="timeline-content">
-                  <div class="timeline-actions">
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience(0)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteExperience(0)"><i class="bi bi-trash"></i></button>
-                  </div>
-                  <div class="d-flex justify-content-between">
-                    <h5 class="mb-1">Développeur Full Stack Senior</h5>
-                    <!-- <span class="badge bg-primary">Actuel</span> -->
-                  </div>
-                  <p class="mb-1 text-muted">TechSolutions Inc. - Casablanca</p>
-                  <small class="text-muted">Janvier 2021 - Présent</small>
-                  <p class="mt-2 mb-0">
-                    - Conception et développement d'une plateforme SaaS pour la gestion des ressources humaines<br>
-                    - Encadrement d'une équipe de 3 développeurs juniors<br>
-                    - Optimisation des performances (réduction du temps de chargement de 40%)
-                  </p>
-                </div>
-              </div>
-              
-              <div class="timeline-item">
-                <div class="timeline-badge">
-                  <i class="bi bi-briefcase"></i>
-                </div>
-                <div class="timeline-content">
-                  <div class="timeline-actions">
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience(1)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteExperience(1)"><i class="bi bi-trash"></i></button>
-                  </div>
-                  <h5 class="mb-1">Développeur Frontend</h5>
-                  <p class="mb-1 text-muted">WebVision - Rabat</p>
-                  <small class="text-muted">Mars 2019 - Décembre 2020</small>
-                  <p class="mt-2 mb-0">
-                    - Développement d'interfaces utilisateur avec React et Redux<br>
-                    - Collaboration avec les designers pour implémenter des maquettes Figma<br>
-                    - Participation aux revues de code et amélioration des processus CI/CD
-                  </p>
-                </div>
-              </div>
-            </div>
+                @foreach ($candidat->experiences as $item)
+                <div class="timeline-item" 
+                data-experience-id="{{ $item->id }}"
+                data-titre="{{ $item->titre_poste }}"
+                data-entreprise="{{ $item->entreprise }}"
+                data-ville="{{ $item->ville }}"
+                data-date-debut="{{ $item->date_debut->format('Y-m-d') }}"
+                data-date-fin="{{ $item->date_fin ? $item->date_fin->format('Y-m-d') : '' }}"
+                data-poste-actuel="{{ $item->poste_actuel ? '1' : '0' }}"
+                data-description="{{ $item->description }}">
+    <div class="timeline-badge">
+        <i class="bi bi-briefcase"></i>
+    </div>
+    <div class="timeline-content">
+        <div class="timeline-actions">
+            <button class="btn btn-sm btn-outline-primary me-1" onclick="editExperience({{ $item->id }})">
+                <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteExperience({{ $item->id }})">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+        <h5 class="mb-1">{{ $item->titre_poste }}</h5>
+        <p class="mb-1 text-muted">{{ $item->entreprise }} - {{$item->ville}}</p>
+        <small class="text-muted">
+            {{ \Carbon\Carbon::parse($item->date_debut)->format('M Y') }} - 
+            {{ $item->poste_actuel ? 'Présent' : ($item->date_fin ? \Carbon\Carbon::parse($item->date_fin)->format('M Y') : '') }}
+        </small>
+        <p class="mt-2 mb-0">
+            {{ $item->description }}
+        </p>
+    </div>
+</div>
+@endforeach
           </div>
           
           <!-- Formation -->
@@ -821,61 +809,86 @@ $niveauxLangue = [
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="experienceForm">
-            <input type="hidden" id="experienceId">
-            <div class="row g-3">
-              <div class="col-md-6">
+    <form id="experienceForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <input type="hidden" name="action_type" value="experience">
+        <input type="hidden" name="experience_id" id="experienceId">
+        <div class="row g-3">
+            <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="expJobTitle" placeholder="Titre du poste" required>
-                  <label for="expJobTitle">Titre du poste</label>
+                    <input type="text" class="form-control @error('titre_poste') is-invalid @enderror" 
+                           id="titre_poste" name="titre_poste" required>
+                    <label for="titre_poste">Titre du poste</label>
+                    @error('titre_poste')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="expCompanyName" placeholder="Nom de l'entreprise" required>
-                  <label for="expCompanyName">Entreprise</label>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-floating">
-                  <input type="text" class="form-control" id="expLocation" placeholder="Lieu" required>
-                  <label for="expLocation">Lieu</label>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="expStartDate" placeholder="Date de début" required>
-                  <label for="expStartDate">Date de début</label>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-floating">
-                  <input type="month" class="form-control" id="expEndDate" placeholder="Date de fin">
-                  <label for="expEndDate">Date de fin</label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="expCurrentJob">
-                  <label class="form-check-label" for="expCurrentJob">
-                    J'occupe actuellement ce poste
-                  </label>
-                </div>
-              </div>
-              <div class="col-12">
-                <div class="form-floating">
-                  <textarea class="form-control" id="expDescription" style="height: 120px" placeholder="Description" required></textarea>
-                  <label for="expDescription">Description</label>
-                </div>
-              </div>
             </div>
-          </form>
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control @error('entreprise') is-invalid @enderror" 
+                           id="entreprise" name="entreprise" required>
+                    <label for="entreprise">Entreprise</label>
+                    @error('entreprise')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating">
+                    <input type="text" class="form-control @error('ville') is-invalid @enderror" 
+                           id="ville" name="ville" required>
+                    <label for="ville">Ville</label>
+                    @error('ville')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="date" class="form-control @error('date_debut') is-invalid @enderror" 
+                           id="date_debut" name="date_debut" required>
+                    <label for="date_debut">Date de début</label>
+                    @error('date_debut')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input type="date" class="form-control @error('date_fin') is-invalid @enderror" 
+                           id="date_fin" name="date_fin">
+                    <label for="date_fin">Date de fin</label>
+                    @error('date_fin')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="poste_actuel" name="poste_actuel" value="1">
+                    <label class="form-check-label" for="poste_actuel">Poste actuel</label>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-floating">
+                    <textarea class="form-control @error('description') is-invalid @enderror" 
+                              id="description" name="description" style="height: 100px"></textarea>
+                    <label for="description">Description</label>
+                    @error('description')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="saveExperience">Enregistrer</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
-      </div>
+    </form>
+</div>
+    </div>
     </div>
   </div>
 
@@ -1079,6 +1092,7 @@ $niveauxLangue = [
                 <div class="form-floating">
                   <input type="month" class="form-control" id="certDate" placeholder="Date d'obtention" required>
                   <label for="certDate">Date d'obtention</label>
+                  <label for="certDate">Date d'obtention</label>
                 </div>
               </div>
               <div class="col-12">
@@ -1112,6 +1126,14 @@ $niveauxLangue = [
     @method('PUT')
     <input type="hidden" name="action_type" value="delete_langue">
     <input type="hidden" name="langue_id" id="deleteLanguageId">
+</form>
+
+<!-- Formulaire caché pour la suppression des expériences -->
+<form id="deleteExperienceForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST" style="display: none;">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="action_type" value="delete_experience">
+    <input type="hidden" name="experience_id" id="deleteExperienceId">
 </form>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -1173,21 +1195,41 @@ $niveauxLangue = [
     }
 
     function editExperience(id) {
-      const experience = profileData.experiences.find(e => e.id === id);
-      if (!experience) return;
+      const experience = document.querySelector(`[data-experience-id="${id}"]`);
       
-      currentEditId = id;
-      currentEditType = 'experience';
-      
+      if (!experience) {
+        console.error('Expérience non trouvée');
+        return;
+      }
+
+      // Debug - afficher les données dans la console
+      console.log('Données de l\'expérience:', experience.dataset);
+
+      // Remplir le formulaire
       document.getElementById('experienceId').value = id;
-      document.getElementById('expJobTitle').value = experience.jobTitle;
-      document.getElementById('expCompanyName').value = experience.companyName;
-      document.getElementById('expLocation').value = experience.location;
-      document.getElementById('expStartDate').value = formatDateForInput(experience.startDate);
-      document.getElementById('expEndDate').value = formatDateForInput(experience.endDate);
-      document.getElementById('expCurrentJob').checked = experience.current;
-      document.getElementById('expDescription').value = experience.description;
+      document.getElementById('titre_poste').value = experience.dataset.titre;
+      document.getElementById('entreprise').value = experience.dataset.entreprise;
+      document.getElementById('ville').value = experience.dataset.ville;
+      document.getElementById('date_debut').value = experience.dataset.dateDebut;
       
+      // Gestion du poste actuel
+      const posteActuel = experience.dataset.posteActuel === "1";
+      const posteActuelCheckbox = document.getElementById('poste_actuel');
+      const dateFinInput = document.getElementById('date_fin');
+      
+      // Définir l'état de la case à cocher
+      posteActuelCheckbox.checked = posteActuel;
+      
+      // Gérer la date de fin en fonction du poste actuel
+      dateFinInput.disabled = posteActuel;
+      dateFinInput.value = posteActuel ? '' : (experience.dataset.dateFin || '');
+      
+      document.getElementById('description').value = experience.dataset.description || '';
+      
+      // Mettre à jour le titre du modal
+      document.getElementById('addExperienceModalLabel').textContent = 'Modifier l\'expérience';
+      
+      // Ouvrir le modal
       const modal = new bootstrap.Modal(document.getElementById('addExperienceModal'));
       modal.show();
     }
@@ -1201,11 +1243,11 @@ $niveauxLangue = [
     }
 
     function deleteExperience(id) {
-      if (confirm("Êtes-vous sûr de vouloir supprimer cette expérience ?")) {
-        profileData.experiences = profileData.experiences.filter(e => e.id !== id);
-        renderExperiences();
-      }
+    if (confirm("Êtes-vous sûr de vouloir supprimer cette expérience ?")) {
+        document.getElementById('deleteExperienceId').value = id;
+        document.getElementById('deleteExperienceForm').submit();
     }
+}
 
     function renderExperiences() {
       const container = document.getElementById('experiences-container');
@@ -1710,35 +1752,95 @@ $niveauxLangue = [
         if (this.files.length) {
           photoActionBtns.style.display = 'block';
           removePhotoBtn.style.display = 'none';
+
         } else {
-          photoActionBtns.style.display = 'none';
+          photoAction
           removePhotoBtn.style.display = 'inline-block';
-          photoPreview.src = originalPhotoSrc;
         }
       });
 
-      // Annuler le changement de photo
-      cancelPhotoBtn.addEventListener('click', function() {
-        photoInput.value = '';
+      // Enregistre la nouvelle photo ou annule le changement
+      document.getElementById('savePhotoBtn').addEventListener('click', function() {
+        const form = document.getElementById('changePhotoForm');
+        if (form.checkValidity()) {
+          form.submit();
+        } else {
+          form.reportValidity();
+        }
+      });
+
+      document.getElementById('cancelPhotoBtn').addEventListener('click', function() {
         photoPreview.src = originalPhotoSrc;
+        photoInput.value = '';
         photoActionBtns.style.display = 'none';
         removePhotoBtn.style.display = 'inline-block';
       });
+
+      // Gestion du changement d'état de la case "poste actuel"
+      const posteActuelCheckbox = document.getElementById('poste_actuel');
+      const dateFinInput = document.getElementById('date_fin');
+
+      // Fonction pour gérer l'état du champ date de fin
+      function toggleDateFin() {
+          dateFinInput.disabled = posteActuelCheckbox.checked;
+          if (posteActuelCheckbox.checked) {
+              dateFinInput.value = '';
+          }
+      }
+
+      // Ajouter l'événement change sur la case à cocher
+      posteActuelCheckbox.addEventListener('change', toggleDateFin);
+
+      // Initialiser l'état au chargement
+      toggleDateFin();
     });
-
-    function deleteSkill(competenceId) {
-        if (confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) {
-            document.getElementById('competenceIdInput').value = competenceId;
-            document.getElementById('deleteSkillForm').submit();
-        }
-    }
-
+    
     function deleteLanguage(langueId) {
         if (confirm('Êtes-vous sûr de vouloir supprimer cette langue ?')) {
             document.getElementById('deleteLanguageId').value = langueId;
             document.getElementById('deleteLanguageForm').submit();
         }
     }
+    
+    function editExperience(id) {
+    const experience = document.querySelector(`[data-experience-id="${id}"]`);
+    
+    if (!experience) {
+        console.error('Expérience non trouvée');
+        return;
+    }
+
+    // Debug - afficher les données dans la console
+    console.log('Données de l\'expérience:', experience.dataset);
+
+    // Remplir le formulaire
+    document.getElementById('experienceId').value = id;
+    document.getElementById('titre_poste').value = experience.dataset.titre;
+    document.getElementById('entreprise').value = experience.dataset.entreprise;
+    document.getElementById('ville').value = experience.dataset.ville;
+    document.getElementById('date_debut').value = experience.dataset.dateDebut;
+    
+    // Gestion du poste actuel
+    const posteActuel = experience.dataset.posteActuel === "1";
+    const posteActuelCheckbox = document.getElementById('poste_actuel');
+    const dateFinInput = document.getElementById('date_fin');
+    
+    // Définir l'état de la case à cocher
+    posteActuelCheckbox.checked = posteActuel;
+    
+    // Gérer la date de fin en fonction du poste actuel
+    dateFinInput.disabled = posteActuel;
+    dateFinInput.value = posteActuel ? '' : (experience.dataset.dateFin || '');
+    
+    document.getElementById('description').value = experience.dataset.description || '';
+    
+    // Mettre à jour le titre du modal
+    document.getElementById('addExperienceModalLabel').textContent = 'Modifier l\'expérience';
+    
+    // Ouvrir le modal
+    const modal = new bootstrap.Modal(document.getElementById('addExperienceModal'));
+    modal.show();
+}
   </script>
 </body>
 </html>
