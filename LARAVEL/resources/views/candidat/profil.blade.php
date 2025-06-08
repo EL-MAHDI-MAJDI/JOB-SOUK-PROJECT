@@ -654,45 +654,27 @@ $niveauxLangue = [
             </h4>
             
             <div id="certifications-container">
-              <!-- Les certifications seront ajoutées ici dynamiquement -->
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-start">
-                  <div>
-                    <h6 class="mb-1">AWS Certified Developer</h6>
-                    <small class="text-muted">Amazon Web Services - 2022</small>
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(0)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(0)"><i class="bi bi-trash"></i></button>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-start">
-                  <div>
-                    <h6 class="mb-1">React Advanced Concepts</h6>
-                    <small class="text-muted">Frontend Masters - 2021</small>
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(1)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(1)"><i class="bi bi-trash"></i></button>
+              @foreach($candidat->certifications as $certification)
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <h6 class="mb-1">{{ $certification->nom }}</h6>
+                      <small class="text-muted">{{ $certification->organisation }} - {{ $certification->date_obtention->format('M Y') }}</small>
+                      @if($certification->code_certifications_international)
+                        <small class="d-block text-muted">ID: {{ $certification->code_certifications_international }}</small>
+                      @endif
+                    </div>
+                    <div>
+                      <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification({{ $certification->id }}, '{{ $certification->nom }}', '{{ $certification->organisation }}', '{{ $certification->date_obtention->format('Y-m-d') }}', '{{ $certification->code_certifications_international }}')">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification({{ $certification->id }})">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              <div>
-                <div class="d-flex justify-content-between align-items-start">
-                  <div>
-                    <h6 class="mb-1">Node.js: Microservices Architecture</h6>
-                    <small class="text-muted">Udemy - 2020</small>
-                  </div>
-                  <div>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification(2)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification(2)"><i class="bi bi-trash"></i></button>
-                  </div>
-                </div>
-              </div>
+              @endforeach
             </div>
           </div>
         </div>
@@ -1073,40 +1055,58 @@ $niveauxLangue = [
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="certificationForm">
-            <input type="hidden" id="certificationId">
+          <form id="certificationForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="action_type" value="certification">
+            <input type="hidden" name="certification_id" id="certificationId">
             <div class="row g-3">
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="certName" placeholder="Nom de la certification" required>
+                  <input type="text" class="form-control @error('nom') is-invalid @enderror" 
+                         id="certName" name="nom" placeholder="Nom de la certification" required>
                   <label for="certName">Certification</label>
+                  @error('nom')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="certOrg" placeholder="Organisation" required>
+                  <input type="text" class="form-control @error('organisation') is-invalid @enderror" 
+                         id="certOrg" name="organisation" placeholder="Organisation" required>
                   <label for="certOrg">Organisation</label>
+                  @error('organisation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="certDate" placeholder="Date d'obtention" required>
+                  <input type="date" class="form-control @error('date_obtention') is-invalid @enderror" 
+                         id="certDate" name="date_obtention" required>
                   <label for="certDate">Date d'obtention</label>
-                  <label for="certDate">Date d'obtention</label>
+                  @error('date_obtention')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="certId" placeholder="ID de certification">
+                  <input type="text" class="form-control @error('code_certifications_international') is-invalid @enderror" 
+                         id="certId" name="code_certifications_international" placeholder="ID de certification">
                   <label for="certId">ID de certification (optionnel)</label>
+                  @error('code_certifications_international')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="saveCertification">Enregistrer</button>
         </div>
       </div>
     </div>
@@ -1134,6 +1134,14 @@ $niveauxLangue = [
     @method('PUT')
     <input type="hidden" name="action_type" value="delete_experience">
     <input type="hidden" name="experience_id" id="deleteExperienceId">
+</form>
+
+<!-- Formulaire caché pour la suppression des certifications -->
+<form id="deleteCertificationForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST" style="display: none;">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="action_type" value="delete_certification">
+    <input type="hidden" name="certification_id" id="deleteCertificationId">
 </form>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -1501,19 +1509,14 @@ $niveauxLangue = [
       renderCertifications();
     }
 
-    function editCertification(id) {
-      const certification = profileData.certifications.find(c => c.id === id);
-      if (!certification) return;
-      
-      currentEditId = id;
-      currentEditType = 'certification';
-      
+    function editCertification(id, nom, organisation, dateObtention, codeCertification) {
       document.getElementById('certificationId').value = id;
-      document.getElementById('certName').value = certification.name;
-      document.getElementById('certOrg').value = certification.organization;
-      document.getElementById('certDate').value = formatDateForInput(certification.date);
-      document.getElementById('certId').value = certification.certId || '';
+      document.getElementById('certName').value = nom;
+      document.getElementById('certOrg').value = organisation;
+      document.getElementById('certDate').value = dateObtention;
+      document.getElementById('certId').value = codeCertification || '';
       
+      document.getElementById('addCertificationModalLabel').textContent = 'Modifier la certification';
       const modal = new bootstrap.Modal(document.getElementById('addCertificationModal'));
       modal.show();
     }
@@ -1528,8 +1531,8 @@ $niveauxLangue = [
 
     function deleteCertification(id) {
       if (confirm("Êtes-vous sûr de vouloir supprimer cette certification ?")) {
-        profileData.certifications = profileData.certifications.filter(c => c.id !== id);
-        renderCertifications();
+        document.getElementById('deleteCertificationId').value = id;
+        document.getElementById('deleteCertificationForm').submit();
       }
     }
 

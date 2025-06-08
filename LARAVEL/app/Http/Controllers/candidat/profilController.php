@@ -58,9 +58,9 @@ class profilController extends Controller
 
                 return back()->with('success', 'Photo supprimée avec succès');
             }
-        }elseif ($request->action_type === 'apropos') {
+        } elseif ($request->action_type === 'apropos') {
             $request->validate([
-            'contenu' => 'required|string|min:10',
+                'contenu' => 'required|string|min:10',
             ]);
 
             $candidat->apropos()->updateOrCreate(
@@ -103,64 +103,98 @@ class profilController extends Controller
             $competence->delete();
 
             return back()->with('success', 'Compétence supprimée avec succès');
-        }elseif ($request->action_type === 'langue') {
-        $request->validate([
-            'nom' => 'required|string|max:50',
-            'niveau' => 'required|in:native,fluent,professional,intermediate,basic',
-        ]);
-        if ($request->filled('langue_id')) {
-            // Mise à jour d'une langue existante
+        } elseif ($request->action_type === 'langue') {
+            $request->validate([
+                'nom' => 'required|string|max:50',
+                'niveau' => 'required|in:native,fluent,professional,intermediate,basic',
+            ]);
+            if ($request->filled('langue_id')) {
+                // Mise à jour d'une langue existante
+                $langue = $candidat->langues()->findOrFail($request->langue_id);
+                $langue->update([
+                    'nom' => $request->nom,
+                    'niveau' => $request->niveau,
+                ]);
+                return redirect()->back()->with('success', 'Langue modifier avec succès');
+            } else {
+                // Création d'une nouvelle langue
+                $candidat->langues()->create([
+                    'nom' => $request->nom,
+                    'niveau' => $request->niveau,
+                ]);
+                return redirect()->back()->with('success', 'Langue ajoutée avec succès');
+            }
+        } elseif ($request->action_type === 'delete_langue') {
             $langue = $candidat->langues()->findOrFail($request->langue_id);
-            $langue->update([
-                'nom' => $request->nom,
-                'niveau' => $request->niveau,
+            $langue->delete();
+            return redirect()->back()->with('success', 'Langue supprimée avec succès');
+        } elseif ($request->action_type === 'experience') {
+            $request->validate([
+                'titre_poste' => 'required|string|max:100',
+                'entreprise' => 'required|string|max:100',
+                'ville' => 'required|string|max:100',
+                'date_debut' => 'required|date',
+                'date_fin' => 'nullable|date|after_or_equal:date_debut',
+                'poste_actuel' => 'boolean',
+                'description' => 'nullable|string'
             ]);
-            return redirect()->back()->with('success', 'Langue modifier avec succès');
-        } else {
-            // Création d'une nouvelle langue
-            $candidat->langues()->create([
-                'nom' => $request->nom,
-                'niveau' => $request->niveau,
+
+            $data = [
+                'titre_poste' => $request->titre_poste,
+                'entreprise' => $request->entreprise,
+                'ville' => $request->ville,
+                'date_debut' => $request->date_debut,
+                'date_fin' => $request->poste_actuel ? null : $request->date_fin,
+                'poste_actuel' => $request->has('poste_actuel'),
+                'description' => $request->description
+            ];
+
+            if ($request->filled('experience_id')) {
+                $experience = $candidat->experiences()->findOrFail($request->experience_id);
+                $experience->update($data);
+                return back()->with('success', 'Expérience mise à jour avec succès.');
+            } else {
+                $candidat->experiences()->create($data);
+                return back()->with('success', 'Expérience ajoutée avec succès.');
+            }
+        } elseif ($request->action_type === 'delete_experience') {
+            $request->validate([
+                'experience_id' => 'required|exists:experiences,id'
             ]);
-            return redirect()->back()->with('success', 'Langue ajoutée avec succès');
-        }
-    }elseif ($request->action_type === 'delete_langue') {
-        $langue = $candidat->langues()->findOrFail($request->langue_id);
-        $langue->delete();
-        return redirect()->back()->with('success', 'Langue supprimée avec succès');
-    }elseif($request->action_type === 'experience') {
-        $request->validate([
-            'titre_poste' => 'required|string|max:100',
-            'entreprise' => 'required|string|max:100',
-            'ville' => 'required|string|max:100',
-            'date_debut' => 'required|date',
-            'date_fin' => 'nullable|date|after_or_equal:date_debut',
-            'poste_actuel' => 'boolean',
-            'description' => 'nullable|string'
-        ]);
-
-        $data = [
-            'titre_poste' => $request->titre_poste,
-            'entreprise' => $request->entreprise,
-            'ville' => $request->ville,
-            'date_debut' => $request->date_debut,
-            'date_fin' => $request->poste_actuel ? null : $request->date_fin,
-            'poste_actuel' => $request->has('poste_actuel'),
-            'description' => $request->description
-        ];
-
-        if ($request->filled('experience_id')) {
+            
             $experience = $candidat->experiences()->findOrFail($request->experience_id);
-            $experience->update($data);
-            return back()->with('success', 'Expérience mise à jour avec succès.');
-        } else {
-            $candidat->experiences()->create($data);
-            return back()->with('success', 'Expérience ajoutée avec succès.');
+            $experience->delete();
+            return back()->with('success', 'Expérience supprimée avec succès.');
+        } elseif ($request->action_type === 'certification') {
+            $request->validate([
+                'nom' => 'required|string|max:255',
+                'organisation' => 'required|string|max:255',
+                'date_obtention' => 'required|date',
+                'code_certifications_international' => 'nullable|string|max:255',
+            ]);
+
+            if ($request->certification_id) {
+                // Mise à jour d'une certification existante
+                $candidat->certifications()->where('id', $request->certification_id)->update([
+                    'nom' => $request->nom,
+                    'organisation' => $request->organisation,
+                    'date_obtention' => $request->date_obtention,
+                    'code_certifications_international' => $request->code_certifications_international,
+                ]);
+                return back()->with('success', 'Certification mise à jour avec succès.');
+            } else {
+                // Création d'une nouvelle certification
+                $candidat->certifications()->create([
+                    'nom' => $request->nom,
+                    'organisation' => $request->organisation,
+                    'date_obtention' => $request->date_obtention,
+                    'code_certifications_international' => $request->code_certifications_international,
+                ]);
+                return back()->with('success', 'Certification ajoutée avec succès.');
+            }
+        } elseif ($request->action_type === 'delete_certification') {
+            $candidat->certifications()->where('id', $request->certification_id)->delete();
+            return back()->with('success', 'Certification supprimée avec succès.');
         }
-    } elseif ($request->action_type === 'delete_experience') {
-        $experience = $candidat->experiences()->findOrFail($request->experience_id);
-        $experience->delete();
-        return back()->with('success', 'Expérience supprimée avec succès.');
     }
-}
 }
