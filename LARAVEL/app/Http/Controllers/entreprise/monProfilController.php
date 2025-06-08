@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Entreprise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\CompetenceRecherchee;
 
 class monProfilController extends Controller
 {
@@ -15,7 +16,58 @@ class monProfilController extends Controller
     }
 public function update(Request $request, Entreprise $entreprise)
     {
-         if ($request->action_type === 'apropos') {
+        // Vérifier le type d'action
+        if ($request->action_type === 'competence_add') {
+            try {
+                $request->validate([
+                    'nom' => 'required|string|max:255'
+                ]);
+
+                $competence = $entreprise->competencesRecherchees()->create([
+                    'nom' => $request->nom
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'competence' => $competence
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Erreur lors de l\'ajout de la compétence: ' . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur lors de l\'ajout de la compétence: ' . $e->getMessage()
+                ], 500);
+            }
+        }
+        elseif ($request->action_type === 'competence_update') {
+            $request->validate([
+                'competence_id' => 'required|exists:competence_recherchees,id',
+                'nom' => 'required|string|max:255'
+            ]);
+
+            $competence = CompetenceRecherchee::find($request->competence_id);
+            $competence->update([
+                'nom' => $request->nom
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'competence' => $competence
+            ]);
+        }
+        elseif ($request->action_type === 'competence_delete') {
+            $request->validate([
+                'competence_id' => 'required|exists:competence_recherchees,id'
+            ]);
+
+            $competence = CompetenceRecherchee::find($request->competence_id);
+            $competence->delete();
+
+            return response()->json([
+                'success' => true
+            ]);
+        }
+        elseif ($request->action_type === 'apropos') {
              // Validation des données
              $request->validate([
                  'description' => 'nullable|string|max:500',
@@ -46,6 +98,23 @@ public function update(Request $request, Entreprise $entreprise)
         
             // Redirection avec un message de succès
             return back()->with('success', 'Logo mis à jour avec succès');
+        }elseif ($request->action_type === 'Competences_recherchees'){
+            // Validation des compétences
+            $request->validate([
+                'competences' => 'required|array',
+                'competences.*' => 'string|max:50',
+            ]);
+        
+            // Suppression des compétences existantes
+            $entreprise->competencesRecherchees()->delete();
+        
+            // Ajout des nouvelles compétences
+            foreach ($request->competences as $competence) {
+                $entreprise->competencesRecherchees()->create(['nom' => $competence]);
+            }
+        
+            // Redirection avec un message de succès
+            return back()->with('success', 'Compétences mises à jour avec succès');
         }
     }
     public function destroyLogo(Entreprise $entreprise)

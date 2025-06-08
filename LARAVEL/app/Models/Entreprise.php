@@ -47,10 +47,15 @@ class Entreprise extends Authenticatable
         return $value ?? 'logoEntreprise/logo.png'; // Default logo path if not set
     }
 
-
+    //relation entre entreprise et ofre emploi
     public function offreEmplois()
     {
         return $this->hasMany(OffreEmploi::class);
+    }
+    //relation entre entreprise et competence recherchee
+    public function competencesRecherchees()
+    {
+        return $this->hasMany(CompetenceRecherchee::class);
     }
     /**
      * Get the attributes that should be cast.

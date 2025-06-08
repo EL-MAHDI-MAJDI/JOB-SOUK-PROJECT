@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Mon Profil Entreprise - Job Souk</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -285,20 +286,29 @@
               <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addSkillModal"><i class="bi bi-plus"></i> Ajouter</button>
             </div>
             
-            <div class="mb-3">
-              <span class="badge-tag"><i class="bi bi-code-slash"></i> JavaScript</span>
-              <span class="badge-tag"><i class="bi bi-code-square"></i> React</span>
-              <span class="badge-tag"><i class="bi bi-database"></i> Node.js</span>
-              <span class="badge-tag"><i class="bi bi-layers"></i> UX Design</span>
-              <span class="badge-tag"><i class="bi bi-kanban"></i> Gestion de projet</span>
-              <span class="badge-tag"><i class="bi bi-cloud"></i> AWS</span>
+            <div class="mb-3" id="competencesList">
+              @foreach($entreprise->competencesRecherchees as $competence)
+                <div class="badge-tag d-inline-flex align-items-center me-2 mb-2" id="competence-{{ $competence->id }}">
+                    {{ $competence->nom }}
+                  <div class="ms-2">
+                    <button class="btn btn-sm btn-link text-primary p-0 me-1" onclick="editCompetence({{ $competence->id }}, '{{ $competence->nom }}')">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-link text-danger p-0" onclick="deleteCompetence({{ $competence->id }})">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              @endforeach
             </div>
           </div>
           <!-- Modal Ajouter Compétence -->
           <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-              <form method="POST" action="#">
+              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" id="addCompetenceForm">
                 @csrf
+                @method('PUT')
+                <input type="hidden" name="action_type" value="competence_add">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="addSkillModalLabel">Ajouter une compétence</h5>
@@ -307,12 +317,40 @@
                   <div class="modal-body">
                     <div class="mb-3">
                       <label for="newSkill" class="form-label">Compétence</label>
-                      <input type="text" class="form-control" id="newSkill" name="competence" placeholder="Ex: Python, Scrum, etc.">
+                      <input type="text" class="form-control" id="newSkill" name="nom" placeholder="Ex: Python, Scrum, etc." required>
                     </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-primary">Ajouter</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Modal Modifier Compétence -->
+          <div class="modal fade" id="editSkillModal" tabindex="-1" aria-labelledby="editSkillModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" id="editCompetenceForm">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="action_type" value="competence_update">
+                <input type="hidden" name="competence_id" id="editCompetenceId">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editSkillModalLabel">Modifier la compétence</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label for="editSkill" class="form-label">Compétence</label>
+                      <input type="text" class="form-control" id="editSkill" name="nom" required>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
                   </div>
                 </div>
               </form>
@@ -426,6 +464,133 @@
     secteurEdit && secteurEdit.addEventListener('change', updateSecteurEdit);
     document.addEventListener('DOMContentLoaded', function() {
       updateSecteurEdit();
+    });
+
+    // Gestion des compétences recherchées
+    function editCompetence(id, nom) {
+      const modal = new bootstrap.Modal(document.getElementById('editSkillModal'));
+      const form = document.getElementById('editCompetenceForm');
+      const input = document.getElementById('editSkill');
+      const competenceIdInput = document.getElementById('editCompetenceId');
+      
+      input.value = nom;
+      competenceIdInput.value = id;
+      modal.show();
+    }
+
+    function deleteCompetence(id) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) {
+        const formData = new FormData();
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+        formData.append('_method', 'PUT');
+        formData.append('action_type', 'competence_delete');
+        formData.append('competence_id', id);
+
+        fetch(`{{ route('entreprise.updateEntreprise', $entreprise) }}`, {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+          },
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById(`competence-${id}`).remove();
+          } else {
+            alert('Une erreur est survenue lors de la suppression.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Une erreur est survenue lors de la suppression.');
+        });
+      }
+    }
+
+    // Gestion du formulaire d'ajout de compétence
+    document.getElementById('addCompetenceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      fetch(this.action, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json'
+        },
+        body: formData
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur réseau');
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          const competencesList = document.getElementById('competencesList');
+          const newCompetence = document.createElement('div');
+          newCompetence.className = 'badge-tag d-inline-flex align-items-center me-2 mb-2';
+          newCompetence.id = `competence-${data.competence.id}`;
+          newCompetence.innerHTML = `
+            <i class="bi bi-code-slash me-1"></i> ${data.competence.nom}
+            <div class="ms-2">
+              <button class="btn btn-sm btn-link text-primary p-0 me-1" onclick="editCompetence(${data.competence.id}, '${data.competence.nom}')">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-link text-danger p-0" onclick="deleteCompetence(${data.competence.id})">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          `;
+          competencesList.appendChild(newCompetence);
+          
+          // Fermer le modal et réinitialiser le formulaire
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addSkillModal'));
+          modal.hide();
+          this.reset();
+        } else {
+          alert('Une erreur est survenue lors de l\'ajout de la compétence.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Une erreur est survenue lors de l\'ajout de la compétence. Veuillez réessayer.');
+      });
+    });
+
+    // Gestion du formulaire de modification de compétence
+    document.getElementById('editCompetenceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      fetch(this.action, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          'Accept': 'application/json'
+        },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const competenceElement = document.getElementById(`competence-${data.competence.id}`);
+          competenceElement.querySelector('i.bi-code-slash').nextSibling.textContent = ` ${data.competence.nom}`;
+          
+          // Fermer le modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('editSkillModal'));
+          modal.hide();
+        } else {
+          alert('Une erreur est survenue lors de la modification de la compétence.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Une erreur est survenue lors de la modification de la compétence.');
+      });
     });
   </script>
 </body>
