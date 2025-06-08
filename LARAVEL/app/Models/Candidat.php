@@ -43,6 +43,11 @@ class Candidat extends Authenticatable
         return $this->hasMany(Certification::class);
     }
 
+    //RELATIONS CANDIDAT ET FORMATIONS
+    public function formations()
+    {
+        return $this->hasMany(Formation::class);
+    }
 
     protected $fillable = [
             'prenom',

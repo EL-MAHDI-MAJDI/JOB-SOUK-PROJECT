@@ -521,40 +521,38 @@
             </h4>
             
             <div id="educations-container">
-              <!-- Les formations seront ajoutées ici dynamiquement -->
-              <div class="timeline-item">
+              @foreach($candidat->formations as $formation)
+              <div class="timeline-item" 
+                   data-formation-id="{{ $formation->id }}"
+                   data-diplome="{{ $formation->diplome }}"
+                   data-etablissement="{{ $formation->etablissement }}"
+                   data-date-debut="{{ $formation->date_debut->format('Y-m-d') }}"
+                   data-date-fin="{{ $formation->date_fin ? $formation->date_fin->format('Y-m-d') : '' }}"
+                   data-description="{{ $formation->description }}">
                 <div class="timeline-badge">
                   <i class="bi bi-mortarboard"></i>
                 </div>
                 <div class="timeline-content">
                   <div class="timeline-actions">
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation(0)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation(0)"><i class="bi bi-trash"></i></button>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation({{ $formation->id }})">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation({{ $formation->id }})">
+                      <i class="bi bi-trash"></i>
+                    </button>
                   </div>
-                  <h5 class="mb-1">Master en Ingénierie Logicielle</h5>
-                  <p class="mb-1 text-muted">Université Mohammed V - Rabat</p>
-                  <small class="text-muted">2017 - 2019</small>
-                  <p class="mt-2 mb-0">
-                    Spécialisation en architectures distribuées et cloud computing. Projet de fin d'études sur 
-                    l'optimisation des requêtes GraphQL dans les applications microservices.
-                  </p>
+                  <h5 class="mb-1">{{ $formation->diplome }}</h5>
+                  <p class="mb-1 text-muted">{{ $formation->etablissement }}</p>
+                  <small class="text-muted">
+                    {{ $formation->date_debut->format('M Y') }} - 
+                    {{ $formation->date_fin ? $formation->date_fin->format('M Y') : 'Présent' }}
+                  </small>
+                  @if($formation->description)
+                    <p class="mt-2 mb-0">{{ $formation->description }}</p>
+                  @endif
                 </div>
               </div>
-              
-              <div class="timeline-item">
-                <div class="timeline-badge">
-                  <i class="bi bi-mortarboard"></i>
-                </div>
-                <div class="timeline-content">
-                  <div class="timeline-actions">
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation(1)"><i class="bi bi-pencil"></i></button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation(1)"><i class="bi bi-trash"></i></button>
-                  </div>
-                  <h5 class="mb-1">Licence en Informatique</h5>
-                  <p class="mb-1 text-muted">Université Hassan II - Casablanca</p>
-                  <small class="text-muted">2014 - 2017</small>
-                </div>
-              </div>
+              @endforeach
             </div>
           </div>
         </div>
@@ -883,49 +881,80 @@ $niveauxLangue = [
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="educationForm">
-            <input type="hidden" id="educationId">
+          <form id="educationForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="action_type" value="formation">
+            <input type="hidden" name="formation_id" id="formationId">
             <div class="row g-3">
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="eduDegree" placeholder="Diplôme" required>
-                  <label for="eduDegree">Diplôme</label>
+                  <input type="text" class="form-control @error('diplome') is-invalid @enderror" 
+                         id="diplome" name="diplome" placeholder="Diplôme" required>
+                  <label for="diplome">Diplôme</label>
+                  @error('diplome')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <input type="text" class="form-control" id="eduSchool" placeholder="Établissement" required>
-                  <label for="eduSchool">Établissement</label>
+                  <input type="text" class="form-control @error('etablissement') is-invalid @enderror" 
+                         id="etablissement" name="etablissement" placeholder="Établissement" required>
+                  <label for="etablissement">Établissement</label>
+                  @error('etablissement')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="eduStartDate" placeholder="Date de début" required>
-                  <label for="eduStartDate">Date de début</label>
+                  <input type="date" class="form-control @error('date_debut') is-invalid @enderror" 
+                         id="date_debut" name="date_debut" required>
+                  <label for="date_debut">Date de début</label>
+                  @error('date_debut')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-floating">
-                  <input type="month" class="form-control" id="eduEndDate" placeholder="Date de fin">
-                  <label for="eduEndDate">Date de fin</label>
+                  <input type="date" class="form-control @error('date_fin') is-invalid @enderror" 
+                         id="date_fin" name="date_fin">
+                  <label for="date_fin">Date de fin</label>
+                  @error('date_fin')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-floating">
-                  <textarea class="form-control" id="eduDescription" style="height: 100px" placeholder="Description"></textarea>
-                  <label for="eduDescription">Description</label>
+                  <textarea class="form-control @error('description') is-invalid @enderror" 
+                            id="description" name="description" style="height: 100px"></textarea>
+                  <label for="description">Description</label>
+                  @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
                 </div>
               </div>
             </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary" id="saveEducation">Enregistrer</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Formulaire caché pour la suppression des formations -->
+  <form id="deleteEducationForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST" style="display: none;">
+      @csrf
+      @method('PUT')
+      <input type="hidden" name="action_type" value="delete_formation">
+      <input type="hidden" name="formation_id" id="deleteEducationId">
+  </form>
 
   <!-- Modal Ajout/Modification Compétence -->
 <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
@@ -1298,21 +1327,27 @@ $niveauxLangue = [
     }
 
     function editEducation(id) {
-      const education = profileData.educations.find(e => e.id === id);
-      if (!education) return;
-      
-      currentEditId = id;
-      currentEditType = 'education';
-      
-      document.getElementById('educationId').value = id;
-      document.getElementById('eduDegree').value = education.degree;
-      document.getElementById('eduSchool').value = education.school;
-      document.getElementById('eduStartDate').value = formatDateForInput(education.startDate);
-      document.getElementById('eduEndDate').value = formatDateForInput(education.endDate);
-      document.getElementById('eduDescription').value = education.description;
-      
-      const modal = new bootstrap.Modal(document.getElementById('addEducationModal'));
-      modal.show();
+        const formation = document.querySelector(`[data-formation-id="${id}"]`);
+        
+        if (!formation) {
+            console.error('Formation non trouvée');
+            return;
+        }
+
+        // Remplir le formulaire
+        document.getElementById('formationId').value = id;
+        document.getElementById('diplome').value = formation.dataset.diplome;
+        document.getElementById('etablissement').value = formation.dataset.etablissement;
+        document.getElementById('date_debut').value = formation.dataset.dateDebut;
+        document.getElementById('date_fin').value = formation.dataset.dateFin || '';
+        document.getElementById('description').value = formation.dataset.description || '';
+        
+        // Mettre à jour le titre du modal
+        document.getElementById('addEducationModalLabel').textContent = 'Modifier la formation';
+        
+        // Ouvrir le modal
+        const modal = new bootstrap.Modal(document.getElementById('addEducationModal'));
+        modal.show();
     }
 
     function updateEducation(id, updatedEducation) {
@@ -1324,10 +1359,10 @@ $niveauxLangue = [
     }
 
     function deleteEducation(id) {
-      if (confirm("Êtes-vous sûr de vouloir supprimer cette formation ?")) {
-        profileData.educations = profileData.educations.filter(e => e.id !== id);
-        renderEducations();
-      }
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette formation ?")) {
+            document.getElementById('deleteEducationId').value = id;
+            document.getElementById('deleteEducationForm').submit();
+        }
     }
 
     function renderEducations() {
@@ -1844,6 +1879,13 @@ $niveauxLangue = [
     const modal = new bootstrap.Modal(document.getElementById('addExperienceModal'));
     modal.show();
 }
+
+    // Réinitialiser le formulaire quand le modal est fermé
+    document.getElementById('addEducationModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('educationForm').reset();
+        document.getElementById('formationId').value = '';
+        document.getElementById('addEducationModalLabel').textContent = 'Ajouter une formation';
+    });
   </script>
 </body>
 </html>

@@ -195,6 +195,28 @@ class profilController extends Controller
         } elseif ($request->action_type === 'delete_certification') {
             $candidat->certifications()->where('id', $request->certification_id)->delete();
             return back()->with('success', 'Certification supprimée avec succès.');
+        }elseif( $request->action_type === 'formation') {
+            $request->validate([
+                'diplome' => 'required|string|max:255',
+                'etablissement' => 'required|string|max:255',
+                'date_debut' => 'required|date',
+                'date_fin' => 'nullable|date|after_or_equal:date_debut',
+                'description' => 'nullable|string|max:1000',
+            ]);
+
+            if ($request->filled('formation_id')) {
+                // Mise à jour d'une formation existante
+                $formation = $candidat->formations()->findOrFail($request->formation_id);
+                $formation->update($request->all());
+                return back()->with('success', 'Formation mise à jour avec succès.');
+            } else {
+                // Création d'une nouvelle formation
+                $candidat->formations()->create($request->all());
+                return back()->with('success', 'Formation ajoutée avec succès.');
+            }
+        } elseif ($request->action_type === 'delete_formation') {
+            $candidat->formations()->where('id', $request->formation_id)->delete();
+            return back()->with('success', 'Formation supprimée avec succès.');
         }
     }
 }
