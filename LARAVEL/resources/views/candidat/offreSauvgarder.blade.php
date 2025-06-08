@@ -308,7 +308,7 @@
                     </div>
                   </div>
                   <div class="col-md-4 text-end">
-                    <button class="btn btn-primary me-2" title="Postuler">Postuler</button>
+                    <a href='{{ route("candidat.offreDetails", ["candidat" => $candidat->id, "offre" => $offre->id]) }}' class="stretched-link me-2" title="Postuler"></a>
                     <!-- @php
                         $isSaved = in_array($offre->id, $offresSauvegardeesIds ?? []);
                     @endphp -->

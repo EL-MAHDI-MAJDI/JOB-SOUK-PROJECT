@@ -56,4 +56,10 @@ class chercherOffresController extends Controller
         // dd($candidat->offresSauvegardees);
         return back()->with('success', 'Offre sauvegardée !');
     }
+    public function detail(Candidat $candidat, OffreEmploi $offre)
+    {
+        $offre->load('entreprise');
+        $offresSauvegardeesIds = $candidat->offresSauvegardees()->pluck('offre_emplois.id')->toArray();
+        return view('candidat.offreDetails', compact('candidat', 'offre', 'offresSauvegardeesIds'));
+    }
 }
