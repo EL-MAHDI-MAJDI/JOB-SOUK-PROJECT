@@ -18,26 +18,18 @@ public function update(Request $request, Entreprise $entreprise)
     {
         // Vérifier le type d'action
         if ($request->action_type === 'competence_add') {
-            try {
-                $request->validate([
-                    'nom' => 'required|string|max:255'
-                ]);
+            // Validation des données
+            $request->validate([
+                'nom' => 'required|string|max:255',
+            ]);
 
-                $competence = $entreprise->competencesRecherchees()->create([
-                    'nom' => $request->nom
-                ]);
+            // Création de la nouvelle compétence
+            $competence = CompetenceRecherchee::create([
+                'nom' => $request->nom,
+                'entreprise_id' => $entreprise->id,
+            ]);
 
-                return response()->json([
-                    'success' => true,
-                    'competence' => $competence
-                ]);
-            } catch (\Exception $e) {
-                \Log::error('Erreur lors de l\'ajout de la compétence: ' . $e->getMessage());
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Erreur lors de l\'ajout de la compétence: ' . $e->getMessage()
-                ], 500);
-            }
+            return redirect()->back()->with('success', 'Compétence ajoutée avec succès');
         }
         elseif ($request->action_type === 'competence_update') {
             $request->validate([
@@ -50,22 +42,24 @@ public function update(Request $request, Entreprise $entreprise)
                 'nom' => $request->nom
             ]);
 
-            return response()->json([
-                'success' => true,
-                'competence' => $competence
-            ]);
+            return redirect()->back()->with('success', 'Compétence mise à jour avec succès');
         }
         elseif ($request->action_type === 'competence_delete') {
+            // Validation de la requête
             $request->validate([
                 'competence_id' => 'required|exists:competence_recherchees,id'
             ]);
 
-            $competence = CompetenceRecherchee::find($request->competence_id);
+            // Récupérer et vérifier que la compétence appartient à l'entreprise
+            $competence = CompetenceRecherchee::where('id', $request->competence_id)
+                ->where('entreprise_id', $entreprise->id)
+                ->firstOrFail();
+
+            // Supprimer la compétence
             $competence->delete();
 
-            return response()->json([
-                'success' => true
-            ]);
+            // Redirection avec message de succès
+            return redirect()->back()->with('success', 'Compétence supprimée avec succès');
         }
         elseif ($request->action_type === 'apropos') {
              // Validation des données

@@ -30,10 +30,16 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     ->where('candidat','\d+')
     ->name('destroyLogo');
     
-
+    //Route CV
     Route::get('cv',[cvController::class,'show'])
     ->where('candidat','\d+')
     ->name('cv');
+    Route::post('cv', [cvController::class, 'store'])
+    ->name('cv.store')
+    ->where('candidat','\d+');
+    Route::delete('cv', [cvController::class, 'destroy'])
+    ->name('cv.destroy')
+    ->where('candidat','\d+');
 
     Route::get('mesCandidatures',[mesCandidaturesController::class,'show'])
     ->where('candidat','\d+')

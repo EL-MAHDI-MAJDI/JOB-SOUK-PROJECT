@@ -49,6 +49,12 @@ class Candidat extends Authenticatable
         return $this->hasMany(Formation::class);
     }
 
+    //RELATIONS CANDIDAT ET CV
+    public function cv()
+    {
+        return $this->hasOne(Cv::class);
+    }
+
     protected $fillable = [
             'prenom',
             'nom',

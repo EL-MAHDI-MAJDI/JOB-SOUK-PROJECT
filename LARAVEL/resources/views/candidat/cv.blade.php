@@ -231,38 +231,39 @@
       <div class="upload-container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
-            <div id="uploadArea" class="upload-area">
-              <div class="upload-icon">
-                <i class="bi bi-cloud-arrow-up"></i>
-              </div>
-              <h4>Glissez-déposez votre CV ici</h4>
-              <p class="text-muted">ou cliquez pour sélectionner un fichier</p>
-              <p class="small text-muted">Formats supportés: PDF, DOC, DOCX (max. 5MB)</p>
-              <input type="file" id="fileInput" accept=".pdf,.doc,.docx" style="display: none;">
-            </div>
-            
-            <div id="filePreview" style="display: none;">
-              <div class="file-info">
-                <div class="file-icon">
-                  <i class="bi bi-file-earmark-text"></i>
+            <form action="{{ route('candidat.cv.store', $candidat) }}" method="POST" enctype="multipart/form-data" id="cvForm">
+                @csrf
+                <div class="upload-area" id="uploadArea">
+                    <i class="bi bi-cloud-upload upload-icon"></i>
+                    <h4>Glissez-déposez votre CV ici</h4>
+                    <p class="text-muted">ou cliquez pour sélectionner un fichier</p>
+                    <p class="small text-muted">Formats supportés: PDF, DOC, DOCX (max. 5MB)</p>
+                    <input type="file" name="cv_file" id="cv_file" accept=".pdf,.doc,.docx" style="display: none;">
                 </div>
-                <div class="file-details">
-                  <h6 id="fileName">mon_cv.pdf</h6>
-                  <small class="text-muted" id="fileSize">2.4 MB</small>
+
+                <div id="filePreview" style="display: none;">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                        <div class="file-details">
+                            <h6 id="fileName"></h6>
+                            <small class="text-muted" id="fileSize"></small>
+                        </div>
+                        <div class="file-actions">
+                            <button type="button" class="btn btn-remove" id="removeFile">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-2"></i>Enregistrer le CV
+                        </button>
+                    </div>
                 </div>
-                <div class="file-actions">
-                  <button class="btn btn-remove" id="removeFile">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </div>
-              
-              <div class="d-flex justify-content-end">
-                <button class="btn btn-primary" id="saveBtn">
-                  <i class="bi bi-save me-2"></i>Enregistrer le CV
-                </button>
-              </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -272,11 +273,38 @@
         <h3 class="fw-bold mb-4">Mon CV actuel</h3>
         
         <div id="currentCv">
-          <div class="no-cv-message">
-            <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
-            <h4>Aucun CV enregistré</h4>
-            <p class="text-muted">Vous n'avez pas encore téléchargé de CV. Ajoutez votre CV pour compléter votre profil.</p>
-          </div>
+          @if($candidat->cv)
+              <div class="cv-preview">
+                  <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                          <h5>{{ $candidat->cv->nom_fichier }}</h5>
+                          <p class="cv-date">Téléchargé le: {{ $candidat->cv->created_at->format('d/m/Y') }}</p>
+                      </div>
+                  </div>
+                  <div class="cv-actions">
+                      <a href="{{ Storage::url($candidat->cv->fichier) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                          <i class="bi bi-eye me-1"></i>Voir
+                      </a>
+                      <a href="{{ Storage::url($candidat->cv->fichier) }}" download class="btn btn-sm btn-outline-secondary">
+                          <i class="bi bi-download me-1"></i>Télécharger
+                      </a>
+                      <form action="{{ route('candidat.cv.destroy', $candidat) }}" method="POST" class="d-inline" 
+                            onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre CV ?');">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-sm btn-outline-danger">
+                              <i class="bi bi-trash me-1"></i>Supprimer
+                          </button>
+                      </form>
+                  </div>
+              </div>
+          @else
+              <div class="no-cv-message">
+                  <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+                  <h4>Aucun CV enregistré</h4>
+                  <p class="text-muted">Vous n'avez pas encore téléchargé de CV. Ajoutez votre CV pour compléter votre profil.</p>
+              </div>
+          @endif
         </div>
       </div>
     </div>
@@ -294,177 +322,80 @@
 
     // Gestion de l'upload de fichier
     const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
+    const fileInput = document.getElementById('cv_file');
     const filePreview = document.getElementById('filePreview');
     const fileName = document.getElementById('fileName');
     const fileSize = document.getElementById('fileSize');
     const removeFile = document.getElementById('removeFile');
-    const saveBtn = document.getElementById('saveBtn');
-    const currentCv = document.getElementById('currentCv');
 
     // Gestion du drag and drop
     uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.style.borderColor = 'var(--primary)';
-      uploadArea.style.backgroundColor = 'var(--primary-light)';
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--primary)';
+        uploadArea.style.backgroundColor = 'var(--primary-light)';
     });
 
     uploadArea.addEventListener('dragleave', () => {
-      uploadArea.style.borderColor = '#ddd';
-      uploadArea.style.backgroundColor = 'transparent';
+        uploadArea.style.borderColor = '#ddd';
+        uploadArea.style.backgroundColor = 'transparent';
     });
 
     uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.style.borderColor = '#ddd';
-      uploadArea.style.backgroundColor = 'transparent';
-      
-      if (e.dataTransfer.files.length) {
-        handleFile(e.dataTransfer.files[0]);
-      }
+        e.preventDefault();
+        uploadArea.style.borderColor = '#ddd';
+        uploadArea.style.backgroundColor = 'transparent';
+        
+        if (e.dataTransfer.files.length) {
+            handleFile(e.dataTransfer.files[0]);
+        }
     });
 
     // Gestion du clic pour sélectionner un fichier
     uploadArea.addEventListener('click', () => {
-      fileInput.click();
+        fileInput.click();
     });
 
     fileInput.addEventListener('change', () => {
-      if (fileInput.files.length) {
-        handleFile(fileInput.files[0]);
-      }
+        if (fileInput.files.length) {
+            handleFile(fileInput.files[0]);
+        }
     });
 
     // Fonction pour gérer le fichier sélectionné
     function handleFile(file) {
-      // Vérifier le type de fichier
-      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
-      const fileExtension = file.name.split('.').pop().toLowerCase();
-      const validExtensions = ['pdf', 'doc', 'docx'];
-      
-      if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
-        alert('Format de fichier non supporté. Veuillez uploader un fichier PDF, DOC ou DOCX.');
-        return;
-      }
-      
-      // Vérifier la taille du fichier (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Le fichier est trop volumineux. Taille maximale: 5MB.');
-        return;
-      }
-      
-      // Afficher les informations du fichier
-      fileName.textContent = file.name;
-      fileSize.textContent = formatFileSize(file.size);
-      filePreview.style.display = 'block';
+        const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        const validExtensions = ['pdf', 'doc', 'docx'];
+        
+        if (!validTypes.includes(file.type) && !validExtensions.includes(fileExtension)) {
+            alert('Format de fichier non supporté. Veuillez uploader un fichier PDF, DOC ou DOCX.');
+            return;
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Le fichier est trop volumineux. Taille maximale: 5MB.');
+            return;
+        }
+        
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        filePreview.style.display = 'block';
+        uploadArea.style.display = 'none';
     }
 
     // Formater la taille du fichier
     function formatFileSize(bytes) {
-      if (bytes < 1024) return bytes + ' bytes';
-      else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-      else return (bytes / 1048576).toFixed(1) + ' MB';
+        if (bytes < 1024) return bytes + ' bytes';
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        else return (bytes / 1048576).toFixed(1) + ' MB';
     }
 
     // Supprimer le fichier sélectionné
     removeFile.addEventListener('click', () => {
-      fileInput.value = '';
-      filePreview.style.display = 'none';
+        fileInput.value = '';
+        filePreview.style.display = 'none';
+        uploadArea.style.display = 'block';
     });
-
-    // Enregistrer le CV
-    saveBtn.addEventListener('click', () => {
-      const file = fileInput.files[0];
-      if (!file) return;
-      
-      // Stocker le fichier en mémoire
-      currentCvFile = file;
-      
-      // Afficher le CV dans la section "CV actuel"
-      currentCv.innerHTML = `
-        <div class="cv-preview">
-          <div class="d-flex justify-content-between align-items-start">
-            <div>
-              <h5>${file.name}</h5>
-              <p class="cv-date">Téléchargé le: ${new Date().toLocaleDateString('fr-FR')} • ${formatFileSize(file.size)}</p>
-            </div>
-          </div>
-          <div class="cv-actions">
-            <button class="btn btn-sm btn-outline-secondary" id="viewCv">
-              <i class="bi bi-eye me-1"></i>Voir
-            </button>
-            <button class="btn btn-sm btn-outline-secondary" id="downloadCv">
-              <i class="bi bi-download me-1"></i>Télécharger
-            </button>
-            <button class="btn btn-sm btn-outline-danger" id="deleteCv">
-              <i class="bi bi-trash me-1"></i>Supprimer
-            </button>
-          </div>
-        </div>
-      `;
-      
-      // Réinitialiser le formulaire
-      fileInput.value = '';
-      filePreview.style.display = 'none';
-      
-      alert('CV enregistré avec succès!');
-      
-      // Ajouter les écouteurs d'événements pour les nouveaux boutons
-      document.getElementById('viewCv').addEventListener('click', viewCurrentCv);
-      document.getElementById('downloadCv').addEventListener('click', downloadCurrentCv);
-      document.getElementById('deleteCv').addEventListener('click', deleteCurrentCv);
-    });
-
-    // Visualiser le CV actuel dans un nouvel onglet
-    function viewCurrentCv() {
-      if (!currentCvFile) return;
-      
-      // Créer une URL pour le fichier
-      const fileUrl = URL.createObjectURL(currentCvFile);
-      
-      // Ouvrir dans un nouvel onglet
-      window.open(fileUrl, '_blank');
-      
-      // Libérer la mémoire après un délai (l'URL reste valide tant que le nouvel onglet est ouvert)
-      setTimeout(() => {
-        URL.revokeObjectURL(fileUrl);
-      }, 10000); // 10 secondes
-    }
-
-    // Télécharger le CV actuel
-    function downloadCurrentCv() {
-      if (!currentCvFile) return;
-      
-      // Créer un lien de téléchargement
-      const a = document.createElement('a');
-      const url = URL.createObjectURL(currentCvFile);
-      
-      a.href = url;
-      a.download = currentCvFile.name || 'mon_cv';
-      document.body.appendChild(a);
-      a.click();
-      
-      // Nettoyer
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 0);
-    }
-
-    // Supprimer le CV actuel
-    function deleteCurrentCv() {
-      if (confirm('Êtes-vous sûr de vouloir supprimer votre CV ?')) {
-        currentCvFile = null;
-        currentCv.innerHTML = `
-          <div class="no-cv-message">
-            <i class="bi bi-file-earmark-text" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
-            <h4>Aucun CV enregistré</h4>
-            <p class="text-muted">Vous n'avez pas encore téléchargé de CV. Ajoutez votre CV pour compléter votre profil.</p>
-          </div>
-        `;
-        alert('CV supprimé avec succès');
-      }
-    }
   </script>
 </body>
 </html>

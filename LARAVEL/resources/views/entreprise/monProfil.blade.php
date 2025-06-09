@@ -21,6 +21,7 @@
   </nav>
 
   <!-- Contenu principal -->
+    <div class="main-content">
   <div class="main-content">
     <div class="container-fluid">
       <!-- En-tête -->
@@ -294,9 +295,16 @@
                     <button class="btn btn-sm btn-link text-primary p-0 me-1" onclick="editCompetence({{ $competence->id }}, '{{ $competence->nom }}')">
                       <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="btn btn-sm btn-link text-danger p-0" onclick="deleteCompetence({{ $competence->id }})">
-                      <i class="bi bi-trash"></i>
-                    </button>
+                    <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" class="d-inline" 
+    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?');">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="action_type" value="competence_delete">
+    <input type="hidden" name="competence_id" value="{{ $competence->id }}">
+    <button type="submit" class="btn btn-sm btn-link text-danger p-0">
+        <i class="bi bi-trash"></i>
+    </button>
+</form>
                   </div>
                 </div>
               @endforeach
@@ -305,7 +313,7 @@
           <!-- Modal Ajouter Compétence -->
           <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" id="addCompetenceForm">
+              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="action_type" value="competence_add">
@@ -390,6 +398,20 @@
       </div>
     </div>
   </div>
+
+  @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   @vite(['resources/js/entrepriseJs/monProfil.js'])
@@ -540,9 +562,16 @@
               <button class="btn btn-sm btn-link text-primary p-0 me-1" onclick="editCompetence(${data.competence.id}, '${data.competence.nom}')">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button class="btn btn-sm btn-link text-danger p-0" onclick="deleteCompetence(${data.competence.id})">
-                <i class="bi bi-trash"></i>
-              </button>
+              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" class="d-inline" 
+    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?');">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="action_type" value="competence_delete">
+    <input type="hidden" name="competence_id" value="{{ $competence->id }}">
+    <button type="submit" class="btn btn-sm btn-link text-danger p-0">
+        <i class="bi bi-trash"></i>
+    </button>
+</form>
             </div>
           `;
           competencesList.appendChild(newCompetence);
