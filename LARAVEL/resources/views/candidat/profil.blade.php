@@ -340,6 +340,7 @@
       background-color: #fff;
       color: #6c757d;
     }
+
   </style>
 </head>
 <body>
@@ -458,13 +459,14 @@
                 <i class="bi bi-pencil"></i>
               </button>
             </h4>
-            <p id="aboutText">
-                @if($candidat->apropos)
-                    {{ $candidat->apropos->contenu }}
-                @else
-                    Aucune description ajoutée.
-                @endif
-            </p>
+            @if($candidat->apropos && $candidat->apropos->contenu)
+                <p id="aboutText">{{ $candidat->apropos->contenu }}</p>
+            @else
+                <div class="text-center py-4">
+                    <i class="bi bi-person text-muted" style="font-size: 2rem;"></i>
+                    <p class="text-muted mt-2">Aucune description ajoutée</p>
+                </div>
+            @endif
           </div>
           
           <!-- Expérience professionnelle -->
@@ -475,6 +477,7 @@
                 <i class="bi bi-plus"></i> Ajouter
               </button>
             </h4>
+            @if($candidat->experiences->count() > 0)
                 @foreach ($candidat->experiences as $item)
                 <div class="timeline-item" 
                 data-experience-id="{{ $item->id }}"
@@ -509,6 +512,12 @@
     </div>
 </div>
 @endforeach
+            @else
+            <div class="text-center py-4">
+                <i class="bi bi-briefcase text-muted" style="font-size: 2rem;"></i>
+                <p class="text-muted mt-2">Aucune expérience professionnelle ajoutée</p>
+            </div>
+            @endif
           </div>
           
           <!-- Formation -->
@@ -521,38 +530,46 @@
             </h4>
             
             <div id="educations-container">
-              @foreach($candidat->formations as $formation)
-              <div class="timeline-item" 
-                   data-formation-id="{{ $formation->id }}"
-                   data-diplome="{{ $formation->diplome }}"
-                   data-etablissement="{{ $formation->etablissement }}"
-                   data-date-debut="{{ $formation->date_debut->format('Y-m-d') }}"
-                   data-date-fin="{{ $formation->date_fin ? $formation->date_fin->format('Y-m-d') : '' }}"
-                   data-description="{{ $formation->description }}">
-                <div class="timeline-badge">
-                  <i class="bi bi-mortarboard"></i>
-                </div>
-                <div class="timeline-content">
-                  <div class="timeline-actions">
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation({{ $formation->id }})">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation({{ $formation->id }})">
-                      <i class="bi bi-trash"></i>
-                    </button>
+              @if($candidat->formations->count() > 0)
+                  @foreach ($candidat->formations as $item)
+                  <div class="timeline-item" 
+                  data-formation-id="{{ $item->id }}"
+                  data-diplome="{{ $item->diplome }}"
+                  data-etablissement="{{ $item->etablissement }}"
+                  data-ville="{{ $item->ville }}"
+                  data-date-debut="{{ $item->date_debut->format('Y-m-d') }}"
+                  data-date-fin="{{ $item->date_fin ? $item->date_fin->format('Y-m-d') : '' }}"
+                  data-description="{{ $item->description }}">
+                    <div class="timeline-badge">
+                      <i class="bi bi-mortarboard"></i>
+                    </div>
+                    <div class="timeline-content">
+                      <div class="timeline-actions">
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editEducation({{ $item->id }})">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteEducation({{ $item->id }})">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                      <h5 class="mb-1">{{ $item->diplome }}</h5>
+                      <p class="mb-1 text-muted">{{ $item->etablissement }} - {{$item->ville}}</p>
+                      <small class="text-muted">
+                        {{ $item->date_debut->format('M Y') }} - 
+                        {{ $item->date_fin ? $item->date_fin->format('M Y') : 'Présent' }}
+                      </small>
+                      @if($item->description)
+                        <p class="mt-2 mb-0">{{ $item->description }}</p>
+                      @endif
+                    </div>
                   </div>
-                  <h5 class="mb-1">{{ $formation->diplome }}</h5>
-                  <p class="mb-1 text-muted">{{ $formation->etablissement }}</p>
-                  <small class="text-muted">
-                    {{ $formation->date_debut->format('M Y') }} - 
-                    {{ $formation->date_fin ? $formation->date_fin->format('M Y') : 'Présent' }}
-                  </small>
-                  @if($formation->description)
-                    <p class="mt-2 mb-0">{{ $formation->description }}</p>
-                  @endif
-                </div>
-              </div>
-              @endforeach
+                  @endforeach
+              @else
+                  <div class="text-center py-4">
+                      <i class="bi bi-mortarboard text-muted" style="font-size: 2rem;"></i>
+                      <p class="text-muted mt-2">Aucune formation ajoutée</p>
+                  </div>
+              @endif
             </div>
           </div>
         </div>
@@ -569,34 +586,48 @@
             </h4>
             
             <div id="skills-container">
-              <div class="mb-3">
-                <h6 class="mb-2">Techniques</h6>
-                <div class="d-flex flex-wrap gap-2" id="technical-skills">
-                  @foreach($candidat->competences->where('type', 'technical') as $comp)
-                    <span class="skill-badge">
-                      {{ $comp->nom }}
-                      <button class="btn btn-sm btn-link p-0 ms-1" onclick="editSkill({{ $comp->id }}, '{{ $comp->nom }}', '{{ $comp->type }}', {{ $comp->niveau }})">
-                        <i class="bi bi-pencil"></i>
-                      </button>
-                      <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
-                    </span>
-                  @endforeach
+                <div class="mb-3">
+                    <h6 class="mb-2">Techniques</h6>
+                    @if($candidat->competences->where('type', 'technical')->count() > 0)
+                        <div class="d-flex flex-wrap gap-2" id="technical-skills">
+                          @foreach($candidat->competences->where('type', 'technical') as $comp)
+                            <span class="skill-badge">
+                              {{ $comp->nom }}
+                              <button class="btn btn-sm btn-link p-0 ms-1" onclick="editSkill({{ $comp->id }}, '{{ $comp->nom }}', '{{ $comp->type }}', {{ $comp->niveau }})">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+                              <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
+                            </span>
+                          @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-4">
+                            <i class="bi bi-code-square text-muted" style="font-size: 2rem;"></i>
+                            <p class="text-muted mt-2">Aucune compétence technique ajoutée</p>
+                        </div>
+                    @endif
                 </div>
-              </div>
-              <div class="mb-3">
-                <h6 class="mb-2">Soft Skills</h6>
-                <div class="d-flex flex-wrap gap-2" id="soft-skills">
-                  @foreach($candidat->competences->where('type', 'soft') as $comp)
-                    <span class="skill-badge">
-                      {{ $comp->nom }}
-                      <button class="btn btn-sm btn-link p-0 ms-1" onclick="editSkill({{ $comp->id }}, '{{ $comp->nom }}', '{{ $comp->type }}', {{ $comp->niveau }})">
-                        <i class="bi bi-pencil"></i>
-                      </button>
-                      <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
-                    </span>
-                  @endforeach
+                <div class="mb-3">
+                    <h6 class="mb-2">Soft Skills</h6>
+                    @if($candidat->competences->where('type', 'soft')->count() > 0)
+                        <div class="d-flex flex-wrap gap-2" id="soft-skills">
+                          @foreach($candidat->competences->where('type', 'soft') as $comp)
+                            <span class="skill-badge">
+                              {{ $comp->nom }}
+                              <button class="btn btn-sm btn-link p-0 ms-1" onclick="editSkill({{ $comp->id }}, '{{ $comp->nom }}', '{{ $comp->type }}', {{ $comp->niveau }})">
+                                <i class="bi bi-pencil"></i>
+                              </button>
+                              <i class="bi bi-x delete-btn" onclick="deleteSkill({{ $comp->id }})"></i>
+                            </span>
+                          @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-4">
+                            <i class="bi bi-person-gear text-muted" style="font-size: 2rem;"></i>
+                            <p class="text-muted mt-2">Aucun soft skill ajouté</p>
+                        </div>
+                    @endif
                 </div>
-              </div>
             </div>
           </div>
           
@@ -610,21 +641,22 @@
             </h4>
             
             <div id="languages-container">
-                @foreach($candidat->langues as $langue)
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span>{{ $langue->nom }}</span>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage({{ $langue->id }}, '{{ $langue->nom }}', '{{ $langue->niveau }}')">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage({{ $langue->id }})">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                @if($candidat->langues->count() > 0)
+                    @foreach($candidat->langues as $langue)
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>{{ $langue->nom }}</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="editLanguage({{ $langue->id }}, '{{ $langue->nom }}', '{{ $langue->niveau }}')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteLanguage({{ $langue->id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <small>{{ $langue->niveau }}</small>
-                        @php
+                            <small>{{ $langue->niveau }}</small>
+                            @php
 $niveauxLangue = [
     'native' => 100,
     'fluent' => 90,
@@ -637,8 +669,14 @@ $niveauxLangue = [
 <div class="language-level">
     <div class="language-level-fill" style="width: {{ $niveauxLangue[$langue->niveau] ?? 40 }}%"></div>
 </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="text-center py-4">
+                        <i class="bi bi-translate text-muted" style="font-size: 2rem;"></i>
+                        <p class="text-muted mt-2">Aucune langue ajoutée</p>
                     </div>
-                @endforeach
+                @endif
             </div>
           </div>
           
@@ -652,27 +690,34 @@ $niveauxLangue = [
             </h4>
             
             <div id="certifications-container">
-              @foreach($candidat->certifications as $certification)
-                <div class="mb-3">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <h6 class="mb-1">{{ $certification->nom }}</h6>
-                      <small class="text-muted">{{ $certification->organisation }} - {{ $certification->date_obtention->format('M Y') }}</small>
-                      @if($certification->code_certifications_international)
-                        <small class="d-block text-muted">ID: {{ $certification->code_certifications_international }}</small>
-                      @endif
-                    </div>
-                    <div>
-                      <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification({{ $certification->id }}, '{{ $certification->nom }}', '{{ $certification->organisation }}', '{{ $certification->date_obtention->format('Y-m-d') }}', '{{ $certification->code_certifications_international }}')">
-                        <i class="bi bi-pencil"></i>
-                      </button>
-                      <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification({{ $certification->id }})">
-                        <i class="bi bi-trash"></i>
-                      </button>
+              @if($candidat->certifications->count() > 0)
+                @foreach($candidat->certifications as $certification)
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h6 class="mb-1">{{ $certification->nom }}</h6>
+                        <small class="text-muted">{{ $certification->organisation }} - {{ $certification->date_obtention->format('M Y') }}</small>
+                        @if($certification->code_certifications_international)
+                          <small class="d-block text-muted">ID: {{ $certification->code_certifications_international }}</small>
+                        @endif
+                      </div>
+                      <div>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editCertification({{ $certification->id }}, '{{ $certification->nom }}', '{{ $certification->organisation }}', '{{ $certification->date_obtention->format('Y-m-d') }}', '{{ $certification->code_certifications_international }}')">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCertification({{ $certification->id }})">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
+                @endforeach
+              @else
+                <div class="text-center py-4">
+                  <i class="bi bi-award text-muted" style="font-size: 2rem;"></i>
+                  <p class="text-muted mt-2">Aucune certification ajoutée</p>
                 </div>
-              @endforeach
+              @endif
             </div>
           </div>
         </div>

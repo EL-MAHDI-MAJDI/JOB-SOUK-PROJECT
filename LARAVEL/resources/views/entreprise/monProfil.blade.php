@@ -288,6 +288,7 @@
             </div>
             
             <div class="mb-3" id="competencesList">
+              @if($entreprise->competencesRecherchees->count() > 0)
               @foreach($entreprise->competencesRecherchees as $competence)
                 <div class="badge-tag d-inline-flex align-items-center me-2 mb-2" id="competence-{{ $competence->id }}">
                     {{ $competence->nom }}
@@ -296,18 +297,26 @@
                       <i class="bi bi-pencil"></i>
                     </button>
                     <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" class="d-inline" 
-    onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?');">
-    @csrf
-    @method('PUT')
-    <input type="hidden" name="action_type" value="competence_delete">
-    <input type="hidden" name="competence_id" value="{{ $competence->id }}">
-    <button type="submit" class="btn btn-sm btn-link text-danger p-0">
-        <i class="bi bi-trash"></i>
-    </button>
-</form>
+                        onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?');">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="action_type" value="competence_delete">
+                        <input type="hidden" name="competence_id" value="{{ $competence->id }}">
+                        <button type="submit" class="btn btn-sm btn-link text-danger p-0">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
                   </div>
                 </div>
               @endforeach
+              @elseCompétences recherchées
+
+                <div class="text-center text-muted">
+                  <i class="bi bi-code-square fs-4 mb-2"></i>
+                  <p class="mb-0">Aucune compétence ajoutée</p>
+                  <small>Cliquez sur "Ajouter" pour commencer</small>
+                </div>
+              @endif
             </div>
           </div>
           <!-- Modal Ajouter Compétence -->
@@ -567,7 +576,7 @@
     @csrf
     @method('PUT')
     <input type="hidden" name="action_type" value="competence_delete">
-    <input type="hidden" name="competence_id" value="{{ $competence->id }}">
+    <input type="hidden" name="competence_id" value="${data.competence.id}">
     <button type="submit" class="btn btn-sm btn-link text-danger p-0">
         <i class="bi bi-trash"></i>
     </button>
