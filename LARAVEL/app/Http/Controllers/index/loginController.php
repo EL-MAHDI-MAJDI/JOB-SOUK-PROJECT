@@ -4,6 +4,7 @@ namespace App\Http\Controllers\index;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class loginController extends Controller
 {
@@ -42,10 +43,17 @@ class loginController extends Controller
             return back()->withErrors([
                 'error' => 'Votre adresse e-mail ou votre mot de passe est incorrect. Veuillez le vérifier.',
             ])->onlyInput('email');
-        }
-        
-
     }
+    
+    public function logout(){
+        // supprime les informations de session de l'utilisateur
+        Session::flush();
+        // Déconnexion de l'utilisateur
+        Auth::logout();
+        // Redirection vers la page de connexion
+        return to_route('loginShow');
+    }
+}
 
 
 

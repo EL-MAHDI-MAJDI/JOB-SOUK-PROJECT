@@ -23,6 +23,10 @@
   <div class="main-content">
     <div class="container-fluid">
       <!-- En-tête -->
+      <!-- Afficher message d'erreur -->
+      @include('partials.flashbag-error')
+      <!-- Afficher message "Offre d'emploi modifiée avec succès." -->
+      @include('partials.flashbag')
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Détails de l'offre</h2>
@@ -32,8 +36,6 @@
           <i class="bi bi-arrow-left"></i> Retour à la liste
         </a>
       </div>
-      <!-- Afficher message "Offre d'emploi modifiée avec succès." -->
-      @include('partials.flashbag')
       <!-- Détails de l'offre -->
       <div class="dashboard-card p-4 mb-4">
         <h3 class="fw-bold mb-3">{{ $offre->intitule_offre_emploi }}</h3>

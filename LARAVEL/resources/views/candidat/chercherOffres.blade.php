@@ -222,6 +222,8 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
+      <!-- afficher les messages flash -->
+      @include('partials.flashbag')
       <!-- Hero section -->
       <div class="search-hero">
         <h1 class="fw-bold mb-3">Trouvez le job de vos rêves</h1>

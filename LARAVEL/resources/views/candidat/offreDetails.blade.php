@@ -219,10 +219,42 @@
               <li><strong>Date limite de candidature :</strong> {{ $offre->date_limite_candidature }}</li>
               <li><strong>Publiée :</strong> {{ $offre->created_at }}</li>
             </ul>
-            <form method="POST" action="{{-- route('candidat.postuler', ['candidat' => $candidat->id, 'offre' => $offre->id]) --}}">
-              @csrf
-              <button type="submit" class="btn btn-postuler shadow"><i class="bi bi-send me-2"></i>Postuler à cette offre</button>
-            </form>
+            <!-- Bouton stylisé pour ouvrir le modal -->
+            <button type="button" class="btn btn-postuler shadow" style="box-shadow:0 4px 16px rgba(231,76,60,0.15);" data-bs-toggle="modal" data-bs-target="#confirmApplyModal">
+              <i class="bi bi-send me-2"></i>Postuler à cette offre
+            </button>
+
+            <!-- Modal de confirmation de candidature avec style personnalisé -->
+            <div class="modal fade" id="confirmApplyModal" tabindex="-1" aria-labelledby="confirmApplyModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <form method="POST" action="{{ route('candidat.postuler',["candidat" => $candidat->id, "offre" => $offre->id]) }}">
+                  @csrf
+                  <div class="modal-content" style="border-radius:18px; border:0; box-shadow:0 8px 32px rgba(52,52,52,0.12);">
+                    <div class="modal-header" style="background:linear-gradient(135deg,#e74c3c 0%,#c0392b 100%); color:#fff; border-radius:18px 18px 0 0;">
+                      <h5 class="modal-title" id="confirmApplyModalLabel"><i class="bi bi-send"></i> Confirmer la candidature</h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                      <h5 class="mb-3">Êtes-vous sûr de vouloir postuler à cette offre ?</h5>
+                      <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="toggleMessageField">
+                        <label class="form-check-label" for="toggleMessageField">
+                          Joindre un message personnalisé
+                        </label>
+                      </div>
+                      <div class="mb-3" id="messageFieldContainer" style="display:none;">
+                        <label for="message" class="form-label">Votre message <span class="text-muted">(optionnel)</span></label>
+                        <textarea class="form-control" id="message" name="messageCandidature" rows="3" placeholder="Votre message..."></textarea>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="border-top:0;">
+                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x-lg me-1"></i>Annuler</button>
+                      <button type="submit" class="btn" style="background:#e74c3c; color:#fff;"><i class="bi bi-check2-circle me-1"></i>Confirmer la candidature</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
           <div class="col-lg-4">
             <div class="entreprise-card text-center">
@@ -240,13 +272,24 @@
         </div>
       </div>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
     // Toggle sidebar on mobile
     document.getElementById('menuToggle')?.addEventListener('click', function() {
-      document.querySelector('.side-menu').classList.toggle('show');
+        document.querySelector('.side-menu').classList.toggle('show');
     });
-  </script>
+
+    // Afficher/cacher le champ message selon la case à cocher
+    document.addEventListener('DOMContentLoaded', function() {
+      var checkbox = document.getElementById('toggleMessageField');
+      var messageField = document.getElementById('messageFieldContainer');
+      if(checkbox) {
+        checkbox.addEventListener('change', function() {
+          messageField.style.display = this.checked ? 'block' : 'none';
+        });
+      }
+    });
+    </script>
 </body>
 </html>
