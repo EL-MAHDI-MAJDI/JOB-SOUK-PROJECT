@@ -69,7 +69,7 @@
             <li><a class="dropdown-item" href="{{ route('candidat.profil', $candidat) }}"><i class="bi bi-person me-2"></i>Profil</a></li>
             <li><a class="dropdown-item" href="{{ route('candidat.parametre', $candidat) }}"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ route('login')}}"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+            <li><a class="dropdown-item" href="{{ route('logout')}}"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
           </ul>
         </div>
       </div>
