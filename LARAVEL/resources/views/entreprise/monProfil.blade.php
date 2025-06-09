@@ -240,43 +240,36 @@
           
           <!-- Offres récentes -->
           <div class="dashboard-card p-4 mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
               <h4 class="section-title fw-bold">Nos offres récentes</h4>
-              <a href="#" class="btn btn-sm btn-outline-primary">Voir toutes</a>
+              <a href="{{ route('entreprise.offresEmploi', $entreprise) }}" class="btn btn-sm btn-outline-primary">Voir toutes</a>
             </div>
-            
-            <div class="list-group list-group-flush">
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
+    
+    <div class="list-group list-group-flush">
+        @forelse($offresRecentes as $offre)
+            <a href="{{ route('entreprise.offresEmploi', ['entreprise' => $entreprise, 'offre' => $offre]) }}" class="list-group-item list-group-item-action border-0 px-0 py-3">
                 <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="fw-bold mb-1">Développeur Full Stack</h6>
-                    <p class="small text-muted mb-0"><i class="bi bi-geo-alt"></i> Casablanca • <i class="bi bi-clock"></i> Publiée il y a 2 jours</p>
-                  </div>
-                  <span class="badge bg-success bg-opacity-10 text-success">Active</span>
+                    <div>
+                        <h6 class="fw-bold mb-1">{{ $offre->intitule_offre_emploi }}</h6>
+                        <p class="small text-muted mb-0">
+                            <i class="bi bi-geo-alt"></i> {{ $offre->localisation }} • 
+                            <i class="bi bi-clock"></i> Publiée {{ $offre->created_at->diffForHumans() }}
+                        </p>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success">
+                        Active
+                    </span>
                 </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="fw-bold mb-1">Chef de Projet IT</h6>
-                    <p class="small text-muted mb-0"><i class="bi bi-geo-alt"></i> Rabat • <i class="bi bi-clock"></i> Publiée il y a 1 semaine</p>
-                  </div>
-                  <span class="badge bg-success bg-opacity-10 text-success">Active</span>
-                </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="fw-bold mb-1">Designer UI/UX</h6>
-                    <p class="small text-muted mb-0"><i class="bi bi-geo-alt"></i> Remote • <i class="bi bi-clock"></i> Publiée il y a 3 semaines</p>
-                  </div>
-                  <span class="badge bg-secondary bg-opacity-10 text-secondary">Clôturée</span>
-                </div>
-              </a>
+            </a>
+        @empty
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-file-earmark-text fs-4 mb-2"></i>
+                <p class="mb-0">Aucune offre publiée</p>
+                <small>Commencez à publier des offres d'emploi</small>
             </div>
-          </div>
+        @endforelse
+    </div>
+</div>
         </div>
         
         <div class="col-lg-4">
@@ -309,8 +302,7 @@
                   </div>
                 </div>
               @endforeach
-              @elseCompétences recherchées
-
+              @else
                 <div class="text-center text-muted">
                   <i class="bi bi-code-square fs-4 mb-2"></i>
                   <p class="mb-0">Aucune compétence ajoutée</p>
@@ -375,7 +367,7 @@
           </div>
           
           <!-- Galerie -->
-          <div class="dashboard-card p-4">
+          {{-- <div class="dashboard-card p-4">
             <h4 class="section-title fw-bold mb-3" style="color: var(--primary);">Galerie</h4>
             
             <div class="row g-2">
@@ -402,7 +394,7 @@
             <button class="btn btn-outline-primary w-100 mt-3">
               <i class="bi bi-images"></i> Voir plus de photos
             </button>
-          </div>
+          </div> --}}
         </div>
       </div>
     </div>

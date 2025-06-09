@@ -9,10 +9,13 @@ use App\Models\CompetenceRecherchee;
 
 class monProfilController extends Controller
 {
-    public function show(Entreprise $entreprise){
-        // $profiles=Profile::paginate(10);
-        // $profiles=Profile::all();
-        return view('entreprise.monProfil',compact('entreprise'));
+    public function show(Entreprise $entreprise)
+    {
+        $offresRecentes = $entreprise->offreEmplois()
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
+        return view('entreprise.monProfil', compact('entreprise', 'offresRecentes'));
     }
 public function update(Request $request, Entreprise $entreprise)
     {
