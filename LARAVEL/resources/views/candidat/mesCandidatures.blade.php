@@ -214,14 +214,6 @@
         <div>
           <h2 class="fw-bold mb-1">Mes Candidatures</h2>
         </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary">
-            <i class="bi bi-funnel me-2"></i>Filtrer
-          </button>
-          <button class="btn btn-primary">
-            <i class="bi bi-plus-circle me-2"></i>Nouvelle candidature
-          </button>
-        </div>
       </div>
       
       <!-- Section de filtres -->
@@ -267,22 +259,23 @@
       
       <!-- Conteneur des candidatures -->
       <div class="application-container">
-        <!-- Candidature 1 -->
+        <!-- Candidature  -->
+      @foreach ($candidatures as $candidature)
         <div class="application-card card mb-3">
           <div class="card-body">
             <div class="row align-items-center">
               <div class="col-md-1">
-                <img src="https://via.placeholder.com/60" alt="Logo entreprise" class="application-company-logo">
+                <img src="{{ asset('storage/' . $candidature->offreEmploi->entreprise->logo) }}" alt="Logo entreprise" class="application-company-logo">
               </div>
               <div class="col-md-5">
-                <h5 class="mb-1">Développeur Full Stack Senior</h5>
-                <p class="text-muted mb-2">TechSolutions Inc. - Casablanca</p>
-                <span class="application-status status-interview">Entretien programmé</span>
+                <h5 class="mb-1">{{$candidature->offreEmploi->intitule_offre_emploi}}</h5>
+                <p class="text-muted mb-2">{{$candidature->offreEmploi->entreprise->nomEntreprise}} - {{$candidature->offreEmploi->localisation}}</p>
+                <span class="application-status status-interview">{{$candidature->statut}}</span>
               </div>
               <div class="col-md-3">
                 <div class="d-flex align-items-center mb-2">
                   <i class="bi bi-calendar me-2"></i>
-                  <span>Postulé le: 15/05/2023</span>
+                  <span>Postulé le: {{ $candidature->created_at->format('d/m/Y') }}</span>
                 </div>
                 <div class="d-flex align-items-center">
                   <i class="bi bi-calendar-event me-2"></i>
@@ -302,162 +295,22 @@
             <div class="application-details">
               <div class="row">
                 <div class="col-md-6">
-                  <p><strong>Type:</strong> Temps plein</p>
-                  <p><strong>Salaire:</strong> 25,000 - 30,000 MAD/mois</p>
+                  <p><strong>Type:</strong> {{ $candidature->offreEmploi->type_contrat}}</p>
+                  <p><strong>Salaire:</strong> {{ $candidature->offreEmploi->salaire_offre_emploi ? $candidature->offreEmploi->salaire_offre_emploi.' MAD/mois' : 'Non précisé' }}</p>
                 </div>
                 <div class="col-md-6">
                   <p><strong>Dernière mise à jour:</strong> 20/05/2023</p>
-                  <p><strong>Contact RH:</strong> rh@techsolutions.ma</p>
+                  <p><strong>Contact :</strong> {{$candidature->offreEmploi->entreprise->email}}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-        <!-- Candidature 2 -->
-        <div class="application-card card mb-3">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-md-1">
-                <img src="https://via.placeholder.com/60" alt="Logo entreprise" class="application-company-logo">
-              </div>
-              <div class="col-md-5">
-                <h5 class="mb-1">Développeur Frontend</h5>
-                <p class="text-muted mb-2">WebVision - Rabat</p>
-                <span class="application-status status-reviewed">Examinée</span>
-              </div>
-              <div class="col-md-3">
-                <div class="d-flex align-items-center mb-2">
-                  <i class="bi bi-calendar me-2"></i>
-                  <span>Postulé le: 10/05/2023</span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-clock me-2"></i>
-                  <span>En cours d'évaluation</span>
-                </div>
-              </div>
-              <div class="col-md-3 text-end">
-                <button class="btn btn-outline-primary me-2">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-outline-secondary">
-                  <i class="bi bi-envelope"></i>
-                </button>
-              </div>
-            </div>
-            
-            <div class="application-details">
-              <div class="row">
-                <div class="col-md-6">
-                  <p><strong>Type:</strong> Temps plein</p>
-                  <p><strong>Salaire:</strong> 18,000 - 22,000 MAD/mois</p>
-                </div>
-                <div class="col-md-6">
-                  <p><strong>Dernière mise à jour:</strong> 18/05/2023</p>
-                  <p><strong>Contact RH:</strong> recrutement@webvision.ma</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Candidature 3 -->
-        <div class="application-card card mb-3">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-md-1">
-                <img src="https://via.placeholder.com/60" alt="Logo entreprise" class="application-company-logo">
-              </div>
-              <div class="col-md-5">
-                <h5 class="mb-1">Chef de Projet IT</h5>
-                <p class="text-muted mb-2">DigitalLab - Casablanca</p>
-                <span class="application-status status-rejected">Rejetée</span>
-              </div>
-              <div class="col-md-3">
-                <div class="d-flex align-items-center mb-2">
-                  <i class="bi bi-calendar me-2"></i>
-                  <span>Postulé le: 05/05/2023</span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-x-circle me-2"></i>
-                  <span>Rejetée le: 12/05/2023</span>
-                </div>
-              </div>
-              <div class="col-md-3 text-end">
-                <button class="btn btn-outline-primary me-2">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-outline-secondary">
-                  <i class="bi bi-envelope"></i>
-                </button>
-              </div>
-            </div>
-            
-            <div class="application-details">
-              <div class="row">
-                <div class="col-md-6">
-                  <p><strong>Type:</strong> Temps plein</p>
-                  <p><strong>Salaire:</strong> 30,000 - 35,000 MAD/mois</p>
-                </div>
-                <div class="col-md-6">
-                  <p><strong>Dernière mise à jour:</strong> 12/05/2023</p>
-                  <p><strong>Raison:</strong> Expérience insuffisante</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Candidature 4 -->
-        <div class="application-card card mb-3">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-md-1">
-                <img src="https://via.placeholder.com/60" alt="Logo entreprise" class="application-company-logo">
-              </div>
-              <div class="col-md-5">
-                <h5 class="mb-1">Développeur Backend</h5>
-                <p class="text-muted mb-2">DataTech - Rabat</p>
-                <span class="application-status status-pending">En attente</span>
-              </div>
-              <div class="col-md-3">
-                <div class="d-flex align-items-center mb-2">
-                  <i class="bi bi-calendar me-2"></i>
-                  <span>Postulé le: 20/05/2023</span>
-                </div>
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-hourglass me-2"></i>
-                  <span>En attente de revue</span>
-                </div>
-              </div>
-              <div class="col-md-3 text-end">
-                <button class="btn btn-outline-primary me-2">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-outline-secondary">
-                  <i class="bi bi-envelope"></i>
-                </button>
-              </div>
-            </div>
-            
-            <div class="application-details">
-              <div class="row">
-                <div class="col-md-6">
-                  <p><strong>Type:</strong> Temps plein</p>
-                  <p><strong>Salaire:</strong> 20,000 - 25,000 MAD/mois</p>
-                </div>
-                <div class="col-md-6">
-                  <p><strong>Dernière mise à jour:</strong> 20/05/2023</p>
-                  <p><strong>Contact RH:</strong> careers@datatech.ma</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      @endforeach
       </div>
       
       <!-- Pagination -->
-      <nav aria-label="Page navigation" class="mt-4">
+      <!-- <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center">
           <li class="page-item disabled">
             <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Précédent</a>
@@ -469,7 +322,7 @@
             <a class="page-link" href="#">Suivant</a>
           </li>
         </ul>
-      </nav>
+      </nav> -->
     </div>
   </div>
 

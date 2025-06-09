@@ -24,7 +24,7 @@
   <div class="main-content">
     <div class="container-fluid">
       <!-- Afficher les erreurs de validation -->
-       <x-erreur />
+      @include('partials.flashbag-error')
       {{-- Afficher les messages de succès --}}
       @include('partials.flashbag')
       <!-- En-tête -->
