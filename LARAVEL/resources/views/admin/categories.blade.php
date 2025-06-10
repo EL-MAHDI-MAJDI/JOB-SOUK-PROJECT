@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Catégories - Admin JobSouk</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +44,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="mb-1">Catégories actives</h6>
-                <h3 class="mb-0">24</h3>
+                <h3 class="mb-0">{{ $stats['categories_count'] }}</h3>
               </div>
               <div class="bg-primary bg-opacity-10 p-3 rounded">
                 <i class="bi bi-tags text-primary"></i>
@@ -56,7 +57,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="mb-1">Sous-catégories</h6>
-                <h3 class="mb-0">78</h3>
+                <h3 class="mb-0">{{ $stats['subcategories_count'] }}</h3>
               </div>
               <div class="bg-success bg-opacity-10 p-3 rounded">
                 <i class="bi bi-diagram-2 text-success"></i>
@@ -69,7 +70,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="mb-1">Offres associées</h6>
-                <h3 class="mb-0">1,245</h3>
+                <h3 class="mb-0">{{ $stats['total_offers'] }}</h3>
               </div>
               <div class="bg-warning bg-opacity-10 p-3 rounded">
                 <i class="bi bi-briefcase text-warning"></i>
@@ -82,7 +83,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="mb-1">Compétences</h6>
-                <h3 class="mb-0">156</h3>
+                <h3 class="mb-0">0</h3>
               </div>
               <div class="bg-info bg-opacity-10 p-3 rounded">
                 <i class="bi bi-lightbulb text-info"></i>
@@ -92,333 +93,88 @@
         </div>
       </div>
 
-      <!-- Categories View Toggle -->
-      <div class="dashboard-card p-3 mb-4">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="mb-0">Mode d'affichage</h6>
-          </div>
-          <div class="btn-group" role="group">
-            <input type="radio" class="btn-check" name="viewMode" id="gridView" autocomplete="off" checked>
-            <label class="btn btn-outline-primary" for="gridView">
-              <i class="bi bi-grid"></i> Grille
-            </label>
-            <input type="radio" class="btn-check" name="viewMode" id="listView" autocomplete="off">
-            <label class="btn btn-outline-primary" for="listView">
-              <i class="bi bi-list-ul"></i> Liste
-            </label>
-          </div>
-        </div>
-      </div>
-
       <!-- Categories Grid View -->
-      <div id="categoriesGridView">
-        <div class="row g-4">
-          <!-- Category 1 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-it me-3">
-                  <i class="bi bi-code-slash"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Informatique</h5>
-                  <span class="text-muted small">12 sous-catégories</span>
-                </div>
+      <div class="row g-4" style="overflow: visible;">
+        @foreach($categories as $category)
+        <div class="col-xl-3 col-lg-4 col-md-6" style="overflow: visible;">
+          <div class="dashboard-card category-card p-4" style="overflow: visible !important;">
+            <div class="d-flex align-items-center mb-3">
+              <div class="category-icon bg-{{ $category->couleur }} me-3 p-2 rounded">
+                <i class="bi bi-{{ $category->icone }}"></i>
               </div>
-              <p class="text-muted small">Développement, réseaux, cybersécurité, data science...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">245 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
+              <div>
+                <h5 class="mb-0">{{ $category->nom }}</h5>
+                <span class="text-muted small">{{ $category->enfants->count() }} sous-catégories</span>
               </div>
             </div>
-          </div>
-
-          <!-- Category 2 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-marketing me-3">
-                  <i class="bi bi-megaphone"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Marketing</h5>
-                  <span class="text-muted small">8 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">Digital, communication, branding, études marché...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">180 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 3 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-finance me-3">
-                  <i class="bi bi-cash-coin"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Finance</h5>
-                  <span class="text-muted small">6 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">Comptabilité, audit, banque, gestion financière...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">120 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 4 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-hr me-3">
-                  <i class="bi bi-people"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">RH</h5>
-                  <span class="text-muted small">5 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">Recrutement, formation, paie, développement personnel...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">95 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 5 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-design me-3">
-                  <i class="bi bi-palette"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Design</h5>
-                  <span class="text-muted small">7 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">UI/UX, graphisme, illustration, motion design...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">110 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 6 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-education me-3">
-                  <i class="bi bi-book"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Éducation</h5>
-                  <span class="text-muted small">4 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">Enseignement, formation, e-learning, recherche...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">75 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 7 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-engineering me-3">
-                  <i class="bi bi-gear"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Ingénierie</h5>
-                  <span class="text-muted small">9 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">Industrie, construction, mécanique, électrique...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">150 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 8 -->
-          <div class="col-xl-3 col-lg-4 col-md-6">
-            <div class="dashboard-card category-card p-4 h-100">
-              <div class="d-flex align-items-center mb-3">
-                <div class="category-icon bg-secondary me-3">
-                  <i class="bi bi-heart-pulse"></i>
-                </div>
-                <div>
-                  <h5 class="mb-0">Santé</h5>
-                  <span class="text-muted small">6 sous-catégories</span>
-                </div>
-              </div>
-              <p class="text-muted small">Médecine, paramédical, pharmacie, recherche médicale...</p>
-              <div class="d-flex justify-content-between align-items-center mt-3">
-                <span class="badge bg-primary rounded-pill">90 offres</span>
-                <div class="dropdown">
-                  <button class="btn btn-sm" data-bs-toggle="dropdown">
-                    <i class="bi bi-three-dots-vertical"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                  </ul>
-                </div>
+            <p class="text-muted small mb-3">{{ $category->description }}</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <span class="badge bg-{{ $category->couleur }} rounded-pill">0 offres</span>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                  <li>
+                    <a class="dropdown-item py-2 edit-category" href="#" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#editCategoryModal" 
+                       data-category-id="{{ $category->id }}"
+                       data-category-nom="{{ $category->nom }}"
+                       data-category-description="{{ $category->description }}"
+                       data-category-icone="{{ $category->icone }}"
+                       data-category-couleur="{{ $category->couleur }}"
+                       data-category-active="{{ $category->is_active ? 'true' : 'false' }}">
+                      <i class="bi bi-pencil me-2 text-primary"></i>Modifier
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2 manage-subcategories" href="#" data-bs-toggle="modal" data-bs-target="#manageSubcategoriesModal" data-category-id="{{ $category->id }}" data-category-name="{{ $category->nom }}">
+                      <i class="bi bi-diagram-2 me-2 text-success"></i>Gérer sous-catégories
+                    </a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item py-2 text-danger delete-category" href="#" data-category-id="{{ $category->id }}">
+                      <i class="bi bi-trash me-2"></i>Supprimer
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Categories List View (Hidden by default) -->
-      <div id="categoriesListView" class="d-none">
-        <div class="dashboard-card p-4">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle">
-              <thead>
-                <tr>
-                  <th width="50px"></th>
-                  <th>Catégorie</th>
-                  <th>Sous-catégories</th>
-                  <th>Offres</th>
-                  <th>Compétences</th>
-                  <th class="text-end">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Category 1 -->
-                <tr>
-                  <td>
-                    <div class="category-icon bg-it p-2 rounded">
-                      <i class="bi bi-code-slash"></i>
-                    </div>
-                  </td>
-                  <td>
-                    <h6 class="mb-0">Informatique</h6>
-                    <p class="small text-muted mb-0">Développement, réseaux, cybersécurité...</p>
-                  </td>
-                  <td>12</td>
-                  <td>245</td>
-                  <td>32</td>
-                  <td class="text-end">
-                    <div class="dropdown">
-                      <button class="btn btn-sm" data-bs-toggle="dropdown">
-                        <i class="bi bi-three-dots-vertical"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editCategoryModal"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-diagram-2 me-2"></i>Gérer sous-catégories</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Supprimer</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                <!-- Other categories in list view would go here -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+        @endforeach
       </div>
 
       <!-- Pagination -->
       <nav class="mt-4">
         <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Précédent</a>
-          </li>
-          <li class="page-item active"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Suivant</a>
-          </li>
+          @if($categories->currentPage() > 1)
+            <li class="page-item">
+              <a class="page-link" href="{{ $categories->previousPageUrl() }}">Précédent</a>
+            </li>
+          @else
+            <li class="page-item disabled">
+              <span class="page-link">Précédent</span>
+            </li>
+          @endif
+
+          @for($i = 1; $i <= $categories->lastPage(); $i++)
+            <li class="page-item {{ $i == $categories->currentPage() ? 'active' : '' }}">
+              <a class="page-link" href="{{ $categories->url($i) }}">{{ $i }}</a>
+            </li>
+          @endfor
+
+          @if($categories->currentPage() < $categories->lastPage())
+            <li class="page-item">
+              <a class="page-link" href="{{ $categories->nextPageUrl() }}">Suivant</a>
+            </li>
+          @else
+            <li class="page-item disabled">
+              <span class="page-link">Suivant</span>
+            </li>
+          @endif
         </ul>
       </nav>
     </div>
@@ -433,50 +189,64 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="categoryForm">
+          <form id="categoryForm" action="{{ route('admin.categories.store') }}" method="POST">
+            @csrf
             <div class="mb-3">
-              <label class="form-label">Nom de la catégorie</label>
-              <input type="text" class="form-control" required>
+              <label class="form-label">Nom de la catégorie <span class="text-danger">*</span></label>
+              <input type="text" name="nom" class="form-control @error('nom') is-invalid @enderror" value="{{ old('nom') }}" required>
+              @error('nom')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <textarea class="form-control" rows="3"></textarea>
+              <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description') }}</textarea>
+              @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
             <div class="mb-3">
-              <label class="form-label">Icône</label>
-              <select class="form-select">
-                <option value="code-slash"><i class="bi bi-code-slash"></i> Développement</option>
-                <option value="megaphone"><i class="bi bi-megaphone"></i> Marketing</option>
-                <option value="cash-coin"><i class="bi bi-cash-coin"></i> Finance</option>
-                <option value="people"><i class="bi bi-people"></i> RH</option>
-                <option value="palette"><i class="bi bi-palette"></i> Design</option>
+              <label class="form-label">Icône <span class="text-danger">*</span></label>
+              <select name="icone" class="form-select @error('icone') is-invalid @enderror" required>
+                <option value="">Sélectionnez une icône</option>
+                <option value="code-slash" {{ old('icone') == 'code-slash' ? 'selected' : '' }}>Développement</option>
+                <option value="megaphone" {{ old('icone') == 'megaphone' ? 'selected' : '' }}>Marketing</option>
+                <option value="cash-coin" {{ old('icone') == 'cash-coin' ? 'selected' : '' }}>Finance</option>
+                <option value="people" {{ old('icone') == 'people' ? 'selected' : '' }}>RH</option>
+                <option value="palette" {{ old('icone') == 'palette' ? 'selected' : '' }}>Design</option>
               </select>
+              @error('icone')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
             <div class="mb-3">
-              <label class="form-label">Couleur</label>
-              <div class="d-flex flex-wrap gap-2">
-                <input type="radio" class="btn-check" name="color" id="colorIt" value="it" checked>
-                <label class="btn btn-sm" for="colorIt" style="background-color: #3498db; color: white;">Informatique</label>
-                
-                <input type="radio" class="btn-check" name="color" id="colorMarketing" value="marketing">
-                <label class="btn btn-sm" for="colorMarketing" style="background-color: #2ECC71; color: white;">Marketing</label>
-                
-                <input type="radio" class="btn-check" name="color" id="colorFinance" value="finance">
-                <label class="btn btn-sm" for="colorFinance" style="background-color: #9B59B6; color: white;">Finance</label>
-                
-                <input type="radio" class="btn-check" name="color" id="colorHr" value="hr">
-                <label class="btn btn-sm" for="colorHr" style="background-color: #E74C3C; color: white;">RH</label>
+              <label class="form-label">Couleur <span class="text-danger">*</span></label>
+              <select name="couleur" class="form-select @error('couleur') is-invalid @enderror" required>
+                <option value="">Sélectionnez une couleur</option>
+                <option value="primary" {{ old('couleur') == 'primary' ? 'selected' : '' }}>Bleu</option>
+                <option value="success" {{ old('couleur') == 'success' ? 'selected' : '' }}>Vert</option>
+                <option value="warning" {{ old('couleur') == 'warning' ? 'selected' : '' }}>Jaune</option>
+                <option value="danger" {{ old('couleur') == 'danger' ? 'selected' : '' }}>Rouge</option>
+                <option value="info" {{ old('couleur') == 'info' ? 'selected' : '' }}>Cyan</option>
+              </select>
+              @error('couleur')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" name="is_active" class="form-check-input @error('is_active') is-invalid @enderror" id="isActive" {{ old('is_active', true) ? 'checked' : '' }}>
+                <label class="form-check-label" for="isActive">Catégorie active</label>
+                @error('is_active')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="isActive">
-              <label class="form-check-label" for="isActive">Catégorie active</label>
+            <div class="text-end">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Ajouter</button>
             </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-primary" form="categoryForm">Enregistrer</button>
         </div>
       </div>
     </div>
@@ -491,50 +261,165 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="editCategoryForm">
+          <form id="editCategoryForm" method="POST">
+            @csrf
+            @method('PUT')
             <div class="mb-3">
               <label class="form-label">Nom de la catégorie</label>
-              <input type="text" class="form-control" value="Informatique" required>
+              <input type="text" name="nom" class="form-control" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Description</label>
-              <textarea class="form-control" rows="3">Développement, réseaux, cybersécurité, data science...</textarea>
+              <textarea name="description" class="form-control" rows="3"></textarea>
             </div>
             <div class="mb-3">
               <label class="form-label">Icône</label>
-              <select class="form-select">
-                <option value="code-slash" selected><i class="bi bi-code-slash"></i> Développement</option>
-                <option value="megaphone"><i class="bi bi-megaphone"></i> Marketing</option>
-                <option value="cash-coin"><i class="bi bi-cash-coin"></i> Finance</option>
-                <option value="people"><i class="bi bi-people"></i> RH</option>
-                <option value="palette"><i class="bi bi-palette"></i> Design</option>
+              <select name="icone" class="form-select">
+                <option value="code-slash">Développement</option>
+                <option value="megaphone">Marketing</option>
+                <option value="cash-coin">Finance</option>
+                <option value="people">RH</option>
+                <option value="palette">Design</option>
               </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Couleur</label>
-              <div class="d-flex flex-wrap gap-2">
-                <input type="radio" class="btn-check" name="editColor" id="editColorIt" value="it" checked>
-                <label class="btn btn-sm" for="editColorIt" style="background-color: #3498db; color: white;">Informatique</label>
-                
-                <input type="radio" class="btn-check" name="editColor" id="editColorMarketing" value="marketing">
-                <label class="btn btn-sm" for="editColorMarketing" style="background-color: #2ECC71; color: white;">Marketing</label>
-                
-                <input type="radio" class="btn-check" name="editColor" id="editColorFinance" value="finance">
-                <label class="btn btn-sm" for="editColorFinance" style="background-color: #9B59B6; color: white;">Finance</label>
-                
-                <input type="radio" class="btn-check" name="editColor" id="editColorHr" value="hr">
-                <label class="btn btn-sm" for="editColorHr" style="background-color: #E74C3C; color: white;">RH</label>
+              <select name="couleur" class="form-select">
+                <option value="primary">Bleu</option>
+                <option value="success">Vert</option>
+                <option value="warning">Jaune</option>
+                <option value="danger">Rouge</option>
+                <option value="info">Cyan</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" name="is_active" class="form-check-input" id="editIsActive">
+                <label class="form-check-label" for="editIsActive">Catégorie active</label>
               </div>
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="editIsActive" checked>
-              <label class="form-check-label" for="editIsActive">Catégorie active</label>
+            <div class="text-end">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
           </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-primary" form="editCategoryForm">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Subcategories Modal -->
+  <div class="modal fade" id="manageSubcategoriesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Gérer les sous-catégories</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="subcategoryForm" method="POST">
+            @csrf
+            <div class="mb-3">
+              <label class="form-label">Nom de la sous-catégorie</label>
+              <input type="text" name="nom" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Icône</label>
+              <select name="icone" class="form-select">
+                <option value="code-slash">Développement</option>
+                <option value="megaphone">Marketing</option>
+                <option value="cash-coin">Finance</option>
+                <option value="people">RH</option>
+                <option value="palette">Design</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Couleur</label>
+              <select name="couleur" class="form-select">
+                <option value="primary">Bleu</option>
+                <option value="success">Vert</option>
+                <option value="warning">Jaune</option>
+                <option value="danger">Rouge</option>
+                <option value="info">Cyan</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" name="is_active" class="form-check-input" id="subcategoryIsActive" checked>
+                <label class="form-check-label" for="subcategoryIsActive">Sous-catégorie active</label>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Ajouter</button>
+            </div>
+          </form>
+
+          <hr>
+
+          <h6 class="mb-3">Sous-catégories existantes</h6>
+          <ul id="subcategoriesList" class="list-group">
+            <!-- Les sous-catégories seront ajoutées ici dynamiquement -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Subcategory Modal -->
+  <div class="modal fade" id="editSubcategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier la sous-catégorie</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editSubcategoryForm" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="mb-3">
+              <label class="form-label">Nom de la sous-catégorie</label>
+              <input type="text" name="nom" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Icône</label>
+              <select name="icone" class="form-select">
+                <option value="code-slash">Développement</option>
+                <option value="megaphone">Marketing</option>
+                <option value="cash-coin">Finance</option>
+                <option value="people">RH</option>
+                <option value="palette">Design</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Couleur</label>
+              <select name="couleur" class="form-select">
+                <option value="primary">Bleu</option>
+                <option value="success">Vert</option>
+                <option value="warning">Jaune</option>
+                <option value="danger">Rouge</option>
+                <option value="info">Cyan</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <div class="form-check">
+                <input type="checkbox" name="is_active" class="form-check-input" id="editSubcategoryIsActive">
+                <label class="form-check-label" for="editSubcategoryIsActive">Sous-catégorie active</label>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -542,6 +427,419 @@
 
   <!-- Bootstrap & Custom JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  @vite(['resources/js/adminJs/categories.js'])
+  <script>
+    // Gestion des catégories
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gestion de l'ajout de catégorie
+      const categoryForm = document.getElementById('categoryForm');
+      if (categoryForm) {
+        categoryForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          try {
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+              if (key === 'is_active') {
+                data[key] = value === 'on';
+              } else {
+                data[key] = value;
+              }
+            });
+
+            const response = await fetch(this.action, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              if (result.errors) {
+                // Afficher les erreurs de validation
+                const errorMessages = Object.values(result.errors).flat();
+                alert(errorMessages.join('\n'));
+              } else {
+                throw new Error(result.message || 'Erreur lors de l\'ajout de la catégorie');
+              }
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+          }
+        });
+      }
+
+      // Gestion de la modification de catégorie
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('.edit-category')) {
+          const link = e.target.closest('.edit-category');
+          const categoryId = link.dataset.categoryId;
+          const form = document.getElementById('editCategoryForm');
+          
+          // Remplir le formulaire avec les données
+          form.action = `/admin/categories/update/${categoryId}`;
+          form.querySelector('[name="nom"]').value = link.dataset.categoryNom;
+          form.querySelector('[name="description"]').value = link.dataset.categoryDescription;
+          form.querySelector('[name="icone"]').value = link.dataset.categoryIcone;
+          form.querySelector('[name="couleur"]').value = link.dataset.categoryCouleur;
+          form.querySelector('[name="is_active"]').checked = link.dataset.categoryActive === 'true';
+        }
+      });
+
+      // Gestion de la soumission du formulaire de modification
+      const editCategoryForm = document.getElementById('editCategoryForm');
+      if (editCategoryForm) {
+        editCategoryForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          try {
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+              if (key === 'is_active') {
+                data[key] = value === 'on';
+              } else {
+                data[key] = value;
+              }
+            });
+
+            const response = await fetch(this.action, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              throw new Error(result.message || 'Erreur lors de la mise à jour de la catégorie');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+          }
+        });
+      }
+
+      // Gestion de la suppression de catégorie
+      const deleteButtons = document.querySelectorAll('.delete-category');
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) {
+            const categoryId = this.dataset.categoryId;
+            fetch(`/admin/categories/delete/${categoryId}`, {
+              method: 'DELETE',
+              headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+              }
+            })
+            .then(response => response.json())
+            .then(data => {
+              location.reload();
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('Erreur lors de la suppression de la catégorie');
+            });
+          }
+        });
+      });
+
+      // Gestion de l'ajout de sous-catégorie
+      const subcategoryForm = document.getElementById('subcategoryForm');
+      if (subcategoryForm) {
+        subcategoryForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          try {
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+              if (key === 'is_active') {
+                data[key] = value === 'on';
+              } else {
+                data[key] = value;
+              }
+            });
+
+            const response = await fetch(this.action, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              // Ajouter la nouvelle sous-catégorie à la liste
+              const subcategoriesList = document.getElementById('subcategoriesList');
+              const li = document.createElement('li');
+              li.className = 'list-group-item d-flex justify-content-between align-items-center';
+              li.innerHTML = `
+                <div>
+                  <i class="bi bi-${result.data.icone} me-2"></i>
+                  ${result.data.nom}
+                  ${result.data.description ? `<br><small class="text-muted">${result.data.description}</small>` : ''}
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-outline-primary edit-subcategory" 
+                          data-subcategory-id="${result.data.id}">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger delete-subcategory" 
+                          data-subcategory-id="${result.data.id}">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              `;
+              subcategoriesList.appendChild(li);
+
+              // Réinitialiser le formulaire
+              this.reset();
+              
+              // Afficher un message de succès
+              alert('Sous-catégorie ajoutée avec succès');
+            } else {
+              throw new Error(result.message || 'Erreur lors de l\'ajout de la sous-catégorie');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+          }
+        });
+      }
+
+      // Gestion de la suppression des sous-catégories
+      document.addEventListener('click', async function(e) {
+        if (e.target.closest('.delete-subcategory')) {
+          const button = e.target.closest('.delete-subcategory');
+          const subcategoryId = button.dataset.subcategoryId;
+          
+          if (confirm('Êtes-vous sûr de vouloir supprimer cette sous-catégorie ?')) {
+            try {
+              const response = await fetch(`/admin/categories/delete/${subcategoryId}`, {
+                method: 'DELETE',
+                headers: {
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                  'Accept': 'application/json'
+                }
+              });
+
+              const result = await response.json();
+
+              if (result.success) {
+                // Supprimer l'élément de la liste
+                button.closest('li').remove();
+                alert('Sous-catégorie supprimée avec succès');
+              } else {
+                throw new Error(result.message || 'Erreur lors de la suppression de la sous-catégorie');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              alert(error.message);
+            }
+          }
+        }
+      });
+
+      // Gestion des sous-catégories
+      const manageSubcategoriesButtons = document.querySelectorAll('.manage-subcategories');
+      manageSubcategoriesButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+          const categoryId = this.dataset.categoryId;
+          const categoryName = this.dataset.categoryName;
+          
+          // Mettre à jour le titre du modal
+          document.querySelector('#manageSubcategoriesModal .modal-title').textContent = 
+            `Gérer les sous-catégories de ${categoryName}`;
+          
+          // Mettre à jour l'action du formulaire
+          const form = document.getElementById('subcategoryForm');
+          form.action = `/admin/categories/subcategories/${categoryId}`;
+          
+          try {
+            // Charger les sous-catégories
+            const response = await fetch(`/admin/categories/subcategories/${categoryId}`, {
+              headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+              }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              const subcategoriesList = document.getElementById('subcategoriesList');
+              subcategoriesList.innerHTML = '';
+              
+              if (result.data && result.data.length > 0) {
+                result.data.forEach(subcategory => {
+                  const li = document.createElement('li');
+                  li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                  li.innerHTML = `
+                    <div>
+                      <i class="bi bi-${subcategory.icone} me-2"></i>
+                      ${subcategory.nom}
+                      ${subcategory.description ? `<br><small class="text-muted">${subcategory.description}</small>` : ''}
+                    </div>
+                    <div>
+                      <button class="btn btn-sm btn-outline-primary edit-subcategory" 
+                              data-subcategory-id="${subcategory.id}">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-danger delete-subcategory" 
+                              data-subcategory-id="${subcategory.id}">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  `;
+                  subcategoriesList.appendChild(li);
+                });
+              } else {
+                subcategoriesList.innerHTML = `
+                  <li class="list-group-item text-center">
+                    <div class="text-muted mb-2">Aucune sous-catégorie n'existe pour cette catégorie</div>
+                    <small class="text-muted">Utilisez le formulaire ci-dessus pour ajouter une sous-catégorie</small>
+                  </li>
+                `;
+              }
+            } else {
+              throw new Error(result.message || 'Erreur lors du chargement des sous-catégories');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            const subcategoriesList = document.getElementById('subcategoriesList');
+            subcategoriesList.innerHTML = `
+              <li class="list-group-item text-center text-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                ${error.message}
+              </li>
+            `;
+          }
+        });
+      });
+
+      // Gestion de la modification des sous-catégories
+      document.addEventListener('click', async function(e) {
+        if (e.target.closest('.edit-subcategory')) {
+          const button = e.target.closest('.edit-subcategory');
+          const subcategoryId = button.dataset.subcategoryId;
+          const form = document.getElementById('editSubcategoryForm');
+          
+          try {
+            // Récupérer les données de la sous-catégorie
+            const response = await fetch(`/admin/categories/${subcategoryId}`, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+              // Remplir le formulaire avec les données
+              form.querySelector('[name="nom"]').value = result.data.nom || '';
+              form.querySelector('[name="description"]').value = result.data.description || '';
+              form.querySelector('[name="icone"]').value = result.data.icone || 'code-slash';
+              form.querySelector('[name="couleur"]').value = result.data.couleur || 'primary';
+              form.querySelector('[name="is_active"]').checked = result.data.is_active === true;
+
+              // Mettre à jour l'action du formulaire
+              form.action = `/admin/categories/update/${subcategoryId}`;
+
+              // Afficher le modal
+              const modal = new bootstrap.Modal(document.getElementById('editSubcategoryModal'));
+              modal.show();
+            } else {
+              throw new Error(result.message || 'Erreur lors du chargement des données de la sous-catégorie');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+          }
+        }
+      });
+
+      // Gestion de la soumission du formulaire de modification de sous-catégorie
+      const editSubcategoryForm = document.getElementById('editSubcategoryForm');
+      if (editSubcategoryForm) {
+        editSubcategoryForm.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          try {
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+              if (key === 'is_active') {
+                data[key] = value === 'on';
+              } else {
+                data[key] = value;
+              }
+            });
+
+            const response = await fetch(this.action, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              // Fermer le modal
+              const modal = bootstrap.Modal.getInstance(document.getElementById('editSubcategoryModal'));
+              modal.hide();
+
+              // Mettre à jour l'élément dans la liste
+              const listItem = document.querySelector(`[data-subcategory-id="${result.data.id}"]`).closest('li');
+              listItem.querySelector('i').className = `bi bi-${result.data.icone} me-2`;
+              listItem.querySelector('div:first-child').innerHTML = `
+                <i class="bi bi-${result.data.icone} me-2"></i>
+                ${result.data.nom}
+                ${result.data.description ? `<br><small class="text-muted">${result.data.description}</small>` : ''}
+              `;
+
+              alert('Sous-catégorie modifiée avec succès');
+            } else {
+              throw new Error(result.message || 'Erreur lors de la modification de la sous-catégorie');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>

@@ -17,7 +17,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('annonces', [annoncesController::class,'index'])->name('annonces');
 
-    Route::get('categories', [categoriesController::class,'index'])->name('categories');
+    // Routes des catégories - tout passe par la même vue
+    Route::get('categories', [categoriesController::class,'show'])->name('categories');
+    Route::get('categories/{categorie}', [categoriesController::class,'getCategory'])->name('categories.get');
+    Route::post('categories/store', [categoriesController::class,'store'])->name('categories.store');
+    Route::put('categories/update/{categorie}', [categoriesController::class,'update'])->name('categories.update');
+    Route::delete('categories/delete/{categorie}', [categoriesController::class,'destroy'])->name('categories.delete');
+    Route::get('categories/subcategories/{categorie}', [categoriesController::class,'getSousCategories'])->name('categories.sous-categories');
+    Route::post('categories/subcategories/{categorie}', [categoriesController::class,'addSousCategorie'])->name('categories.sous-categories.add');
 
     Route::get('gestionComptes', [gestionComptesController::class,'index'])->name('gestionComptes');
 
@@ -26,6 +33,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('signalements', [signalementsController::class,'index'])->name('signalements');
 
     Route::get('administrateurs', [administrateursController::class,'index'])->name('administrateurs');
-
 });
 

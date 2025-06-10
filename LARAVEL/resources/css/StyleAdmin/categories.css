@@ -44,6 +44,7 @@ body {
 .main-content {
   padding: 20px;
   margin-left: auto;
+  overflow: visible !important;
 }
 
 /* Top Navbar */
@@ -79,6 +80,7 @@ body {
   border: none;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
+  overflow: visible !important;
 }
 
 .dashboard-card:hover {
@@ -89,9 +91,9 @@ body {
 /* Category Cards */
 .category-card {
   border-radius: 10px;
-  overflow: hidden;
   transition: all 0.3s ease;
   border: 1px solid #eee;
+  position: relative;
 }
 .category-card:hover {
   transform: translateY(-5px);
