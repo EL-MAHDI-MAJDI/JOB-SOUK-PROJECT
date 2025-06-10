@@ -44,7 +44,9 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('evaluerCandidat', [evaluerCandidatController::class,'show'])
     ->where('entreprise','\d+')
     ->name('evaluerCandidat');
-
+    Route::post('evaluerCandidat/{offre}/{candidat}', [evaluerCandidatController::class,'update'])
+    ->where(['entreprise' => '\d+', 'offre' => '\d+', 'candidat' => '\d+'])
+    ->name('evaluerCandidat.update');
     
     Route::get('notification', [notificationController::class,'show'])
     ->where('entreprise','\d+')

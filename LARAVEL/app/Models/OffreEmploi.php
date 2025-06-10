@@ -34,4 +34,21 @@ class OffreEmploi extends Model
     {
         return $this->belongsTo(Entreprise::class);
     }
+
+    public function candidatures()
+    {
+        return $this->hasMany(Candidature::class, 'offre_emploi_id');
+    }
+
+    // Pour accéder directement aux candidats via la table pivot
+    public function candidats()
+    {
+        return $this->belongsToMany(
+            Candidat::class,
+            'candidatures',
+            'offre_emploi_id',
+            'candidat_id'
+        )->withPivot('messageCandidature', 'scoreEvaluation', 'commentairesEvaluation', 'statut')
+        ->withTimestamps();
+    }
 }

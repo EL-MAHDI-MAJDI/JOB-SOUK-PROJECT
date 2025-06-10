@@ -87,7 +87,7 @@ class Candidat extends Authenticatable
         return $this->belongsToMany(OffreEmploi::class, 'offre_sauvegardes', 'candidat_id', 'offre_emploi_id');
     }
 
-    public function offresCandidature()
+    public function candidature()
     {
         return $this->belongsToMany(
             OffreEmploi::class,           // Le modèle lié
