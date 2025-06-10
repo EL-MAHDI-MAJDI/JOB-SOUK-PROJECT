@@ -219,7 +219,7 @@
             <li><i class="bi bi-check-circle-fill text-success"></i> Suivez vos recrutements facilement</li>
           </ul>
           <div class="mt-4">
-            <a href="{{ route('loginShow') }}" class="btn btn-primary">Créer un compte entreprise</a>
+            <a href="{{ route('inscriptionEntreprise') }}" class="btn btn-primary">Créer un compte entreprise</a>
             <a href="{{ route('accueil') }}" class="btn btn-outline-primary ms-2">En savoir plus</a>
           </div>
         </div>
