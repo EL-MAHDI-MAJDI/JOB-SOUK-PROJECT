@@ -71,7 +71,7 @@
   </section>
 
   <!-- Section entreprises mises en avant -->
-  <section class="py-5">
+  {{-- <section class="py-5">
     <div class="container">
       <h2 class="mb-4">Entreprises en vedette</h2>
       <div class="row g-4">
@@ -154,154 +154,54 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
 
   <!-- Section liste des entreprises -->
-  <section class="py-5 bg-light">
+  <section class="py-5">
     <div class="container">
-      <h2 class="mb-4">Toutes les entreprises</h2>
+      <h2 class="section-title">Entreprises partenaires</h2>
       <div class="row g-4">
-        <!-- Entreprise 1 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--primary);">CM</span>
+        @forelse($entreprises as $entreprise)
+        <div class="col-md-4">
+          <div class="company-card">
+            <div class="company-logo">
+              <img src="{{ asset('storage/' . $entreprise->logo) }}" alt="{{ $entreprise->nomEntreprise }}" class="img-fluid">
             </div>
-            <div class="p-3">
-              <h5>ConseilMedia</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Casablanca</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Marketing & Communication</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">5 offres</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Entreprise 2 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--secondary);">PH</span>
-            </div>
-            <div class="p-3">
-              <h5>PharmaHealth</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Rabat</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Santé & Pharmacie</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">3 offres</a>
+            <div class="company-info">
+              <h5>{{ $entreprise->nomEntreprise }}</h5>
+              <p class="text-muted mb-2">{{ $entreprise->SecteurActivite }}</p>
+              <div class="company-stats">
+                <span class="stat-item">
+                  <i class="bi bi-geo-alt"></i>{{ $entreprise->ville }}
+                </span>
+                <span class="stat-item">
+                  <i class="bi bi-people"></i>{{ $entreprise->tailleEntreprise }}
+                </span>
+                <span class="stat-item">
+                  <i class="bi bi-briefcase"></i>{{ $entreprise->offre_emplois_count }} offres
+                </span>
+              </div>
+              <a href="{{ route('loginShow') }}" class="btn btn-outline-primary">
+                Voir le profil <i class="bi bi-arrow-right ms-2"></i>
+              </a>
             </div>
           </div>
         </div>
-
-        <!-- Entreprise 3 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--accent);">BT</span>
-            </div>
-            <div class="p-3">
-              <h5>BuildTech</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Marrakech</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> BTP & Construction</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">8 offres</a>
-            </div>
+        @empty
+        <div class="col-12 text-center">
+          <div class="text-muted py-5">
+            <i class="bi bi-building fs-1 mb-2"></i><br>
+            <span>Aucune entreprise disponible pour le moment.</span>
           </div>
         </div>
-
-        <!-- Entreprise 4 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--primary);">DI</span>
-            </div>
-            <div class="p-3">
-              <h5>DistriMaroc</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Agadir</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Distribution & Commerce</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">4 offres</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Entreprise 5 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--secondary);">ED</span>
-            </div>
-            <div class="p-3">
-              <h5>EduFuture</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Fès</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Éducation & Formation</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">6 offres</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Entreprise 6 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--accent);">LT</span>
-            </div>
-            <div class="p-3">
-              <h5>LogiTransport</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Tanger</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Transport & Logistique</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">7 offres</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Entreprise 7 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--primary);">FS</span>
-            </div>
-            <div class="p-3">
-              <h5>FinService</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Casablanca</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Banque & Finance</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">9 offres</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Entreprise 8 -->
-        <div class="col-md-3">
-          <div class="company-card-small">
-            <div class="company-logo-small bg-white d-flex align-items-center justify-content-center">
-              <span class="fw-bold" style="color: var(--secondary);">IT</span>
-            </div>
-            <div class="p-3">
-              <h5>InnoTech</h5>
-              <p class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> Rabat</p>
-              <p class="small text-muted mb-3"><i class="bi bi-briefcase"></i> Informatique & Télécoms</p>
-              <a href="#" class="btn btn-outline-primary btn-sm w-100">11 offres</a>
-            </div>
-          </div>
-        </div>
+        @endforelse
       </div>
       
-      <!-- Pagination -->
-      <div class="d-flex justify-content-center mt-5">
-        <nav aria-label="Page navigation">
-          <ul class="pagination">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-              </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+      @if($entreprises->hasPages())
+      <div class="d-flex justify-content-center mt-4">
+        {{ $entreprises->links('pagination::bootstrap-4') }}
       </div>
+      @endif
     </div>
   </section>
 
@@ -319,8 +219,8 @@
             <li><i class="bi bi-check-circle-fill text-success"></i> Suivez vos recrutements facilement</li>
           </ul>
           <div class="mt-4">
-            <a href="#" class="btn btn-primary">Créer un compte entreprise</a>
-            <a href="#" class="btn btn-outline-primary ms-2">En savoir plus</a>
+            <a href="{{ route('loginShow') }}" class="btn btn-primary">Créer un compte entreprise</a>
+            <a href="{{ route('accueil') }}" class="btn btn-outline-primary ms-2">En savoir plus</a>
           </div>
         </div>
         <div class="col-md-6">
@@ -379,11 +279,11 @@
         <div class="col-md-4 mb-4">
           <h5>Liens rapides</h5>
           <ul class="list-unstyled">
-            <li><a href="accueil.html" class="text-white text-decoration-none">Accueil</a></li>
-            <li><a href="offre.html" class="text-white text-decoration-none">Offres d'Emploi</a></li>
-            <li><a href="Entreprises.html" class="text-white text-decoration-none">Entreprises</a></li>
-            <li><a href="login.html" class="text-white text-decoration-none">Se connecter</a></li>
-            <li><a href="choix-inscription.html" class="text-white text-decoration-none">Créer un compte</a></li>
+            <li><a href="{{ route('accueil') }}" class="text-white text-decoration-none">Accueil</a></li>
+            <li><a href="{{ route('offre') }}" class="text-white text-decoration-none">Offres d'Emploi</a></li>
+            <li><a href="{{ route('entreprises') }}" class="text-white text-decoration-none">Entreprises</a></li>
+            <li><a href="{{ route('loginShow') }}" class="text-white text-decoration-none">Se connecter</a></li>
+            <li><a href="{{ route('choixInscription') }}" class="text-white text-decoration-none">Créer un compte</a></li>
           </ul>
         </div>
   
@@ -416,3 +316,101 @@
   @vite(['resources/js/indexJs/script.js'])
 </body>
 </html>
+
+<style>
+  .company-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .company-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .company-logo {
+    height: 180px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .company-logo img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  .company-info {
+    padding: 20px;
+  }
+
+  .company-info h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+
+  .company-info .text-muted {
+    font-size: 0.9rem;
+  }
+
+  .company-info .btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .company-info .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .company-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+  }
+
+  .stat-item {
+    background: #f8f9fa;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+
+  .stat-item i {
+    margin-right: 5px;
+    color: var(--primary);
+  }
+
+  .section-title {
+    position: relative;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+</style>

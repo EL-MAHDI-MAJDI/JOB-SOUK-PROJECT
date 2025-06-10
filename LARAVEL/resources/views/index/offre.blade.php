@@ -38,103 +38,36 @@
     <div class="container">
       <h2 class="mb-4 text-center">Offres récentes</h2>
       <div class="row g-4">
+        @forelse($offres as $offre)
         <div class="col-md-4">
           <div class="job-card">
-            <h5>Développeur Full Stack</h5>
-            <p class="mb-1">TechCorp - Casablanca</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
+            <h5>{{ $offre->intitule_offre_emploi }}</h5>
+            <p class="mb-1">{{ $offre->entreprise->nomEntreprise }} - {{ $offre->localisation }}</p>
+            <p class="text-muted">{{ $offre->type_contrat }}</p>
+            <div class="d-flex flex-wrap gap-2 mb-2">
+              @if($offre->salaire_offre_emploi)
+                <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>{{ $offre->salaire_offre_emploi }}</span>
+              @endif
+              <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée {{ $offre->created_at->diffForHumans() }}</span>
+            </div>
+            <a href="{{ route('loginShow') }}" class="btn btn-outline-primary btn-sm">Voir plus</a>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Analyste Data</h5>
-            <p class="mb-1">DataPlus - Rabat</p>
-            <p class="text-muted">Stage - 6 mois</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
+        @empty
+        <div class="col-12 text-center">
+          <div class="text-muted py-5">
+            <i class="bi bi-briefcase fs-1 mb-2"></i><br>
+            <span>Aucune offre d'emploi disponible pour le moment.</span>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Responsable Marketing</h5>
-            <p class="mb-1">MarketPro - Marrakech</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Ingénieur Réseau</h5>
-            <p class="mb-1">NetSolutions - Tanger</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Développeur Mobile</h5>
-            <p class="mb-1">AppDev - Agadir</p>
-            <p class="text-muted">Freelance</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Chef de Projet IT</h5>
-            <p class="mb-1">ITConsult - Oujda</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Développeur Frontend</h5>
-            <p class="mb-1">WebDesign - Fès</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Administrateur Système</h5>
-            <p class="mb-1">SysAdmin - Rabat</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Développeur Backend</h5>
-            <p class="mb-1">CodeFactory - Marrakech</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Graphiste</h5>
-            <p class="mb-1">DesignPro - Casablanca</p>
-            <p class="text-muted">Freelance</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>Développeur Web</h5>
-            <p class="mb-1">WebSolutions - Tanger</p>
-            <p class="text-muted">CDI - Temps plein</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="job-card">
-            <h5>UX/UI Designer</h5>
-            <p class="mb-1">Creative Studio - Fès</p>
-            <p class="text-muted">Freelance</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Voir plus</a>
-          </div>
-        </div>
+        @endforelse
       </div>
+      
+      @if($offres->hasPages())
+      <div class="d-flex justify-content-center mt-4">
+        {{ $offres->links('pagination::bootstrap-4') }}
+      </div>
+      @endif
     </div>
   </section>
 
@@ -150,11 +83,11 @@
       <div class="col-md-4 mb-4">
         <h5>Liens rapides</h5>
           <ul class="list-unstyled">
-            <li><a href="accueil.html" class="text-white text-decoration-none">Accueil</a></li>
-            <li><a href="offre.html" class="text-white text-decoration-none">Offres d'Emploi</a></li>
-            <li><a href="Entreprises.html" class="text-white text-decoration-none">Entreprises</a></li>
-            <li><a href="login.html" class="text-white text-decoration-none">Se connecter</a></li>
-            <li><a href="choix-inscription.html" class="text-white text-decoration-none">Créer un compte</a></li>
+            <li><a href="{{ route('accueil') }}" class="text-white text-decoration-none">Accueil</a></li>
+            <li><a href="{{ route('offre') }}" class="text-white text-decoration-none">Offres d'Emploi</a></li>
+            <li><a href="{{ route('entreprises') }}" class="text-white text-decoration-none">Entreprises</a></li>
+            <li><a href="{{ route('loginShow') }}" class="text-white text-decoration-none">Se connecter</a></li>
+            <li><a href="{{ route('choixInscription') }}" class="text-white text-decoration-none">Créer un compte</a></li>
           </ul>
       </div>
 
