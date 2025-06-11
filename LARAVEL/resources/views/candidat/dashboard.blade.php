@@ -368,7 +368,7 @@
       </div>
       
       <!-- Completion profil -->
-      <div class="profile-completion mb-4">
+      {{-- <div class="profile-completion mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="mb-0">Complétez votre profil - 75%</h5>
           <a href="profil.html" class="btn btn-sm btn-light"><i class="bi bi-pencil me-1"></i>Compléter</a>
@@ -383,7 +383,7 @@
           <span class="badge bg-white text-dark"><i class="bi bi-x-circle me-1"></i>Photo de profil</span>
           <span class="badge bg-white text-dark"><i class="bi bi-x-circle me-1"></i>Projets</span>
         </div>
-      </div>
+      </div> --}}
       
       <!-- Activité récente réorganisée -->
       <div class="row g-4">

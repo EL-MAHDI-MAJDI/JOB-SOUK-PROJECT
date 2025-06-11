@@ -11,6 +11,17 @@
       </div>
       
       <div class="d-flex align-items-center ms-auto">
+                <!-- Menu rapide -->
+        <div class="dropdown me-3">
+          <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-lightning-charge me-1"></i> Actions rapides
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createOfferModal"><i class="bi bi-plus-circle me-2"></i>Créer une offre</a></li>
+            <li><a class="dropdown-item" href="rechercher-candidats.html"><i class="bi bi-search me-2"></i>Rechercher candidats</a></li>
+            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal"><i class="bi bi-calendar-plus me-2"></i>Planifier entretien</a></li>
+          </ul>
+        </div>
         <!-- Notifications -->
         <div class="dropdown me-3">
           <button class="btn position-relative" type="button" data-bs-toggle="dropdown">

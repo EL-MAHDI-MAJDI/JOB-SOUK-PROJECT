@@ -253,8 +253,15 @@
 
   <!-- Contenu principal -->
   <div class="main-content">
+    <!-- En-tête -->
       <!-- Afficher message "votre modification a été faite avec succès" -->
       @include('partials.flashbag')
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1">Paramètres</h2>
+          <p class="text-muted mb-0">Gérez vos préférences et vos informations de compte</p>
+        </div>
+      </div>
     <div class="container-fluid h-100">
       <div class="settings-container h-100">
         <!-- Menu des paramètres -->

@@ -298,9 +298,9 @@
                       <a href="{{ Storage::url($candidat->cv->fichier) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
                           <i class="bi bi-eye me-1"></i>Voir
                       </a>
-                      <a href="{{ Storage::url($candidat->cv->fichier) }}" download class="btn btn-sm btn-outline-secondary">
+                      {{-- <a href="{{ Storage::url($candidat->cv->fichier) }}" download class="btn btn-sm btn-outline-secondary">
                           <i class="bi bi-download me-1"></i>Télécharger
-                      </a>
+                      </a> --}}
                       <form action="{{ route('candidat.cv.destroy', $candidat) }}" method="POST" class="d-inline" 
                             onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre CV ?');">
                           @csrf
