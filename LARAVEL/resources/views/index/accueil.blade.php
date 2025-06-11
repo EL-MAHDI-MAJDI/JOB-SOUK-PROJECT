@@ -359,7 +359,7 @@
               </div>
             </div>
             <div class="job-details">
-              <span><i class="bi bi-currency-dollar"></i> {{ $offre->salaire ?? 'Non spécifié' }}</span>
+              <span class="text-muted"><i class="bi bi-hourglass-bottom me-1"></i>Dernier délai {{$offre->date_limite_candidature}}</span>
               <span><i class="bi bi-clock"></i> {{ $offre->created_at->diffForHumans() }}</span>
             </div>
             <a href="{{ route('loginShow') }}" class="btn btn-outline-primary btn-sm w-100">Voir plus</a>

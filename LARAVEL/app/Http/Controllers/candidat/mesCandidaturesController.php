@@ -19,13 +19,13 @@ class mesCandidaturesController extends Controller
     }
      public function postuler(Request $request, Candidat $candidat, OffreEmploi $offre)
     {
-        $candidat->offresCandidature()->syncWithoutDetaching([$offre->id]);
+        $candidat->candidature()->syncWithoutDetaching([$offre->id]);
         $messageCandidature = $request->input('messageCandidature');
         $request->validate([
                 'messageCandidature' =>'nullable|string|max:500',
             ]);
         // dd($messageCandidature);
-        $candidat->offresCandidature()->syncWithoutDetaching([
+        $candidat->candidature()->syncWithoutDetaching([
             $offre->id => ['messageCandidature' => $messageCandidature]
         ]);
         return to_route('candidat.chercherOffres', ['candidat' => $candidat->id])

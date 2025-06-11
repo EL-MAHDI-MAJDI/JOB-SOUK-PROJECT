@@ -23,6 +23,8 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
+      <!-- Affichage des messages success -->
+      @include('partials.flashbag')
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -78,251 +80,131 @@
         </div>
       </div>
 
-      <!-- Liste des offres avec candidats -->
-      <div class="dashboard-card p-4">
-        <!-- Offre 1 -->
-        <div class="offer-card mb-4">
-          <div class="offer-header" data-bs-toggle="collapse" href="#offer1" aria-expanded="true">
-            <h5>Développeur Front-end</h5>
-            <span class="badge badge-candidate-count rounded-pill">3 candidats</span>
-          </div>
-          <div class="collapse show" id="offer1">
-            <div class="table-responsive">
-              <table class="table candidate-table">
-                <thead>
-                  <tr>
-                    <th>Candidat</th>
-                    <th>Expérience</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="candidate-row">
-                    <td>
-                      <div class="candidate-info">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="candidate-img">
-                        <div>
-                          <div class="fw-bold">Youssef Benali</div>
-                          <small class="text-muted">youssef.benali@email.com</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>3 ans</td>
-                    <td><span class="status-badge status-new">Nouveau</span></td>
-                    <td>2025-04-22</td>
-                    <td>
-                      <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#evaluateModal">Évaluer</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="candidate-row">
-                    <td>
-                      <div class="candidate-info">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="candidate-img">
-                        <div>
-                          <div class="fw-bold">Mehdi El Fassi</div>
-                          <small class="text-muted">mehdi.elfassi@email.com</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>2 ans</td>
-                    <td><span class="status-badge status-review">En revue</span></td>
-                    <td>2025-04-20</td>
-                    <td>
-                      <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#evaluateModal">Évaluer</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="candidate-row">
-                    <td>
-                      <div class="candidate-info">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="candidate-img">
-                        <div>
-                          <div class="fw-bold">Fatima Zahra</div>
-                          <small class="text-muted">fatima.zahra@email.com</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>4 ans</td>
-                    <td><span class="status-badge status-interview">Entretien</span></td>
-                    <td>2025-04-18</td>
-                    <td>
-                      <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#evaluateModal">Évaluer</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Offre 2 -->
-        <div class="offer-card mb-4">
-          <div class="offer-header" data-bs-toggle="collapse" href="#offer2" aria-expanded="true">
-            <h5>Chef de projet</h5>
-            <span class="badge badge-candidate-count rounded-pill">2 candidats</span>
-          </div>
-          <div class="collapse show" id="offer2">
-            <div class="table-responsive">
-              <table class="table candidate-table">
-                <thead>
-                  <tr>
-                    <th>Candidat</th>
-                    <th>Expérience</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="candidate-row">
-                    <td>
-                      <div class="candidate-info">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="candidate-img">
-                        <div>
-                          <div class="fw-bold">Leila Nassiri</div>
-                          <small class="text-muted">leila.nassiri@email.com</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>5 ans</td>
-                    <td><span class="status-badge status-review">À relancer</span></td>
-                    <td>2025-04-21</td>
-                    <td>
-                      <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#evaluateModal">Évaluer</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="candidate-row">
-                    <td>
-                      <div class="candidate-info">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="candidate-img">
-                        <div>
-                          <div class="fw-bold">Karim Belhaj</div>
-                          <small class="text-muted">karim.belhaj@email.com</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>6 ans</td>
-                    <td><span class="status-badge status-hired">Embauché</span></td>
-                    <td>2025-04-15</td>
-                    <td>
-                      <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#evaluateModal">Évaluer</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Offre 3 -->
-        <div class="offer-card mb-4">
-          <div class="offer-header" data-bs-toggle="collapse" href="#offer3" aria-expanded="true">
-            <h5>Designer UI/UX</h5>
-            <span class="badge badge-candidate-count rounded-pill">1 candidat</span>
-          </div>
-          <div class="collapse show" id="offer3">
-            <div class="table-responsive">
-              <table class="table candidate-table">
-                <thead>
-                  <tr>
-                    <th>Candidat</th>
-                    <th>Expérience</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="candidate-row">
-                    <td>
-                      <div class="candidate-info">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="candidate-img">
-                        <div>
-                          <div class="fw-bold">Amina Toumi</div>
-                          <small class="text-muted">amina.toumi@email.com</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>2 ans</td>
-                    <td><span class="status-badge status-rejected">Rejeté</span></td>
-                    <td>2025-04-10</td>
-                    <td>
-                      <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#evaluateModal">Évaluer</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+      <!-- Offre  -->
+    @if($offres->isEmpty())
+      <div class="d-flex flex-column align-items-center justify-content-center py-5">
+        <i class="bi bi-briefcase display-3 text-secondary mb-3"></i>
+        <h4 class="fw-semibold mb-1">Aucune offre trouvée</h4>
+        <p class="text-muted text-center mb-0">Vous n'avez pas encore publié d'offres d'emploi.</p>
       </div>
-
-      <!-- Modal pour l'évaluation -->
-      <div class="modal fade" id="evaluateModal" tabindex="-1" aria-labelledby="evaluateModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="evaluateModalLabel">Évaluer Candidat</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="mb-3">
-                <label for="candidateName" class="form-label">Candidat</label>
-                <input type="text" class="form-control" id="candidateName" readonly value="Youssef Benali">
+    @else
+      @foreach($offres as $offre)
+        <!-- Liste des offres avec candidats -->
+        <div class="dashboard-card p-4">
+            @php
+              $collapseId = 'offer' . $offre->id;
+            @endphp
+            <div class="offer-card mb-4">
+              <div class="offer-header" data-bs-toggle="collapse" href="#{{$collapseId}}" aria-expanded="false">
+                <h5>{{$offre->intitule_offre_emploi}}</h5>
+                <span class="badge badge-candidate-count rounded-pill">{{ $offre->candidats->count() }} candidat{{ $offre->candidats->count() > 1 ? 's' : '' }}</span>
               </div>
-              <div class="mb-3">
-                <label for="poste" class="form-label">Poste</label>
-                <input type="text" class="form-control" id="poste" readonly value="Développeur Front-end">
+              <div class="collapse show" id="{{ $collapseId }}">
+                @if($offre->candidats->isEmpty())
+                  <div class="text-center my-4">
+                    <i class="bi bi-person-x fs-2 text-secondary"></i>
+                    <h6 class="mt-2">Aucun candidat pour cette offre</h6>
+                    <p class="text-muted">Attendez que des candidats postulent à cette offre.</p>
+                  </div>
+                @else
+                <div class="table-responsive">
+                  <table class="table candidate-table">
+                    <thead>
+                      <tr>
+                        <th>Candidat</th>
+                        <th>Expérience</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($offre->candidats as $candidat)
+                          <tr class="candidate-row">
+                            <td>
+                              <div class="candidate-info">
+                                <img src="{{ asset('storage/' . $candidat->photoProfile) }}" alt="Profile" class="candidate-img">
+                                <div>
+                                  <div class="fw-bold">{{$candidat->prenom.' '.$candidat->nom}}</div>
+                                  <small class="text-muted">{{$candidat->email}}</small>
+                                </div>
+                              </div>
+                            </td>
+                            <td>3 ans</td>
+                            <td><span class="status-badge status-new">{{ $candidat->pivot->statut }}</span></td>
+                            <td>{{ $candidat->pivot->created_at->format('d/m/Y') }}</td>
+                            <td>
+                              <div class="d-flex gap-2">
+                                <a href="{{ Storage::url($candidat->cv->fichier) }}" class="btn btn-sm btn-outline-primary">Voir CV</a>
+                                <!-- Remplacer le bouton modal par un bouton qui affiche le formulaire -->
+                                <button class="btn btn-sm btn-outline-success" type="button" onclick="toggleEvalForm({{ $offre->id }}, {{ $candidat->id }})">Évaluer</button>
+                              </div>
+                            </td>
+                          </tr>
+                          <!-- Formulaire d'évaluation caché par défaut -->
+                          <tr id="eval-form-row-{{ $offre->id }}-{{ $candidat->id }}" style="display:none;">
+                            <td colspan="5">
+                              <form method="POST" action="{{ route('entreprise.evaluerCandidat.update', ['entreprise' => $entreprise->id, 'offre' => $offre->id, 'candidat' => $candidat->id]) }}">                            
+                                @csrf
+                                <div class="row g-3 align-items-end">
+                                  <div class="col-md-3">
+                                    <label class="form-label">Candidat</label>
+                                    <input type="text" class="form-control" readonly value="{{ $candidat->prenom.' '.$candidat->nom }}">
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label class="form-label">Poste</label>
+                                    <input type="text" class="form-control" readonly value="{{ $offre->intitule_offre_emploi }}">
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label class="form-label">Score (1-5)</label>
+                                    <input type="number" class="form-control" name="scoreEvaluation" min="1" max="5" required>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-select" name="statut" required>
+                                      <option value="En revue">En revue</option>
+                                      <option value="Entretien planifié">Entretien planifié</option>
+                                      <option value="Embauché">Embauché</option>
+                                      <option value="Rejeté">Rejeté</option>
+                                    </select>
+                                  </div>
+                                  <div class="col-md-10 mt-2">
+                                    <label class="form-label">Commentaires</label>
+                                    <textarea class="form-control" name="commentairesEvaluation" rows="2" placeholder="Ajoutez vos commentaires sur la candidature"></textarea>
+                                  </div>
+                                  <div class="col-md-2 mt-2 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                    <button type="button" class="btn btn-secondary" onclick="toggleEvalForm({{ $offre->id }}, {{ $candidat->id }})">Annuler</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </td>
+                          </tr>
+                        @endforeach
+                    </tbody>
+                  </table>
+                </div>
+                @endif
               </div>
-              <div class="mb-3">
-                <label for="score" class="form-label">Score (1-5)</label>
-                <input type="number" class="form-control" id="score" min="1" max="5" placeholder="Entrez un score">
-              </div>
-              <div class="mb-3">
-                <label for="comments" class="form-label">Commentaires</label>
-                <textarea class="form-control" id="comments" rows="4" placeholder="Ajoutez vos commentaires sur la candidature"></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="status" class="form-label">Statut</label>
-                <select class="form-select" id="status">
-                  <option value="new">Nouveau</option>
-                  <option value="review">En revue</option>
-                  <option value="interview">Entretien planifié</option>
-                  <option value="hired">Embauché</option>
-                  <option value="rejected">Rejeté</option>
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-              <button type="button" class="btn btn-primary">Enregistrer</button>
             </div>
           </div>
-        </div>
-      </div>
+          <!-- Fin du formulaire d'évaluation -->
+      @endforeach
+    @endif
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   @vite(['resources/js/entrepriseJs/evaluerCandidat.js'])
+  <script>
+    function toggleEvalForm(offerId, candidatId) {
+      const row = document.getElementById(`eval-form-row-${offerId}-${candidatId}`);
+      if (row.style.display === 'none') {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  </script>
 </body>
 </html>
