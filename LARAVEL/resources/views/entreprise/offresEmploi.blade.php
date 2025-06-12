@@ -54,11 +54,10 @@
         <div class="row g-3">
           <div class="col-md-3">
             <label class="form-label">Statut</label>
-            <select class="form-select">
-              <option selected>Toutes les offres</option>
-              <option>Actives</option>
-              <option>Clôturées</option>
-              <option>Brouillons</option>
+            <select class="form-select" name="status" id="statusFilter">
+              <option value="" selected>Toutes les offres</option>
+              <option value="active">Actives</option>
+              <option value="passe">Clôturées</option>
             </select>
           </div>
           <div class="col-md-3">
@@ -171,7 +170,14 @@
                   </td>
                   <td>{{$offre->localisation}}</td>
                   <td>{{$offre->type_contrat}}</td>
-                  <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
+                  <td>
+                    <span class="badge 
+                      @if($offre->status === 'active') bg-success
+                      @elseif($offre->status === 'desactive') bg-danger
+                      @else bg-secondary @endif">
+                      {{ $offre->status === 'active' ? 'Active' : ($offre->status === 'desactive' ? 'Désactivée' : ucfirst($offre->status)) }}
+                    </span>
+                  </td>
                   <td>{{$offre->date_limite_candidature}}</td>
                   <td>
                     <div class="dropdown">

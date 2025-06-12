@@ -256,8 +256,11 @@
                             <i class="bi bi-clock"></i> Publiée {{ $offre->created_at->diffForHumans() }}
                         </p>
                     </div>
-                    <span class="badge bg-success bg-opacity-10 text-success">
-                        Active
+                    <span class="badge 
+                        @if($offre->status === 'active') bg-success bg-opacity-10 text-success
+                        @elseif($offre->status === 'desactive') bg-danger bg-opacity-10 text-danger
+                        @endif">
+                        {{ $offre->status === 'active' ? 'Active' : ($offre->status === 'desactive' ? 'Désactivée' : ucfirst($offre->status)) }}
                     </span>
                 </div>
             </a>

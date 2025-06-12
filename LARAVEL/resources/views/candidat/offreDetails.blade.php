@@ -190,6 +190,9 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container">
+      <!-- afficher les messages d'erreur -->
+      @include('partials.flashbag-error')
+      
       <div class="offre-header mb-0">
         <img src="{{ asset('storage/' . $offre->entreprise->logo) }}" alt="Logo entreprise" class="offre-logo shadow">
         <div class="offre-title">{{ $offre->intitule_offre_emploi }}</div>
@@ -217,13 +220,46 @@
               <li><strong>Salaire :</strong> {{ $offre->salaire_offre_emploi ? $offre->salaire_offre_emploi.' MAD' : 'Non précisé' }}</li>
               <li><strong>Niveau d'expérience :</strong> {{ $offre->niveau_experience_demander }}</li>
               <li><strong>Date limite de candidature :</strong> {{ $offre->date_limite_candidature }}</li>
+              <li><strong>Statut :</strong> 
+                @if($offre->status === 'active')
+                  <span class="badge bg-success">Active</span>
+                @elseif($offre->status === 'desactive')
+                  <span class="badge bg-danger">Désactivée</span>
+                @endif
+              </li>
               <li><strong>Publiée :</strong> {{ $offre->created_at }}</li>
             </ul>
             <!-- Bouton stylisé pour ouvrir le modal -->
-            <button type="button" class="btn btn-postuler shadow" style="box-shadow:0 4px 16px rgba(231,76,60,0.15);" data-bs-toggle="modal" data-bs-target="#confirmApplyModal">
-              <i class="bi bi-send me-2"></i>Postuler à cette offre
-            </button>
+            @if(!$candidat->cv)
+              <button type="button" class="btn btn-postuler shadow" style="box-shadow:0 4px 16px rgba(231,76,60,0.15);" data-bs-toggle="modal" data-bs-target="#noCVModal">
+                <i class="bi bi-send me-2"></i>Postuler à cette offre
+              </button>
+            @else
+              <button type="button" class="btn btn-postuler shadow" style="box-shadow:0 4px 16px rgba(231,76,60,0.15);" data-bs-toggle="modal" data-bs-target="#confirmApplyModal">
+                <i class="bi bi-send me-2"></i>Postuler à cette offre
+              </button>
+            @endif
 
+            <!-- Modal d'information si pas de CV -->
+            <div class="modal fade" id="noCVModal" tabindex="-1" aria-labelledby="noCVModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="border-radius:18px; border:0; box-shadow:0 8px 32px rgba(52,52,52,0.12);">
+                  <div class="modal-header" style="background:linear-gradient(135deg,#e74c3c 0%,#c0392b 100%); color:#fff; border-radius:18px 18px 0 0;">
+                    <h5 class="modal-title" id="noCVModalLabel"><i class="bi bi-exclamation-triangle"></i> CV requis</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Vous devez d'abord déposer votre CV avant de pouvoir postuler à une offre.</p>
+                    <a href="{{ route('candidat.cv', ['candidat' => $candidat->id]) }}" class="btn btn-primary mt-2">
+                      Déposer mon CV
+                    </a>
+                  </div>
+                  <div class="modal-footer" style="border-top:0;">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- Modal de confirmation de candidature avec style personnalisé -->
             <div class="modal fade" id="confirmApplyModal" tabindex="-1" aria-labelledby="confirmApplyModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">

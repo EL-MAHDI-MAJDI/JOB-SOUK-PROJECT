@@ -8,3 +8,9 @@
         </ul>
     </x-alert>
 @endif
+
+@if (session('error'))
+    <x-alert type="danger">
+        {{ session('error') }}
+    </x-alert>
+@endif

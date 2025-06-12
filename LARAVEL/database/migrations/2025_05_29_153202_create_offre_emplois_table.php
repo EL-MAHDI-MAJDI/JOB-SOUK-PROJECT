@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('telephone_contact')->nullable();
             $table->string('localisation'); // Nouveau champ
             $table->text('competences_requises'); // Nouveau champ
+            $table->enum('status', ['active', 'desactive'])->default('active');
             $table->foreignId('entreprise_id')->constrained('entreprises')->cascadeOnDelete(); // Clé étrangère vers la table entreprises
             $table->timestamps();
         });

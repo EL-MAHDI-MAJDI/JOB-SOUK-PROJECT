@@ -28,6 +28,7 @@ class OffreEmploi extends Model
         'localisation',
         'competences_requises',
         'entreprise_id',
+        'status', // Ajout du champ status
     ];
 
     public function entreprise()
@@ -48,7 +49,7 @@ class OffreEmploi extends Model
             'candidatures',
             'offre_emploi_id',
             'candidat_id'
-        )->withPivot('messageCandidature', 'scoreEvaluation', 'commentairesEvaluation', 'statut')
+        )->withPivot('messageCandidature', 'fichier', 'nom_fichier', 'scoreEvaluation', 'commentairesEvaluation', 'statut')
         ->withTimestamps();
     }
 }

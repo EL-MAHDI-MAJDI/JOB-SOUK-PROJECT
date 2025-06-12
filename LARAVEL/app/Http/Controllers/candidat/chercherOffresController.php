@@ -18,7 +18,7 @@ class chercherOffresController extends Controller
         }else{
             $sortBy = $request->input('sortBy', 'created_at'); // ou la valeur par défaut
             $offres = OffreEmploi::with('entreprise')
-            ->where('date_limite_candidature', '>=', now()) // Filtrer les offres dont la date limite est dans le futur
+            ->where('status', 'active')
             ->orderBy($sortBy);
             $countoffres = $offres->count();
             $offres = $offres->paginate(4); // 4 offres par page
@@ -42,7 +42,7 @@ class chercherOffresController extends Controller
                     ->orWhere('competences_requises', 'like', '%' . $searchTerm . '%');
                 });
         })
-            ->where('date_limite_candidature', '>=', now()) // Filtrer les offres dont la date limite est dans le futur
+            ->where('status', 'active')
             ->orderBy($sortBy)
             ->paginate(4); // 4 offres par page
 

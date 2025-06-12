@@ -305,6 +305,13 @@
                       @if($offre->salaire_offre_emploi) <span class="text-muted"><i class="bi bi-cash-coin me-1"></i>{{$offre->salaire_offre_emploi}} MAD/mois</span> @endif
                       <span class="text-muted"><i class="bi bi-clock me-1"></i>Publiée {{ $offre->created_at->diffForHumans() }}</span>
                       <span class="text-muted"><i class="bi bi-hourglass-bottom me-1"></i>Dernier délai {{$offre->date_limite_candidature}}</span>
+                      <span>
+                        @if($offre->status === 'active')
+                          <span class="badge bg-success">Active</span>
+                        @elseif($offre->status === 'desactive')
+                          <span class="badge bg-danger">Désactivée</span>
+                        @endif
+                      </span>
                     </div>
                   </div>
                   <div class="col-md-4 text-end">

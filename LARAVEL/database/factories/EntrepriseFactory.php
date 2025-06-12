@@ -27,7 +27,7 @@ class EntrepriseFactory extends Factory
             'adresse' => fake()->address(),
             'dateCreation' => fake()->date(),
             'description' => fake()->optional()->text(50),
-            'logo' => fake()->optional()->imageUrl(200, 200, 'business'),
+            'logo' => 'photoProfile/profile.png',
             'phone' => fake()->phoneNumber(),
             'password' => Hash::make('password'),
         ];

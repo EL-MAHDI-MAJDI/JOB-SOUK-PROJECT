@@ -31,7 +31,7 @@ class evaluerCandidatController extends Controller
             $candidature->update([
                 'scoreEvaluation' => $request->input('scoreEvaluation'),
                 'commentairesEvaluation' => $request->input('commentairesEvaluation'),
-                'statut' => $request->input('statut', 'évalué'), // valeur par défaut si non envoyée
+                'statut' =>"Évaluation terminée", // valeur par défaut si non envoyée
             ]);
             return back()->with('success', 'Candidat ' . $candidat->nom . ' évalué avec succès.');
         } else {

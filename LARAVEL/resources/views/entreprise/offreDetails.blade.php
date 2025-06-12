@@ -54,6 +54,13 @@
           <span class="mx-3"></span>
           <i class="bi bi-clock me-2"></i>
           <strong>Date limite de candidature :</strong> {{ $offre->date_limite_candidature }}
+          <span class="ms-3">
+            @if($offre->status === 'active')
+              <span class="badge bg-success">Active</span>
+            @elseif($offre->status === 'desactive')
+              <span class="badge bg-danger">Désactivée</span>
+            @endif
+          </span>
         </div>
         <hr>
         <h5 class="fw-bold mb-2">Description du poste</h5>

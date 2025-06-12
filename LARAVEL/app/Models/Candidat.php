@@ -87,15 +87,9 @@ class Candidat extends Authenticatable
         return $this->belongsToMany(OffreEmploi::class, 'offre_sauvegardes', 'candidat_id', 'offre_emploi_id');
     }
 
-    public function candidature()
+    public function candidatures()
     {
-        return $this->belongsToMany(
-            OffreEmploi::class,           // Le modèle lié
-            'candidatures',               // Nom de la table pivot (à adapter selon ton schéma)
-            'candidat_id',                // Clé étrangère du candidat dans la table pivot
-            'offre_emploi_id'             // Clé étrangère de l'offre dans la table pivot
-            )->withPivot('messageCandidature', 'scoreEvaluation', 'commentairesEvaluation', 'statut') // Pour accéder au champ messageCandidature
-            ->withTimestamps(); 
+        return $this->hasMany(Candidature::class, 'candidat_id');
     }
     /**
      * Get the attributes that should be cast.

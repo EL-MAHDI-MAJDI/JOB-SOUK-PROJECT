@@ -25,6 +25,8 @@
     <div class="container-fluid">
       <!-- Affichage des messages success -->
       @include('partials.flashbag')
+      <!-- Affichage des messages d'erreur -->
+      @include('partials.flashbag-error')
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -60,10 +62,12 @@
                 <label for="statusFilter" class="form-label">Statut</label>
                 <select class="form-select" id="statusFilter">
                   <option value="">Tous les statuts</option>
-                  <option value="new">Nouveau</option>
-                  <option value="review">En revue</option>
-                  <option value="interview">Entretien planifié</option>
-                  <option value="hired">Embauché</option>
+                  <option value="En attente">En attente</option>
+                  <option value="Évaluation terminée">Évaluation terminée</option>
+                  <option value="Entretien prévu">Entretien prévu</option>
+                  <option value="Entretien terminé">Entretien terminé</option>
+                  <option value="Accepté">Accepté</option>
+                  <option value="Refusé">Refusé</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -135,9 +139,11 @@
                             <td>{{ $candidat->pivot->created_at->format('d/m/Y') }}</td>
                             <td>
                               <div class="d-flex gap-2">
-                                <a href="{{ Storage::url($candidat->cv->fichier) }}" class="btn btn-sm btn-outline-primary">Voir CV</a>
+                                <a href="{{ Storage::url($candidat->pivot->fichier) }}" class="btn btn-sm btn-outline-primary">Voir CV</a>
                                 <!-- Remplacer le bouton modal par un bouton qui affiche le formulaire -->
-                                <button class="btn btn-sm btn-outline-success" type="button" onclick="toggleEvalForm({{ $offre->id }}, {{ $candidat->id }})">Évaluer</button>
+                                @if($candidat->pivot->statut === 'En attente')
+                                  <button class="btn btn-sm btn-outline-success" type="button" onclick="toggleEvalForm({{ $offre->id }}, {{ $candidat->id }})">Évaluer</button>
+                                @endif
                               </div>
                             </td>
                           </tr>
@@ -147,26 +153,17 @@
                               <form method="POST" action="{{ route('entreprise.evaluerCandidat.update', ['entreprise' => $entreprise->id, 'offre' => $offre->id, 'candidat' => $candidat->id]) }}">                            
                                 @csrf
                                 <div class="row g-3 align-items-end">
-                                  <div class="col-md-3">
+                                  <div class="col-md-4">
                                     <label class="form-label">Candidat</label>
                                     <input type="text" class="form-control" readonly value="{{ $candidat->prenom.' '.$candidat->nom }}">
                                   </div>
-                                  <div class="col-md-3">
+                                  <div class="col-md-4">
                                     <label class="form-label">Poste</label>
                                     <input type="text" class="form-control" readonly value="{{ $offre->intitule_offre_emploi }}">
                                   </div>
-                                  <div class="col-md-2">
+                                  <div class="col-md-4">
                                     <label class="form-label">Score (1-5)</label>
                                     <input type="number" class="form-control" name="scoreEvaluation" min="1" max="5" required>
-                                  </div>
-                                  <div class="col-md-2">
-                                    <label class="form-label">Statut</label>
-                                    <select class="form-select" name="statut" required>
-                                      <option value="En revue">En revue</option>
-                                      <option value="Entretien planifié">Entretien planifié</option>
-                                      <option value="Embauché">Embauché</option>
-                                      <option value="Rejeté">Rejeté</option>
-                                    </select>
                                   </div>
                                   <div class="col-md-10 mt-2">
                                     <label class="form-label">Commentaires</label>
