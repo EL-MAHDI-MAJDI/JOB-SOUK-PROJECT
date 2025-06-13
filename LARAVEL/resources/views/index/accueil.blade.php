@@ -53,28 +53,25 @@
           <div class="category-card">
             <div class="category-icon">
               @switch($categorie->SecteurActivite)
-                @case('Informatique & Télécoms')
+                @case('Technologie')
                   <i class="bi bi-laptop"></i>
                   @break
-                @case('Marketing & Communication')
-                  <i class="bi bi-megaphone"></i>
-                  @break
-                @case('Finance & Comptabilité')
+                @case('Finance')
                   <i class="bi bi-cash-stack"></i>
                   @break
-                @case('Santé & Pharmacie')
+                @case('Santé')
                   <i class="bi bi-heart-pulse"></i>
                   @break
-                @case('BTP & Construction')
+                @case('Industrie')
                   <i class="bi bi-building"></i>
                   @break
                 @case('Transport & Logistique')
                   <i class="bi bi-truck"></i>
                   @break
-                @case('Éducation & Formation')
+                @case('Éducation')
                   <i class="bi bi-book"></i>
                   @break
-                @case('Commerce & Distribution')
+                @case('Commerce')
                   <i class="bi bi-shop"></i>
                   @break
                 @default
@@ -181,7 +178,11 @@
           @forelse($entreprisesConfiance as $entreprise)
           <div class="col-6 col-md-4 col-lg-2">
             <div class="company-logo-card">
+              @if($entreprise->logo)
               <img src="{{ asset('storage/' . $entreprise->logo) }}" alt="{{ $entreprise->nomEntreprise }}" class="img-fluid">
+              @else
+                @continue
+              @endif
             </div>
           </div>
           @empty

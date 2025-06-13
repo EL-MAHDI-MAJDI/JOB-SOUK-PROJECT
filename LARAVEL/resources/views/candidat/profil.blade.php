@@ -655,14 +655,14 @@
                                     </button>
                                 </div>
                             </div>
-                            <small>{{ $langue->niveau }}</small>
+                            <small>{{ ucfirst(strtolower($langue->niveau)) }}</small>
                             @php
 $niveauxLangue = [
-    'native' => 100,
-    'fluent' => 90,
-    'professional' => 80,
-    'intermediate' => 60,
-    'basic' => 40
+    'Native' => 100,
+    'Fluent' => 90,
+    'Professional' => 80,
+    'Intermediate' => 60,
+    'Basic' => 40
 ];
 @endphp
 
@@ -1010,7 +1010,7 @@ $niveauxLangue = [
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="skillForm" action="{{ route('candidat.updateprofil',['candidat' => $candidat->id]) }}" method="POST">
+        <form id="skillForm" action="{{ route('candidat.updateprofil', ['candidat' => $candidat->id]) }}" method="POST">
           @csrf
           @method('PUT')
           <input type="hidden" name="action_type" value="competence">
@@ -1097,11 +1097,11 @@ $niveauxLangue = [
                                 <select class="form-select @error('niveau') is-invalid @enderror" 
                                         id="langLevel" name="niveau" required>
                                     <option value="">Sélectionnez un niveau</option>
-                                    <option value="native">Langue maternelle</option>
-                                    <option value="fluent">Courant</option>
-                                    <option value="professional">Professionnel</option>
-                                    <option value="intermediate">Intermédiaire</option>
-                                    <option value="basic">Basique</option>
+                                    <option value="Native">Langue maternelle</option>
+                                    <option value="Fluent">Courant</option>
+                                    <option value="Professional">Professionnel</option>
+                                    <option value="Intermediate">Intermédiaire</option>
+                                    <option value="Basic">Basique</option>
                                 </select>
                                 <label for="langLevel">Niveau</label>
                                 @error('niveau')
@@ -1524,8 +1524,14 @@ $niveauxLangue = [
     function editLanguage(id, nom, niveau) {
       document.getElementById('languageId').value = id;
       document.getElementById('langName').value = nom;
-      document.getElementById('langLevel').value = niveau;
+      // Assurer que le niveau est correctement formaté avant de le définir dans le select
+      const niveauFormate = niveau.charAt(0).toUpperCase() + niveau.slice(1).toLowerCase();
+      document.getElementById('langLevel').value = niveauFormate;
+      
+      // Mettre à jour le titre du modal
       document.getElementById('addLanguageModalLabel').textContent = 'Modifier la langue';
+      
+      // Ouvrir le modal
       const modal = new bootstrap.Modal(document.getElementById('addLanguageModal'));
       modal.show();
     }
@@ -1533,6 +1539,9 @@ $niveauxLangue = [
     function updateLanguage(id, updatedLanguage) {
       const index = profileData.languages.findIndex(l => l.id === id);
       if (index !== -1) {
+        // Formater le niveau avant de mettre à jour
+        updatedLanguage.niveau = updatedLanguage.niveau.charAt(0).toUpperCase() + 
+                               updatedLanguage.niveau.slice(1).toLowerCase();
         profileData.languages[index] = updatedLanguage;
         renderLanguages();
       }
@@ -1550,15 +1559,16 @@ $niveauxLangue = [
       container.innerHTML = '';
       
       const niveauxLangue = {
-    'native': 100,
-    'fluent': 90,
-    'professional': 80,
-    'intermediate': 60,
-    'basic': 40
-};
+        'Native': 100,
+        'Fluent': 90,
+        'Professional': 80,
+        'Intermediate': 60,
+        'Basic': 40
+      };
       
       profileData.languages.forEach(lang => {
         const niveauPourcentage = niveauxLangue[lang.niveau] || 0;
+        const niveauFormate = lang.niveau.charAt(0).toUpperCase() + lang.niveau.slice(1).toLowerCase();
         
         const langItem = document.createElement('div');
         langItem.className = 'mb-3';
@@ -1572,7 +1582,7 @@ $niveauxLangue = [
               </button>
             </div>
           </div>
-          <small>${lang.niveau}</small>
+          <small>${niveauFormate}</small>
           <div class="language-level">
             <div class="language-level-fill" style="width: ${niveauPourcentage}%"></div>
           </div>
@@ -1930,6 +1940,39 @@ $niveauxLangue = [
         document.getElementById('educationForm').reset();
         document.getElementById('formationId').value = '';
         document.getElementById('addEducationModalLabel').textContent = 'Ajouter une formation';
+    });
+
+    // Validation du formulaire de formation
+    document.getElementById('formationForm').addEventListener('submit', function(e) {
+      const dateDebut = new Date(document.getElementById('formationDateDebut').value);
+      const dateFin = document.getElementById('formationDateFin').value ? new Date(document.getElementById('formationDateFin').value) : null;
+      const today = new Date();
+      
+      if (dateDebut > today) {
+        e.preventDefault();
+        alert('La date de début ne peut pas être dans le futur.');
+        return;
+      }
+      
+      if (dateDebut < new Date('1900-01-01')) {
+        e.preventDefault();
+        alert('La date de début doit être après 1900.');
+        return;
+      }
+      
+      if (dateFin) {
+        if (dateFin < dateDebut) {
+          e.preventDefault();
+          alert('La date de fin doit être après la date de début.');
+          return;
+        }
+        
+        if (dateFin > today) {
+          e.preventDefault();
+          alert('La date de fin ne peut pas être dans le futur.');
+          return;
+        }
+      }
     });
   </script>
 </body>

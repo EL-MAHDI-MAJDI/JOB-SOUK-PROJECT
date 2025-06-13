@@ -263,12 +263,12 @@
             @enderror
           </div>
           
-          <div class="mb-3 form-check">
+          {{-- <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="conditions" name="conditions" >
             <label class="form-check-label" for="conditions">
               J'accepte les conditions d'utilisation et la politique de confidentialité
             </label>
-          </div>
+          </div> --}}
           
           <button type="submit" class="btn btn-primary">Créer mon compte entreprise</button>
           

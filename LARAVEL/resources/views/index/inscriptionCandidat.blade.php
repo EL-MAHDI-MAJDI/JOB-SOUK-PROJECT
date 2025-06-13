@@ -216,12 +216,12 @@
             @enderror
           </div>
           
-          <div class="mb-3 form-check">
+          {{-- <div class="mb-3 form-check">
             <input type="checkbox" name="conditions" class="form-check-input" id="conditions">
             <label class="form-check-label" for="conditions">
               J'accepte les conditions d'utilisation et la politique de confidentialité
             </label>
-          </div>
+          </div> --}}
           
           <button class="btn btn-primary">Créer mon compte</button>
           

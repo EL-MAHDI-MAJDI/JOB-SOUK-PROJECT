@@ -277,6 +277,85 @@
       animation: pulse 1.5s infinite;
       box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.3);
     }
+
+    /* Ajout des styles pour les états vides */
+    .empty-state {
+      padding: 2rem 1rem;
+      background-color: #f8f9fa;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .empty-state:hover {
+      background-color: #f0f2f5;
+    }
+
+    .empty-state i {
+      display: block;
+      margin: 0 auto;
+      color: #adb5bd;
+      transition: transform 0.3s ease;
+    }
+
+    .empty-state:hover i {
+      transform: scale(1.1);
+    }
+
+    .empty-state h6 {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+
+    .empty-state p {
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .empty-state .btn {
+      margin-top: 1rem;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+    }
+
+    /* Styles pour les cartes d'offres */
+    .hover-card {
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    .company-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #f8f9fa;
+    }
+
+    .company-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge {
+      font-weight: 500;
+      padding: 0.5em 0.8em;
+    }
+
+    .btn-primary {
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
@@ -302,10 +381,10 @@
         <div>
           <h2 class="fw-bold mb-1">Bienvenue, {{$candidat->prenom }} !</h2>
         </div>
-        <div class="d-flex gap-2">
+        <!--<div class="d-flex gap-2">
           <button class="btn btn-outline-primary"><i class="bi bi-filter me-2"></i>Filtrer</button>
           <button class="btn btn-primary"><i class="bi bi-search me-2"></i>Rechercher</button>
-        </div>
+        </div>-->
       </div>
       
       <!-- Statistiques principales -->
@@ -318,7 +397,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Candidatures</h6>
-                <h3 class="fw-bold mb-0">5</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['candidatures'] }}</h3>
               </div>
             </div>
           </div>
@@ -332,7 +411,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Entretiens</h6>
-                <h3 class="fw-bold mb-0">2</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['entretiens'] }}</h3>
               </div>
             </div>
           </div>
@@ -346,7 +425,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Offres recommandées</h6>
-                <h3 class="fw-bold mb-0">8</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['offres_recommandees'] }}</h3>
               </div>
             </div>
           </div>
@@ -360,7 +439,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Vues de profil</h6>
-                <h3 class="fw-bold mb-0">12</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['vues_profil'] }}</h3>
               </div>
             </div>
           </div>
@@ -392,79 +471,50 @@
           <div class="dashboard-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">Mes candidatures récentes</h5>
-              <a href="mes-candidatures.html" class="btn btn-sm btn-outline-primary">Voir tout</a>
+              <a href="{{ route('candidat.mesCandidatures', ['candidat' => $candidat->id]) }}" class="btn btn-sm btn-outline-primary">Voir tout</a>
             </div>
             
             <div class="list-group list-group-flush">
+              @forelse($candidatures_recentes as $candidature)
               <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6 class="mb-1">Développeur Full Stack</h6>
-                    <p class="text-muted mb-0 small">MegaSoft - Casablanca</p>
+                    <h6 class="mb-1">{{ $candidature->offreEmploi->titre }}</h6>
+                    <p class="text-muted mb-0 small">{{ $candidature->offreEmploi->entreprise->nom }} - {{ $candidature->offreEmploi->ville }}</p>
                   </div>
-                  <span class="badge status-badge interview">Entretien</span>
+                  <span class="badge status-badge {{ strtolower(str_replace(' ', '', $candidature->statut)) }}">{{ $candidature->statut }}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mt-2">
-                  <small class="text-muted">Posté il y a 5 jours</small>
+                  <small class="text-muted">Posté il y a {{ $candidature->created_at->diffForHumans() }}</small>
                   <a href="#" class="btn btn-sm btn-outline-primary">Détails</a>
                 </div>
               </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="mb-1">Ingénieur Frontend React</h6>
-                    <p class="text-muted mb-0 small">DataTech - Rabat</p>
-                  </div>
-                  <span class="badge status-badge pending">En attente</span>
+              @empty
+              <div class="dashboard-card p-4 text-center">
+                <div class="empty-state">
+                  <i class="bi bi-inbox text-muted mb-3" style="font-size: 3rem;"></i>
+                  <h6 class="text-muted mb-2">Aucune candidature récente</h6>
+                  <p class="text-muted small mb-3">Vous n'avez pas encore postulé à des offres d'emploi</p>
+                  <a href="{{ route('candidat.chercherOffres', ['candidat' => $candidat->id]) }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-search me-1"></i> Découvrir des offres
+                  </a>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mt-2">
-                  <small class="text-muted">Posté il y a 2 jours</small>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Détails</a>
-                </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="mb-1">Développeur Backend Node.js</h6>
-                    <p class="text-muted mb-0 small">MarocDigital - Tanger</p>
-                  </div>
-                  <span class="badge status-badge accepted">Accepté</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-2">
-                  <small class="text-muted">Posté il y a 7 jours</small>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Détails</a>
-                </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="mb-1">Développeur Mobile Flutter</h6>
-                    <p class="text-muted mb-0 small">AppWave - Casablanca</p>
-                  </div>
-                  <span class="badge status-badge rejected">Refusé</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-2">
-                  <small class="text-muted">Posté il y a 14 jours</small>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Détails</a>
-                </div>
-              </a>
+              </div>
+              @endforelse
             </div>
           </div>
         </div>
         
-        <!-- Entretiens à venir - Version améliorée -->
+        <!-- Entretiens à venir -->
         <div class="col-lg-6">
           <div class="dashboard-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">Entretiens à venir</h5>
-              <a href="entretiens.html" class="btn btn-sm btn-outline-primary">Voir tout</a>
+              <a href="{{ route('candidat.mesEntretiens', ['candidat' => $candidat->id]) }}" class="btn btn-sm btn-outline-primary">Voir tout</a>
             </div>
             
             <div class="timeline">
-              <!-- Entretien 1 - Mise en valeur -->
+              @forelse($entretiens as $entretien)
               <div class="timeline-item mb-4">
                 <div class="timeline-badge bg-primary">
                   <i class="bi bi-calendar-check"></i>
@@ -473,8 +523,8 @@
                   <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                       <div>
-                        <h6 class="mb-1 fw-bold">MegaSoft - Développeur Full Stack</h6>
-                        <span class="badge bg-primary bg-opacity-10 text-primary small">Entretien technique</span>
+                        <h6 class="mb-1 fw-bold">{{ $entretien->candidature->offreEmploi->entreprise->nom }} - {{ $entretien->candidature->offreEmploi->titre }}</h6>
+                        <span class="badge bg-primary bg-opacity-10 text-primary small">{{ $entretien->type }}</span>
                       </div>
                       <div class="dropdown">
                         <button class="btn btn-sm btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
@@ -493,7 +543,7 @@
                         <i class="bi bi-clock me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Date</small>
-                          <span>Demain - 10:00 à 11:30</span>
+                          <span>{{ $entretien->date_entretien->format('d/m/Y') }} - {{ $entretien->heure_debut }} à {{ $entretien->heure_fin }}</span>
                         </div>
                       </div>
                       
@@ -501,7 +551,7 @@
                         <i class="bi bi-geo-alt me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Lieu</small>
-                          <span>En ligne (Zoom)</span>
+                          <span>{{ $entretien->lieu }}</span>
                         </div>
                       </div>
                     </div>
@@ -511,102 +561,50 @@
                         <i class="bi bi-person me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Interlocuteur</small>
-                          <span>Meryem Tazi (Responsable RH)</span>
+                          <span>{{ $entretien->interlocuteur }}</span>
                         </div>
                       </div>
                       
+                      @if($entretien->lien)
                       <div class="d-flex align-items-center">
                         <i class="bi bi-link-45deg me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Lien</small>
-                          <a href="#" class="text-primary">zoom.us/j/123456789</a>
+                          <a href="{{ $entretien->lien }}" class="text-primary" target="_blank">{{ $entretien->lien }}</a>
                         </div>
                       </div>
+                      @endif
                     </div>
                     
                     <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
                       <button class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-journal-text me-1"></i> Préparation
                       </button>
+                      @if($entretien->lien)
                       <button class="btn btn-sm btn-primary">
                         <i class="bi bi-camera-video me-1"></i> Rejoindre
                       </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Entretien 2 - Mise en valeur -->
-              <div class="timeline-item">
-                <div class="timeline-badge bg-success">
-                  <i class="bi bi-building"></i>
-                </div>
-                <div class="timeline-card card border-0 shadow-sm">
-                  <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                      <div>
-                        <h6 class="mb-1 fw-bold">DataTech - Ingénieur Frontend React</h6>
-                        <span class="badge bg-success bg-opacity-10 text-success small">Premier entretien</span>
-                      </div>
-                      <div class="dropdown">
-                        <button class="btn btn-sm btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
-                          <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                          <li><a class="dropdown-item" href="#"><i class="bi bi-trash me-2"></i>Annuler</a></li>
-                          <li><a class="dropdown-item" href="#"><i class="bi bi-calendar-plus me-2"></i>Ajouter à calendrier</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    <div class="d-flex flex-wrap gap-3 mt-3">
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-clock me-2 text-muted"></i>
-                        <div>
-                          <small class="text-muted d-block">Date</small>
-                          <span>23/04 - 14:30 à 15:30</span>
-                        </div>
-                      </div>
-                      
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-geo-alt me-2 text-muted"></i>
-                        <div>
-                          <small class="text-muted d-block">Lieu</small>
-                          <span>Bureaux DataTech, Rabat</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="d-flex flex-wrap gap-3 mt-3">
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-person me-2 text-muted"></i>
-                        <div>
-                          <small class="text-muted d-block">Interlocuteur</small>
-                          <span>Karim Lahlou (Tech Lead)</span>
-                        </div>
-                      </div>
-                      
-                      <div class="d-flex align-items-center">
-                        <i class="bi bi-telephone me-2 text-muted"></i>
-                        <div>
-                          <small class="text-muted d-block">Contact</small>
-                          <span>+212 6 12 34 56 78</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
-                      <button class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-journal-text me-1"></i> Préparation
-                      </button>
+                      @else
                       <button class="btn btn-sm btn-outline-success">
                         <i class="bi bi-map me-1"></i> Itinéraire
                       </button>
+                      @endif
                     </div>
                   </div>
                 </div>
               </div>
+              @empty
+              <div class="dashboard-card p-4 text-center">
+                <div class="empty-state">
+                  <i class="bi bi-calendar-x text-muted mb-3" style="font-size: 3rem;"></i>
+                  <h6 class="text-muted mb-2">Aucun entretien à venir</h6>
+                  <p class="text-muted small mb-3">Vous n'avez pas d'entretiens programmés pour le moment</p>
+                  <a href="{{ route('candidat.chercherOffres', ['candidat' => $candidat->id]) }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-search me-1"></i> Trouver des opportunités
+                  </a>
+                </div>
+              </div>
+              @endforelse
             </div>
           </div>
         </div>
@@ -616,96 +614,78 @@
           <div class="dashboard-card p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">Offres recommandées pour vous</h5>
-              <a href="offres-emploi.html" class="btn btn-sm btn-outline-primary">Voir plus</a>
+              <a href="{{ route('candidat.chercherOffres', ['candidat' => $candidat->id]) }}" class="btn btn-sm btn-outline-primary">Voir plus</a>
             </div>
             
             <div class="row g-3">
+              @forelse($offres_recommandees as $offre)
               <div class="col-md-6 col-lg-4">
-                <div class="card border h-100">
-                  <div class="card-body">
+                <div class="card border-0 shadow-sm h-100 hover-card">
+                  <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
-                      <div class="bg-light rounded p-2 me-3">
-                        <span class="fw-bold">TW</span>
+                      <div class="company-logo me-3">
+                        @if($offre->entreprise->logo)
+                          <img src="{{ asset('storage/' . $offre->entreprise->logo) }}" alt="{{ $offre->entreprise->nomEntreprise }}" class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
+                        @else
+                          <div class="bg-primary text-white rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                            <span class="fw-bold">{{ substr($offre->entreprise->nomEntreprise, 0, 2) }}</span>
+                          </div>
+                        @endif
                       </div>
                       <div>
-                        <h6 class="mb-0">Développeur Full Stack</h6>
-                        <small class="text-muted">TechWave - Casablanca</small>
+                        <h6 class="mb-0 text-truncate" style="max-width: 200px;">{{ $offre->intitule_offre_emploi }}</h6>
+                        <small class="text-muted d-block">{{ $offre->entreprise->nomEntreprise }}</small>
                       </div>
                     </div>
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                      <span class="badge bg-light text-dark">React</span>
-                      <span class="badge bg-light text-dark">Node.js</span>
-                      <span class="badge bg-light text-dark">MongoDB</span>
+
+                    <div class="mb-3">
+                      <div class="d-flex align-items-center text-muted mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        <small>{{ $offre->localisation }}</small>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center text-muted mb-2">
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-cash me-2"></i>
+                          <small>{{ $offre->salaire_offre_emploi }} MAD</small>
+                        </div>
+                      </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center small text-muted mb-3">
-                      <span><i class="bi bi-cash me-1"></i>12 000 - 15 000 MAD</span>
-                      <span><i class="bi bi-geo-alt me-1"></i>Casablanca</span>
+
+                    <div class="mb-3">
+                      <div class="d-flex flex-wrap gap-2">
+                        @if($offre->competences_requises)
+                          @foreach(explode(',', $offre->competences_requises) as $competence)
+                            <span class="badge bg-light text-dark">{{ trim($competence) }}</span>
+                          @endforeach
+                        @else
+                          <span class="badge bg-light text-dark">Non spécifié</span>
+                        @endif
+                      </div>
                     </div>
-                    <div class="d-flex justify-content-between">
-                      <span class="badge bg-primary">CDI</span>
-                      <a href="#" class="btn btn-sm btn-outline-primary">Postuler</a>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                      <span class="badge bg-primary bg-opacity-10 text-primary">{{ $offre->type_contrat }}</span>
+                      <a href="{{ route('candidat.chercherOffres', ['candidat' => $candidat->id, 'offre' => $offre->id]) }}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-arrow-right me-1"></i> Postuler
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              <div class="col-md-6 col-lg-4">
-                <div class="card border h-100">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <div class="bg-light rounded p-2 me-3">
-                        <span class="fw-bold">MD</span>
-                      </div>
-                      <div>
-                        <h6 class="mb-0">Développeur Backend Node.js</h6>
-                        <small class="text-muted">MarocDigital - Rabat</small>
-                      </div>
-                    </div>
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                      <span class="badge bg-light text-dark">Node.js</span>
-                      <span class="badge bg-light text-dark">Express</span>
-                      <span class="badge bg-light text-dark">PostgreSQL</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center small text-muted mb-3">
-                      <span><i class="bi bi-cash me-1"></i>10 000 - 14 000 MAD</span>
-                      <span><i class="bi bi-geo-alt me-1"></i>Rabat</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <span class="badge bg-primary">CDI</span>
-                      <a href="#" class="btn btn-sm btn-outline-primary">Postuler</a>
-                    </div>
+              @empty
+              <div class="col-12">
+                <div class="dashboard-card p-4 text-center">
+                  <div class="empty-state">
+                    <i class="bi bi-briefcase text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h6 class="text-muted mb-2">Aucune offre recommandée</h6>
+                    <p class="text-muted small mb-3">Nous n'avons pas encore d'offres correspondant à votre profil</p>
+                    <a href="{{ route('candidat.chercherOffres', ['candidat' => $candidat->id]) }}" class="btn btn-sm btn-primary">
+                      <i class="bi bi-search me-1"></i> Explorer toutes les offres
+                    </a>
                   </div>
                 </div>
               </div>
-              
-              <div class="col-md-6 col-lg-4">
-                <div class="card border h-100">
-                  <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                      <div class="bg-light rounded p-2 me-3">
-                        <span class="fw-bold">DT</span>
-                      </div>
-                      <div>
-                        <h6 class="mb-0">Ingénieur Frontend React</h6>
-                        <small class="text-muted">DataTech - Tanger</small>
-                      </div>
-                    </div>
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                      <span class="badge bg-light text-dark">React</span>
-                      <span class="badge bg-light text-dark">Redux</span>
-                      <span class="badge bg-light text-dark">TypeScript</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center small text-muted mb-3">
-                      <span><i class="bi bi-cash me-1"></i>11 000 - 14 000 MAD</span>
-                      <span><i class="bi bi-geo-alt me-1"></i>Tanger</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <span class="badge bg-primary">CDI</span>
-                      <a href="#" class="btn btn-sm btn-outline-primary">Postuler</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              @endforelse
             </div>
           </div>
         </div>
