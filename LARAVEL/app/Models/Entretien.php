@@ -21,15 +21,15 @@ class Entretien extends Model
     {
         return $this->belongsTo(Candidature::class);
     }
-    public function enPersonne()
+    public function enPersonnes()
     {
         return $this->hasOne(EnPersonne::class);
     }
-    public function telephonique()
+    public function telephoniques()
     {
         return $this->hasOne(Telephonique::class);
     }
-    public function visioconference()
+    public function visioconferences()
     {
         return $this->hasOne(Visioconference::class);
     }

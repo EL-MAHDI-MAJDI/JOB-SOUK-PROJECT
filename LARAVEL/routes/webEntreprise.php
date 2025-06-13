@@ -40,6 +40,9 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('entretiens', [entretiensController::class,'show'])
     ->where('entreprise','\d+')
     ->name('entretiens');
+    Route::post('entretiens', [entretiensController::class,'store'])
+    ->where('entreprise','\d+')
+    ->name('entretiens.store');
 
     Route::get('evaluerCandidat', [evaluerCandidatController::class,'show'])
     ->where('entreprise','\d+')

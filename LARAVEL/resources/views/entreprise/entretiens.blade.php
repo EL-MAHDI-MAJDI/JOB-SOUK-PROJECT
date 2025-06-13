@@ -22,6 +22,10 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
+      <!-- afficher les messages flash -->
+      @include('partials.flashbag')
+      <!-- afficher les messages d'erreurs -->
+      @include('partials.flashbag-error')
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -124,6 +128,7 @@
               </tr>
             </thead>
             <tbody>
+              
               <tr>
                 <td>
                   <div class="d-flex align-items-center">
@@ -154,7 +159,7 @@
                 </td>
               </tr>
               
-              <tr>
+              <!-- <tr>
                 <td>
                   <div class="d-flex align-items-center">
                     <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-2" width="40" height="40">
@@ -182,9 +187,9 @@
                     <i class="bi bi-x-circle"></i>
                   </button>
                 </td>
-              </tr>
+              </tr> -->
               
-              <tr>
+              <!-- <tr>
                 <td>
                   <div class="d-flex align-items-center">
                     <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-2" width="40" height="40">
@@ -212,7 +217,7 @@
                     <i class="bi bi-x-circle"></i>
                   </button>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </div>
@@ -282,121 +287,221 @@
     </div>
   </div>
 
-  <!-- Modal Nouvel Entretien -->
-  <div class="modal fade" id="newInterviewModal" tabindex="-1" aria-labelledby="newInterviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="newInterviewModalLabel">Planifier un nouvel entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="candidateSelect" class="form-label">Candidat</label>
-                <select class="form-select" id="candidateSelect" required>
-                  <option value="" selected disabled>Sélectionner un candidat</option>
-                  <option>Ahmed Benali - Développeur Full Stack</option>
-                  <option>Fatima Zahra - Designer UI/UX</option>
-                  <option>Karim El Mansouri - Chef de Projet IT</option>
-                  <option>Youssef Alaoui - Développeur Backend</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="jobPosition" class="form-label">Poste concerné</label>
-                <select class="form-select" id="jobPosition" required>
-                  <option value="" selected disabled>Sélectionner un poste</option>
-                  <option>Développeur Full Stack</option>
-                  <option>Designer UI/UX</option>
-                  <option>Chef de Projet IT</option>
-                  <option>Développeur Backend</option>
-                </select>
-              </div>
+<!-- Modal Nouvel Entretien -->
+<div class="modal fade" id="newInterviewModal" tabindex="-1" aria-labelledby="newInterviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="newInterviewModalLabel">Planifier un nouvel entretien</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ route('entreprise.entretiens.store', $entreprise->id) }}">
+          @csrf
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="offre_id" class="form-label">Poste concerné*</label>
+              <select class="form-select @error('offre_id') is-invalid @enderror" id="offre_id" name="offre_id" required>
+                <option value="" selected disabled>Sélectionner un poste</option>
+                @foreach($offres as $offre)
+                  <option value="{{ $offre->id }}" {{ old('offre_id') == $offre->id ? 'selected' : '' }}>{{ $offre->intitule_offre_emploi }}</option>
+                @endforeach
+              </select>
+              @error('offre_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label for="interviewDate" class="form-label">Date</label>
-                <input type="date" class="form-control" id="interviewDate" required>
-              </div>
-              <div class="col-md-3">
-                <label for="startTime" class="form-label">Heure de début</label>
-                <input type="time" class="form-control" id="startTime" required>
-              </div>
-              <div class="col-md-3">
-                <label for="endTime" class="form-label">Heure de fin</label>
-                <input type="time" class="form-control" id="endTime" required>
-              </div>
+            <div class="col-md-6">
+              <label for="candidat_id" class="form-label">Candidature*</label>
+              <select class="form-select @error('candidat_id') is-invalid @enderror" id="candidat_id" name="candidat_id" required disabled>
+                <option value="" selected disabled>Sélectionner d'abord un poste</option>
+              </select>
+              @error('candidat_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label class="form-label">Type d'entretien</label>
-                <div class="d-flex gap-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="interviewType" id="typeVideo" value="video" checked>
-                    <label class="form-check-label" for="typeVideo">
-                      <i class="bi bi-camera-video"></i> Visioconférence
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="interviewType" id="typeInPerson" value="inPerson">
-                    <label class="form-check-label" for="typeInPerson">
-                      <i class="bi bi-person"></i> En personne
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="interviewType" id="typePhone" value="phone">
-                    <label class="form-check-label" for="typePhone">
-                      <i class="bi bi-telephone"></i> Téléphonique
-                    </label>
-                  </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="interviewDate" class="form-label">Date*</label>
+              <input type="date" class="form-control @error('date') is-invalid @enderror" id="interviewDate" name="date" required value="{{ old('date') }}">
+              @error('date')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="col-md-3">
+              <label for="startTime" class="form-label">Heure de début*</label>
+              <input type="time" class="form-control @error('heure_debut') is-invalid @enderror" id="startTime" name="heure_debut" required value="{{ old('heure_debut') }}">
+              @error('heure_debut')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="col-md-3">
+              <label for="endTime" class="form-label">Heure de fin</label>
+              <input type="time" class="form-control @error('heure_fin') is-invalid @enderror" id="endTime" name="heure_fin" required value="{{ old('heure_fin') }}">
+              @error('heure_fin')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Type d'entretien*</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input @error('type') is-invalid @enderror" type="radio" name="type" id="typeVideo" value="visioconference" {{ old('type', 'visioconference') == 'visioconference' ? 'checked' : '' }}>
+                  <label class="form-check-label" for="typeVideo">
+                    <i class="bi bi-camera-video"></i> Visioconférence
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="type" id="typeInPerson" value="en_personne" {{ old('type') == 'en_personne' ? 'checked' : '' }}>
+                  <label class="form-check-label" for="typeInPerson">
+                    <i class="bi bi-person"></i> En personne
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="type" id="typePhone" value="telephonique" {{ old('type') == 'telephonique' ? 'checked' : '' }}>
+                  <label class="form-check-label" for="typePhone">
+                    <i class="bi bi-telephone"></i> Téléphonique
+                  </label>
                 </div>
               </div>
-              <div class="col-md-6">
-                <label for="interviewers" class="form-label">Participants</label>
-                <select class="form-select" id="interviewers" multiple>
-                  <option selected>Responsable RH</option>
-                  <option>Tech Lead</option>
-                  <option>Manager</option>
-                  <option>CEO</option>
-                </select>
-              </div>
+              @error('type')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+              @enderror
             </div>
-            
-            <div class="mb-3" id="videoConferenceDetails">
-              <label for="meetingLink" class="form-label">Lien de la réunion</label>
-              <input type="url" class="form-control" id="meetingLink" placeholder="https://zoom.us/j/123456789">
+            <div class="col-md-6">
+              <label for="participants" class="form-label">Participant*</label>
+              <select class="form-select @error('participant') is-invalid @enderror" id="participants" name="participant">
+                <option value="Responsable RH" {{ old('participant') == 'Responsable RH' ? 'selected' : '' }}>Responsable RH</option>
+                <option value="Tech Lead" {{ old('participant') == 'Tech Lead' ? 'selected' : '' }}>Tech Lead</option>
+                <option value="Manager" {{ old('participant') == 'Manager' ? 'selected' : '' }}>Manager</option>
+                <option value="CEO" {{ old('participant') == 'CEO' ? 'selected' : '' }}>CEO</option>
+              </select>
+              @error('participant')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            
-            <div class="mb-3 d-none" id="locationDetails">
-              <label for="location" class="form-label">Lieu</label>
-              <input type="text" class="form-control" id="location" placeholder="Adresse complète">
-            </div>
-            
-            <div class="mb-3">
-              <label for="notes" class="form-label">Notes supplémentaires</label>
-              <textarea class="form-control" id="notes" rows="3" placeholder="Points à aborder, informations importantes..."></textarea>
-            </div>
-            
-            <div class="form-check mb-4">
-              <input class="form-check-input" type="checkbox" id="sendInvitation" checked>
-              <label class="form-check-label" for="sendInvitation">
-                Envoyer une invitation par email au candidat
-              </label>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Planifier l'entretien</button>
-        </div>
+          </div>
+          <div class="mb-3 d-none" id="phoneDetails">
+            <label for="numero_telephone" class="form-label">Numéro de téléphone*</label>
+            <input type="tel" class="form-control @error('numero_telephone') is-invalid @enderror" id="numero_telephone" name="numero_telephone" placeholder="+212 6XX XXX XXX" value="{{ old('numero_telephone') }}">
+            @error('numero_telephone')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+          <div class="mb-3" id="videoConferenceDetails">
+            <label for="lien_reunion" class="form-label">Lien de la réunion*</label>
+            <input type="url" class="form-control @error('lien') is-invalid @enderror" id="lien_reunion" name="lien" placeholder="https://zoom.us/j/123456789" value="{{ old('lien_reunion') }}">
+            @error('lien')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+          <div class="mb-3 d-none" id="locationDetails">
+            <label for="lieu" class="form-label">Lieu*</label>
+            <input type="text" class="form-control @error('lieu') is-invalid @enderror" id="lieu" name="lieu" placeholder="Adresse complète" value="{{ old('lieu') }}">
+            @error('lieu')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notes supplémentaires</label>
+            <textarea class="form-control @error('notes') is-invalid @enderror" id="notes" name="notes" rows="3" placeholder="Points à aborder, informations importantes...">{{ old('notes') }}</textarea>
+            @error('notes')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+          <div class="form-check mb-4">
+            <input class="form-check-input @error('envoyer_invitation') is-invalid @enderror" type="checkbox" id="sendInvitation" name="envoyer_invitation" value="1" {{ old('envoyer_invitation', '1') == '1' ? 'checked' : '' }}>
+            <label class="form-check-label" for="sendInvitation">
+              Envoyer une invitation par email au candidat
+            </label>
+            @error('envoyer_invitation')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Planifier l'entretien</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   @vite(['resources/js/entrepriseJs/entretiens.js'])
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Récupérer les éléments du DOM
+      const offreSelect = document.getElementById('offre_id');
+      const candidatureSelect = document.getElementById('candidat_id');
+      
+      // Stocker toutes les candidatures pour pouvoir filtrer
+      const candidatures = [
+        @foreach($candidatures as $candidature)
+          {
+            id: {{ $candidature->candidat->id }},
+            offreId: {{ $candidature->offreEmploi->id }},
+            candidatNom: "{{ $candidature->candidat->nom }} {{ $candidature->candidat->prenom }}",
+            posteNom: "{{ $candidature->offreEmploi->intitule_offre_emploi }}"
+          },
+        @endforeach
+      ];
+      
+      // Fonction pour mettre à jour les options du select de candidatures
+      function updateCandidatureOptions(offreId) {
+        // Vider le select
+        candidatureSelect.innerHTML = '';
+        
+        // Filtrer les candidatures pour l'offre sélectionnée
+        const filteredCandidatures = candidatures.filter(c => c.offreId == offreId);
+        
+        // Si aucune candidature trouvée
+        if (filteredCandidatures.length === 0) {
+          const option = document.createElement('option');
+          option.disabled = true;
+          option.selected = true;
+          option.textContent = 'Aucune candidature pour ce poste';
+          candidatureSelect.appendChild(option);
+          candidatureSelect.disabled = true;
+          return;
+        }
+        
+        // Ajouter l'option par défaut
+        const defaultOption = document.createElement('option');
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.value = '';
+        defaultOption.textContent = 'Sélectionner une candidature';
+        candidatureSelect.appendChild(defaultOption);
+        
+        // Ajouter les options filtrées
+        filteredCandidatures.forEach(candidature => {
+          const option = document.createElement('option');
+          option.value = candidature.id;
+          option.textContent = `${candidature.candidatNom} - ${candidature.posteNom}`;
+          candidatureSelect.appendChild(option);
+        });
+        
+        // Activer le select
+        candidatureSelect.disabled = false;
+      }
+      
+      // Écouter les changements sur le select de poste
+      offreSelect.addEventListener('change', function() {
+        const selectedOffreId = this.value;
+        if (selectedOffreId) {
+          updateCandidatureOptions(selectedOffreId);
+        } else {
+          // Réinitialiser et désactiver le select de candidatures
+          candidatureSelect.innerHTML = '<option value="" selected disabled>Sélectionner d\'abord un poste</option>';
+          candidatureSelect.disabled = true;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
