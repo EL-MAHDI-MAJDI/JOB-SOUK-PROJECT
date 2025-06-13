@@ -137,6 +137,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      position: relative; /* Pour s'assurer qu'il est au-dessus du stretched-link */
+      z-index: 2;         /* Doit être supérieur au z-index du pseudo-élément de stretched-link (qui est 1) */
     }
 
     .empty-state {
@@ -225,15 +227,16 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
+      @include('partials.flashbag')
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Offres sauvegardées</h2>
         </div>
-        <div class="d-flex gap-2">
+        {{-- <div class="d-flex gap-2">
           <button class="btn btn-outline-primary"><i class="bi bi-filter me-2"></i>Filtrer</button>
           <button class="btn btn-primary"><i class="bi bi-search me-2"></i>Rechercher</button>
-        </div>
+        </div> --}}
       </div>
 
       <!-- Filtres -->
@@ -271,13 +274,18 @@
             </select>
           </div>
           <div class="col-md-3 d-flex align-items-end">
-            <button class="btn btn-outline-danger w-100">
-              <i class="bi bi-trash me-2"></i>Supprimer la sélection
+            <button type="submit" form="deleteAllOffersForm" class="btn btn-outline-danger w-100" id="deleteSelectedBtn">
+              <i class="bi bi-trash me-2"></i>Supprimer toutes les offres
             </button>
           </div>
         </div>
       </div>
 
+      <!-- Formulaire pour supprimer toutes les offres, lié au bouton ci-dessus -->
+      <form method="POST" action="{{ route('candidat.offreSauvgarder.destroyAll', $candidat) }}" id="deleteAllOffersForm" style="display: none;">
+          @csrf
+          @method('DELETE')
+      </form>
       <!-- Liste des offres sauvegardées -->
       <div class="row">
         <div class="col-12">
@@ -291,7 +299,11 @@
             <!-- Offre  -->
             @foreach($offresSauvegardees as $offre)
             <div class="job-card card mb-3">
+              {{-- Suppression des cases à cocher individuelles --}}
               <div class="card-body">
+                {{-- <div class="form-check position-absolute" style="top: 10px; left: 10px; z-index:3;"> --}}
+                  {{-- <input class="form-check-input offer-checkbox" type="checkbox" name="offre_ids[]" value="{{ $offre->id }}" id="check_{{ $offre->id }}"> --}}
+                {{-- </div> --}}
                 <div class="row align-items-center">
                   <div class="col-md-1 text-center">
                     <img src="{{ asset('storage/' . $offre->entreprise->logo) }}" alt="Logo" class="company-logo">
@@ -319,12 +331,13 @@
                     <!-- @php
                         $isSaved = in_array($offre->id, $offresSauvegardeesIds ?? []);
                     @endphp -->
-                    <form method="POST" action="{{ route('candidat.chercherOffres.sauvegarder', ['candidat' => $candidat->id, 'offre' => $offre->id]) }}" style="display:inline;">
+                    <form method="POST" action="{{ route('candidat.offreSauvgarder.destroy', ['candidat' => $candidat->id, 'offre' => $offre->id]) }}" style="display:inline;" class="delete-offer-form">
                         @csrf
+                        @method('DELETE')
                         <button type="submit"
-                            class="btn save-btn btn-warning" {{-- $isSaved ? 'btn-warning' : 'btn-outline-secondary' --}}"
-                            title="Sauvegarder" name="save">
-                            <i class="bi bi-bookmark-fill" {{-- $isSaved ? 'bi-bookmark-fill' : 'bi-bookmark' --}}"></i>
+                            class="btn save-btn btn-danger" 
+                            title="Supprimer des sauvegardes" name="save">
+                            <i class="bi bi-trash-fill text-warning"></i>
                         </button>
                     </form>
                   </div>
@@ -372,74 +385,37 @@
       document.querySelector('.side-menu').classList.toggle('show');
     });
 
-    // Gestion des boutons de sauvegarde
-    document.querySelectorAll('.save-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        // Confirmation avant suppression
-        if (confirm("Voulez-vous vraiment supprimer cette offre de vos sauvegardes ?")) {
-          this.closest('.job-card').remove();
-          // Mettre à jour le compteur (pour démonstration)
-          const countElement = document.querySelector('.nav-link.active .badge');
-          if (countElement) {
-            const currentCount = parseInt(countElement.textContent);
-            countElement.textContent = currentCount - 1;
-          }
-          // Afficher un message temporaire
-          const toast = document.createElement('div');
-          toast.className = 'position-fixed bottom-0 end-0 p-3';
-          toast.innerHTML = `
-            <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-              <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Succès</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-              </div>
-              <div class="toast-body">
-                Offre supprimée de vos sauvegardes
-              </div>
-            </div>
-          `;
-          document.body.appendChild(toast);
-          setTimeout(() => toast.remove(), 3000);
-        }
-      });
+    // Gestion de la soumission des formulaires pour supprimer une offre sauvegardée
+    document.querySelectorAll('.delete-offer-form').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            if (!confirm("Voulez-vous vraiment supprimer cette offre de vos sauvegardes ?")) {
+                event.preventDefault(); // Empêche la soumission si l'utilisateur annule
+            }
+            // Si confirmé, le formulaire est soumis.
+            // Le serveur traitera la suppression et la page sera rechargée
+            // (grâce au `return back()` du contrôleur), affichant la liste mise à jour.
+        });
     });
 
     // Sélection multiple pour suppression
-    document.querySelector('.btn-outline-danger').addEventListener('click', function() {
-      const selectedCards = document.querySelectorAll('.job-card .form-check-input:checked');
-      if (selectedCards.length === 0) {
-        alert("Veuillez sélectionner au moins une offre à supprimer");
-        return;
+    const deleteAllOffersForm = document.getElementById('deleteAllOffersForm');
+    if (deleteAllOffersForm) {
+      deleteAllOffersForm.addEventListener('submit', function(event) {
+      if (!confirm(`Voulez-vous vraiment supprimer TOUTES vos offres sauvegardées ? Cette action est irréversible.`)) {
+        event.preventDefault();
       }
-      
-      if (confirm(`Voulez-vous vraiment supprimer ${selectedCards.length} offre(s) de vos sauvegardes ?`)) {
-        selectedCards.forEach(card => {
-          card.closest('.job-card').remove();
-        });
-        // Mettre à jour le compteur (pour démonstration)
-        const countElement = document.querySelector('.nav-link.active .badge');
-        if (countElement) {
-          const currentCount = parseInt(countElement.textContent);
-          countElement.textContent = currentCount - selectedCards.length;
-        }
-        // Afficher un message temporaire
-        const toast = document.createElement('div');
-        toast.className = 'position-fixed bottom-0 end-0 p-3';
-        toast.innerHTML = `
-          <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-              <strong class="me-auto">Succès</strong>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-              ${selectedCards.length} offre(s) supprimée(s) de vos sauvegardes
-            </div>
-          </div>
-        `;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-      }
-    });
+      // Si confirmé, le formulaire est soumis. Le serveur s'occupera de la suppression.
+      });
+    }
+    
+    // Activer/désactiver le bouton de suppression multiple en fonction des cases cochées
+    // (Optionnel, pour une meilleure UX)
+    // document.querySelectorAll('.offer-checkbox').forEach(checkbox => {
+    //   checkbox.addEventListener('change', () => {
+    //     document.getElementById('deleteSelectedBtn').disabled = !document.querySelector('.offer-checkbox:checked');
+    //   });
+    // });
+    // if (document.getElementById('deleteSelectedBtn')) document.getElementById('deleteSelectedBtn').disabled = true; // Désactiver au chargement
   </script>
 </body>
 </html>

@@ -476,19 +476,22 @@
             
             <div class="list-group list-group-flush">
               @forelse($candidatures_recentes as $candidature)
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
+              {{-- Le lien externe <a> est retiré pour éviter le comportement de navigation par défaut si on clique ailleurs que sur le bouton "Détails" --}}
+              <div class="list-group-item border-0 px-0 py-3">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
-                    <h6 class="mb-1">{{ $candidature->offreEmploi->titre }}</h6>
-                    <p class="text-muted mb-0 small">{{ $candidature->offreEmploi->entreprise->nom }} - {{ $candidature->offreEmploi->ville }}</p>
+                    {{-- Correction des noms de propriétés pour l'offre d'emploi --}}
+                    <h6 class="mb-1">{{ $candidature->offreEmploi->intitule_offre_emploi }}</h6>
+                    <p class="text-muted mb-0 small">{{ $candidature->offreEmploi->entreprise->nomEntreprise }} - {{ $candidature->offreEmploi->localisation }}</p>
                   </div>
                   <span class="badge status-badge {{ strtolower(str_replace(' ', '', $candidature->statut)) }}">{{ $candidature->statut }}</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                   <small class="text-muted">Posté il y a {{ $candidature->created_at->diffForHumans() }}</small>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Détails</a>
+                  {{-- Mise à jour du lien "Détails" pour pointer vers les détails de l'offre --}}
+                  <a href="{{ route('candidat.offreDetails', ['candidat' => $candidat->id, 'offre' => $candidature->offreEmploi->id]) }}" class="btn btn-sm btn-outline-primary">Détails</a>
                 </div>
-              </a>
+              </div>
               @empty
               <div class="dashboard-card p-4 text-center">
                 <div class="empty-state">

@@ -145,6 +145,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      position: relative; /* Pour s'assurer qu'il est au-dessus du stretched-link */
+      z-index: 2;         /* Doit être supérieur au z-index du pseudo-élément de stretched-link (qui est 1) */
     }
 
     /* Badges de statut */
@@ -345,6 +347,16 @@
           @else
             <!-- Offre  -->
             @foreach($offres as $offre)
+            @php
+                $isSaved = in_array($offre->id, $offresSauvegardeesIds ?? []);
+                // Supposons que $appliedOfferIds est passé par le contrôleur.
+                // $appliedOfferIds devrait être un tableau des IDs des offres auxquelles le candidat a postulé.
+                $isApplied = in_array($offre->id, $appliedOfferIds ?? []);
+            @endphp
+
+            {{-- Afficher l'offre seulement si elle n'est NI postulée NI sauvegardée --}}
+            {{-- Cela signifie qu'une offre est masquée si elle est postulée OU si elle est sauvegardée (ou les deux) --}}
+            @if(!$isApplied && !$isSaved)
             <div class="job-card card mb-3">
               <div class="card-body">
                 <div class="row align-items-center">
@@ -371,9 +383,6 @@
                   </div>
                   <div class="col-md-4 text-end">
                     <a href='{{ route("candidat.offreDetails", ["candidat" => $candidat->id, "offre" => $offre->id]) }}' class="stretched-link me-2" title="Postuler"></a>
-                    @php
-                        $isSaved = in_array($offre->id, $offresSauvegardeesIds ?? []);
-                    @endphp
                     <form method="POST" action="{{ route('candidat.chercherOffres.sauvegarder', ['candidat' => $candidat->id, 'offre' => $offre->id]) }}" style="display:inline;">
                         @csrf
                         <button type="submit"
@@ -386,6 +395,7 @@
                 </div>
               </div>
             </div>
+            @endif
             @endforeach
             
             <!-- Pagination -->

@@ -149,6 +149,11 @@
       margin-bottom: 1.5rem;
     }
 
+    .message-btn {
+      position: relative; /* Nécessaire pour que z-index fonctionne correctement */
+      z-index: 2;         /* Doit être supérieur au z-index du pseudo-élément de stretched-link (qui est 1) */
+    }
+
     /* Version mobile */
     @media (max-width: 992px) {
       body {
@@ -283,10 +288,12 @@
                 </div>
               </div>
               <div class="col-md-3 text-end">
-                <button class="btn btn-outline-primary me-2">
+                <a href='{{ route("candidat.candidature.details", ["candidat" => $candidat->id, "candidature" => $candidature->id]) }}'
+                   class="btn btn-outline-primary me-2 stretched-link"
+                   title="Voir les détails de la candidature, de l'offre et le CV soumis">
                   <i class="bi bi-eye"></i>
-                </button>
-                <button class="btn btn-outline-secondary">
+                </a>
+                <button class="btn btn-outline-secondary message-btn" title="Contacter l'entreprise">
                   <i class="bi bi-envelope"></i>
                 </button>
               </div>

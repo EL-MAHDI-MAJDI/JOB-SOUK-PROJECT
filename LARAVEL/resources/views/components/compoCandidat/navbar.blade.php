@@ -17,9 +17,10 @@
             <i class="bi bi-lightning-charge me-1"></i> Actions rapides
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createOfferModal"><i class="bi bi-plus-circle me-2"></i>Créer une offre</a></li>
-            <li><a class="dropdown-item" href="rechercher-candidats.html"><i class="bi bi-search me-2"></i>Rechercher candidats</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal"><i class="bi bi-calendar-plus me-2"></i>Planifier entretien</a></li>
+            <li><a class="dropdown-item" href="{{ route('candidat.mesCandidatures', $candidat) }}"><i class="bi bi-file-earmark-text me-2"></i>Mes candidatures</a></li>
+            <li><a class="dropdown-item" href="{{ route('candidat.offreSauvgarder', $candidat) }}"><i class="bi bi-bookmark me-2"></i>Offres sauvegardées</a></li>
+            <li><a class="dropdown-item" href="{{ route('candidat.profil', $candidat) }}#cv"><i class="bi bi-person-vcard me-2"></i>Gérer mon profil</a></li>
+            <li><a class="dropdown-item" href="{{ route('candidat.cv', $candidat) }}"><i class="bi bi-file-earmark-person me-2"></i>Gérer mon cv</a></li>
           </ul>
         </div>
         <!-- Notifications -->

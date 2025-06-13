@@ -60,4 +60,15 @@ class mesCandidaturesController extends Controller
         return to_route('candidat.chercherOffres', ['candidat' => $candidat->id])
             ->with('success', 'Vous avez postulé avec succès à l\'offre !');
     }
+
+    public function showDetails(Candidat $candidat, Candidature $candidature)
+    {
+        // Charger les relations nécessaires pour éviter les requêtes N+1
+        $candidature->load(['offreEmploi.entreprise', 'candidat.cv']);
+
+        // Vous pouvez accéder au CV via $candidature->fichier et $candidature->nom_fichier
+        // ou si vous voulez le CV principal du candidat : $candidat->cv
+
+        return view('candidat.candidature_details', compact('candidat', 'candidature'));
+    }
 }

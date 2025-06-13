@@ -44,23 +44,37 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     Route::get('mesCandidatures',[mesCandidaturesController::class,'show'])
     ->where('candidat','\d+')
     ->name('mesCandidatures');
+    //route pour afficher les détails d'une candidature
+    Route::get('candidatures/{candidature}/details', [mesCandidaturesController::class, 'showDetails'])
+    ->where(['candidature' => '\d+']) // La contrainte pour 'candidat' est héritée du groupe
+    ->name('candidature.details'); // Sera préfixé par 'candidat.' pour devenir 'candidat.candidature.details'
+
 
     Route::get('chercherOffres',[chercherOffresController::class,'show'])
     ->where('candidat','\d+')
     ->name('chercherOffres');
     Route::post('chercherOffres/{offre}', [chercherOffresController::class,'sauvegarder'])
-    ->where(['candidat'=>'\d+', 'offre' => '\d+'])
+    ->where(['offre' => '\d+']) // La contrainte pour 'candidat' est héritée
     ->name('chercherOffres.sauvegarder');
 
     Route::get('chercherOffres/{offre}', [chercherOffresController::class, 'detail'])
     ->name('offreDetails');
     Route::post('chercherOffres/{offre}/postuler', [mesCandidaturesController::class, 'postuler'])
-    ->where(['candidat'=>'\d+', 'offre' => '\d+'])
+    ->where(['offre' => '\d+']) // La contrainte pour 'candidat' est héritée
     ->name('postuler');
 
     Route::get('offreSauvgarder',[offreSauvgarderController::class,'show'])
     ->where('candidat','\d+')
     ->name('offreSauvgarder');
+    Route::delete('offreSauvgarder/{offre}', [offreSauvgarderController::class, 'destroy'])
+    ->where('offre', '\d+') // La contrainte pour 'candidat' est héritée du groupe
+    ->name('offreSauvgarder.destroy');
+    Route::delete('offreSauvgarder', [offreSauvgarderController::class, 'destroyMultiple'])
+    // ->where('candidat', '\d+') // La contrainte pour 'candidat' est héritée du groupe
+    ->name('offreSauvgarder.destroyMultiple');
+    Route::delete('offreSauvgarderAll', [offreSauvgarderController::class, 'destroyAll']) // Nouvelle route
+    ->name('offreSauvgarder.destroyAll');
+
 
     Route::get('mesEntretiens',[mesEntretiensController::class,'show'])
     ->where('candidat','\d+')
