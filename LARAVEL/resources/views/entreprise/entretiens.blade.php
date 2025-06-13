@@ -128,7 +128,7 @@
               </tr>
             </thead>
             <tbody>
-              
+            
               <tr>
                 <td>
                   <div class="d-flex align-items-center">
@@ -324,8 +324,8 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="interviewDate" class="form-label">Date*</label>
-              <input type="date" class="form-control @error('date') is-invalid @enderror" id="interviewDate" name="date" required value="{{ old('date') }}">
-              @error('date')
+              <input type="date" class="form-control @error('date_entretien') is-invalid @enderror" id="interviewDate" name="date_entretien" required value="{{ old('date') }}">
+              @error('date_entretien')
                 <div class="invalid-feedback">{{ $message }}</div>
               @enderror
             </div>
