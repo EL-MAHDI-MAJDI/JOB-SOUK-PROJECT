@@ -526,7 +526,7 @@
                   <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                       <div>
-                        <h6 class="mb-1 fw-bold">{{ $entretien->candidature->offreEmploi->entreprise->nom }} - {{ $entretien->candidature->offreEmploi->titre }}</h6>
+                        <h6 class="mb-1 fw-bold">{{ $entretien->candidature->offreEmploi->entreprise->nomEntreprise ?? 'Entreprise non spécifiée' }} - {{ $entretien->candidature->offreEmploi->intitule_offre_emploi ?? 'Poste non spécifié' }}</h6>
                         <span class="badge bg-primary bg-opacity-10 text-primary small">{{ $entretien->type }}</span>
                       </div>
                       <div class="dropdown">
@@ -546,7 +546,7 @@
                         <i class="bi bi-clock me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Date</small>
-                          <span>{{ $entretien->date_entretien->format('d/m/Y') }} - {{ $entretien->heure_debut }} à {{ $entretien->heure_fin }}</span>
+                          <span>{{ $entretien->date_entretien->format('d/m/Y') }} - {{ $entretien->heure_debut->format('H:i') }} à {{ $entretien->heure_fin->format('H:i') }}</span>
                         </div>
                       </div>
                       
@@ -554,7 +554,17 @@
                         <i class="bi bi-geo-alt me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Lieu</small>
-                          <span>{{ $entretien->lieu }}</span>
+                          <span>
+                            @if($entretien->type === 'En personne' && $entretien->enPersonnes)
+                              {{ $entretien->enPersonnes->adresse_entretien ?? 'Lieu non spécifié' }}
+                            @elseif($entretien->type === 'Téléphonique')
+                              Téléphonique
+                            @elseif($entretien->type === 'Visioconférence' && $entretien->visioconferences)
+                              {{ $entretien->visioconferences->plateforme_visioconference ?? 'En ligne' }}
+                            @else
+                              {{ $entretien->lieu ?? 'Non spécifié' }}
+                            @endif
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -564,29 +574,37 @@
                         <i class="bi bi-person me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Interlocuteur</small>
-                          <span>{{ $entretien->interlocuteur }}</span>
+                          <span>{{ $entretien->participant ?? 'Non spécifié' }}</span>
                         </div>
                       </div>
                       
-                      @if($entretien->lien)
+                      @php
+                        $lienEntretien = null;
+                        if ($entretien->type === 'Visioconférence' && $entretien->visioconferences) {
+                            $lienEntretien = $entretien->visioconferences->lien_visioconference;
+                        } elseif ($entretien->lien) { // Fallback si lien est un attribut direct
+                            $lienEntretien = $entretien->lien;
+                        }
+                      @endphp
+                      @if($lienEntretien)
                       <div class="d-flex align-items-center">
                         <i class="bi bi-link-45deg me-2 text-muted"></i>
                         <div>
                           <small class="text-muted d-block">Lien</small>
-                          <a href="{{ $entretien->lien }}" class="text-primary" target="_blank">{{ $entretien->lien }}</a>
+                          <a href="{{ $lienEntretien }}" class="text-primary" target="_blank" title="{{ $lienEntretien }}">{{ \Illuminate\Support\Str::limit($lienEntretien, 30) }}</a>
                         </div>
                       </div>
                       @endif
                     </div>
                     
                     <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
-                      <button class="btn btn-sm btn-outline-primary">
+                      {{-- <button class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-journal-text me-1"></i> Préparation
-                      </button>
-                      @if($entretien->lien)
-                      <button class="btn btn-sm btn-primary">
+                      </button> --}}
+                      @if($entretien->type === 'Visioconférence' && $lienEntretien)
+                      <a href="{{ $lienEntretien }}" target="_blank" class="btn btn-sm btn-primary">
                         <i class="bi bi-camera-video me-1"></i> Rejoindre
-                      </button>
+                      </a>
                       @else
                       <button class="btn btn-sm btn-outline-success">
                         <i class="bi bi-map me-1"></i> Itinéraire

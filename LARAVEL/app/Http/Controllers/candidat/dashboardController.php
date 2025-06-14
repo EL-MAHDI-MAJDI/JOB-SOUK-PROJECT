@@ -34,6 +34,12 @@ class dashboardController extends Controller
         $entretiens = Entretien::whereHas('candidature', function($query) use ($candidat) {
                 $query->where('candidat_id', $candidat->id);
             })
+            ->with([
+                'candidature.offreEmploi.entreprise',
+                'enPersonnes',      // Pour les entretiens en personne
+                'telephoniques',    // Pour les entretiens téléphoniques (si modèle spécifique)
+                'visioconferences'  // Pour les entretiens en visioconférence
+            ])
             ->where('date_entretien', '>=', now()->format('Y-m-d'))
             ->orderBy('date_entretien')
             ->take(2)

@@ -16,7 +16,11 @@ class Entretien extends Model
         'type',
         'statut',
     ];
-    
+    protected $casts= [
+        'date_entretien' => 'datetime',
+        'heure_debut' => 'datetime',
+        'heure_fin' => 'datetime',
+    ];
 
     public function candidature()
     {

@@ -339,20 +339,21 @@
                   </div>
                 </div>
                 <div class="col-md-4 text-end">
-                  @if($entretien->statut === 'En attente')
-                    <button class="btn btn-primary me-2" onclick="confirmInterview({{ $entretien->id }})">
-                      <i class="bi bi-calendar-check me-1"></i>Confirmer
+                  <div class="d-flex justify-content-end gap-2">
+                    @if($entretien->statut === 'En attente')
+                      <button class="btn btn-primary btn-sm" onclick="confirmInterview({{ $entretien->id }})">
+                        <i class="bi bi-calendar-check me-1"></i>Confirmer
+                      </button>
+                    @endif
+                    <button class="btn btn-outline-primary btn-sm" onclick="showDetails({{ $entretien->id }})">
+                      <i class="bi bi-eye me-1"></i>Détails
                     </button>
-                  @endif
-                  <button class="btn btn-outline-primary me-2" onclick="showDetails({{ $entretien->id }})">
-                    <i class="bi bi-eye me-1"></i>Détails
-                    <!-- <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#interviewDetailsModal"><i class="bi bi-eye me-1"></i>Détails</button> -->
-                  </button>
-                  @if($entretien->statut === 'En attente')
-                    <button class="btn btn-warning attention-btn" title="Attention" onclick="showWarningPopup()">
-                      <i class="bi bi-exclamation-triangle me-1"></i>Attention
-                    </button>
-                  @endif
+                    @if($entretien->statut === 'En attente')
+                      <button class="btn btn-warning btn-sm" title="Attention" onclick="showWarningPopup()">
+                        <i class="bi bi-exclamation-triangle me-1"></i>Attention
+                      </button>
+                    @endif
+                  </div>
                 </div>
               </div>
             </div>

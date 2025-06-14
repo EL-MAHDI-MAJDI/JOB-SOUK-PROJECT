@@ -86,7 +86,7 @@
           </div>
           <div class="col-md-6">
             <h3 class="fw-bold mb-1">{{ $entreprise->nomEntreprise}}</h3>
-            <p class="text-muted mb-2"><i class="bi bi-geo-alt me-2"></i>{{ $entreprise->ville}}, Maroc</p>
+            <p class="text-muted mb-2"><i class="bi bi-geo-alt me-2"></i>{{ $entreprise->adresse}}</p>
             <div class="mb-3">
               <span class="badge bg-primary me-2">{{$entreprise->SecteurActivite}}</span>
               <span class="badge bg-secondary">{{$entreprise->tailleEntreprise}} employés</span>
@@ -318,9 +318,9 @@
           <!-- Candidats récents -->
           <div class="dashboard-card p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <h4 class="section-title fw-bold">Candidats récents</h4>
+              <h4 class="section-title fw-bold" style="color:red">Candidats récents</h4>
               <a href="{{ route('entreprise.evaluerCandidat', $entreprise) }}" class="btn btn-sm btn-outline-primary">
-                <i class="bi bi-arrow-right"></i> Voir tous
+                {{-- <i class="bi bi-arrow-right"></i> --}}Voir tous
               </a>
             </div>
             
@@ -335,7 +335,11 @@
                 @foreach($candidats_recents as $candidature)
                   <a href="{{ route('entreprise.evaluerCandidat', [$entreprise, $candidature->offreEmploi, $candidature->candidat]) }}" class="list-group-item list-group-item-action border-0 px-0 py-3">
                     <div class="d-flex align-items-center">
-                      <img src="{{ $candidature->candidat->photoProfile ?? 'https://via.placeholder.com/40' }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                      @if($candidature->candidat->photoProfile)
+                        <img src="{{ asset('storage/' . $candidature->candidat->photoProfile) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40" style="object-fit: cover;">
+                      @else
+                        <img src="{{ asset('storage/app/public/photo/jxxP2SOoFJOu2KMzWNfnvVKlv8CfBUTU84soKqL8.jpg') }}" alt="Profile par défaut" class="rounded-circle me-3" width="40" height="40" style="object-fit: cover;">
+                      @endif
                       <div>
                         <h6 class="fw-bold mb-1">{{ $candidature->candidat->nom }}</h6>
                         <p class="small text-muted mb-0">{{ $candidature->offreEmploi->intitule_offre_emploi }} • {{ $candidature->created_at->diffForHumans() }}</p>
@@ -563,5 +567,60 @@
       });
     });
   </script>
+
+  <!-- Modal Ajout Compétence -->
+  <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSkillModalLabel">Ajouter une compétence</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <form id="addCompetenceForm" method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}">
+          @csrf
+          @method('PUT')
+          <input type="hidden" name="action_type" value="competence_add">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="nom" class="form-label">Nom de la compétence</label>
+              <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Édition Compétence -->
+  <div class="modal fade" id="editSkillModal" tabindex="-1" aria-labelledby="editSkillModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editSkillModalLabel">Modifier la compétence</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        </div>
+        <form id="editCompetenceForm" method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}">
+          @csrf
+          @method('PUT')
+          <input type="hidden" name="action_type" value="competence_update">
+          <input type="hidden" name="competence_id" id="editCompetenceId">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="editSkill" class="form-label">Nom de la compétence</label>
+              <input type="text" class="form-control" id="editSkill" name="nom" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

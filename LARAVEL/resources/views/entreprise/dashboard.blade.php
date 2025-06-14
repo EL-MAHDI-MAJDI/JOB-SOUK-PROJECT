@@ -151,7 +151,11 @@
                 @foreach($candidats_recents as $candidature)
                   <a href="{{ route('entreprise.evaluerCandidat', [$entreprise, $candidature->offreEmploi, $candidature->candidat]) }}" class="list-group-item list-group-item-action border-0 px-0 py-3">
                     <div class="d-flex align-items-center">
-                      <img src="{{ $candidature->candidat->photoProfile ?? 'https://via.placeholder.com/40' }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                      @if($candidature->candidat->photoProfile)
+                        <img src="{{ asset('storage/' . $candidature->candidat->photoProfile) }}" alt="Profile" class="rounded-circle me-3" width="40" height="40" style="object-fit: cover;">
+                      @else
+                        <img src="{{ asset('storage/app/public/photo/jxxP2SOoFJOu2KMzWNfnvVKlv8CfBUTU84soKqL8.jpg') }}" alt="Profile par défaut" class="rounded-circle me-3" width="40" height="40" style="object-fit: cover;">
+                      @endif
                       <div>
                         <h6 class="fw-bold mb-1">{{ $candidature->candidat->nom }}</h6>
                         <p class="small text-muted mb-0">{{ $candidature->offreEmploi->intitule_offre_emploi }} • {{ $candidature->created_at->diffForHumans() }}</p>

@@ -169,7 +169,7 @@
                                     <label class="form-label">Commentaires</label>
                                     <textarea class="form-control" name="commentairesEvaluation" rows="2" placeholder="Ajoutez vos commentaires sur la candidature"></textarea>
                                   </div>
-                                  <div class="col-md-2 mt-2 d-flex gap-2">
+                                  <div class="col-md-2 mt-2 d-grid gap-2">
                                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                                     <button type="button" class="btn btn-secondary" onclick="toggleEvalForm({{ $offre->id }}, {{ $candidat->id }})">Annuler</button>
                                   </div>

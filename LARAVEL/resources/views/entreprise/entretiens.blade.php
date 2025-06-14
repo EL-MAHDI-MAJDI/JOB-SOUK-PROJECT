@@ -365,7 +365,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
                 </div>
-                <div class="form-check mb-4">
+                {{-- <div class="form-check mb-4">
                   <input class="form-check-input @error('envoyer_invitation') is-invalid @enderror" type="checkbox" id="sendInvitation" name="envoyer_invitation" value="1" {{ old('envoyer_invitation', '1') == '1' ? 'checked' : '' }}>
                   <label class="form-check-label" for="sendInvitation">
                     Envoyer une invitation par email au candidat
@@ -373,7 +373,7 @@
                   @error('envoyer_invitation')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
-                </div>
+                </div> --}}
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
                   <button type="submit" class="btn btn-primary">Planifier l'entretien</button>

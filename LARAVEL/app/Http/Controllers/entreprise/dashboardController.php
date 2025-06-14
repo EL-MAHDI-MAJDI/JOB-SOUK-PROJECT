@@ -62,7 +62,7 @@ class dashboardController extends Controller
                     'date' => $candidature->created_at,
                     'titre' => 'Candidature reçue',
                     'description' => $candidature->candidat->nom . ' pour le poste de ' . $candidature->offreEmploi->titre,
-                    'lien' => route('entreprise.candidatures.show', [$candidature->offreEmploi->entreprise, $candidature])
+                    'lien' => route('entreprise.evaluerCandidat', [$candidature->offreEmploi->entreprise, $candidature])
                 ];
             });
 
@@ -80,7 +80,7 @@ class dashboardController extends Controller
                     'date' => $entretien->created_at,
                     'titre' => 'Entretien programmé',
                     'description' => 'Avec ' . $entretien->candidature->candidat->nom . ' pour le poste de ' . $entretien->candidature->offreEmploi->titre,
-                    'lien' => route('entreprise.entretiens.show', [$entretien->candidature->offreEmploi->entreprise, $entretien])
+                    'lien' => route('entreprise.entretiens', [$entretien->candidature->offreEmploi->entreprise, $entretien])
                 ];
             });
 
