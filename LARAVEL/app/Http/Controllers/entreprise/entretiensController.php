@@ -45,7 +45,25 @@ class entretiensController extends Controller
         
         // Charger les détails spécifiques pour chaque entretien
         $entretiens->load('enPersonnes', 'telephoniques', 'visioconferences');
-        return view('entreprise.entretiens', compact('entreprise', 'offres', 'candidatures', 'entretiens'));
+
+        // Récupérer les candidatures avec les statuts spécifiés
+        $statuts = ['Entretien prévu', 'Entretien terminé', 'Accepté', 'Refusé'];
+        $candidaturesAll = Candidature::whereHas('offreEmploi.entreprise', function ($query) use ($entreprise) {
+            $query->where('id', $entreprise->id);
+        })
+        ->whereIn('statut', $statuts)
+        ->get();
+
+        // Charger les relations nécessaires pour les candidatures
+        $candidaturesAll->load('offreEmploi', 'candidat', 'entretiens');
+
+        // Récupérer tous les entretiens associés à ces candidatures
+        $entretiensAll = Entretien::whereIn('candidature_id', $candidaturesAll->pluck('id'))
+            ->get();
+        
+        // Charger les détails spécifiques pour chaque entretien
+        $entretiensAll->load('enPersonnes', 'telephoniques', 'visioconferences');
+        return view('entreprise.entretiens', compact('entreprise', 'offres', 'candidatures', 'entretiens', 'candidaturesAll', 'entretiensAll'));
         }
     public function store(Entreprise $entreprise, Request $request)
     {
@@ -56,7 +74,7 @@ class entretiensController extends Controller
             'date_entretien' => 'required|date|after_or_equal:today',
             'heure_debut' => 'required|date_format:H:i',
             'heure_fin' => 'nullable|date_format:H:i|after:heure_debut',
-            'type' => 'required|string|in:visioconference,telephonique,en_personne',
+            'type' => 'required|string|in:Visioconference,Telephonique,EnPersonne',
             'participant'=> 'required|string|max:255',
             'notes' => 'nullable|string|max:1000',
         ], [
@@ -64,18 +82,18 @@ class entretiensController extends Controller
         ]);
 
         // Vérification du type d'entretien
-        if ($request->type == 'visioconference') {
+        if ($request->type == 'Visioconference') {
             $request->validate([
                 'lien' => 'required|url',
                 // dd($request->lien),
             ]);
             
-        } elseif ($request->type == 'telephonique') {
+        } elseif ($request->type == 'Telephonique') {
             $request->validate([
                 'numero_telephone' => 'required|string|max:15',
             ]);
             // dd($request->numero_telephone);
-        } elseif ($request->type == 'en_personne') {
+        } elseif ($request->type == 'EnPersonne') {
             $request->validate([
                 'lieu' => 'required|string|max:255',
             ]);
@@ -109,13 +127,13 @@ class entretiensController extends Controller
             // Associer l'entretien à la candidature
         $candidature->entretiens()->save($entretien);
         
-        if ($request->type == 'visioconference') {
+        if ($request->type == 'Visioconference') {
             // Création d'une visioconférence associée à l'entretien
             $entretien->visioconferences()->create([
                 'entretien_id' => $entreprise->id,
                 'lien' => $request->lien,
             ]);
-        } elseif ($request->type == 'telephonique') {
+        } elseif ($request->type == 'Telephonique') {
             // Création d'un entretien téléphonique associé à l'entretien
             $entretien->telephoniques()->create([
                 'entretien_id' => $entreprise->id,
@@ -128,6 +146,9 @@ class entretiensController extends Controller
                 'lieu' => $request->lieu,
             ]);
         }
+        // changer le statut de la candidature
+        $candidature->update(['statut' => 'Entretien prévu']);
+        // Rediriger vers la page des entretiens de l'entreprise avec un message de succès
         return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
                          ->with('success', 'Entretien créé avec succès.');
     }

@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     phoneDetails.classList.add('d-none');
     
     // Afficher uniquement le champ correspondant au type sélectionné
-    if (type === 'visioconference') {
+    if (type === 'Visioconference') {
       videoDetails.classList.remove('d-none');
-    } else if (type === 'en_personne') {
+    } else if (type === 'EnPersonne') {
       locationDetails.classList.remove('d-none');
-    } else if (type === 'telephonique') {
+    } else if (type === 'Telephonique') {
       phoneDetails.classList.remove('d-none');
     }
   }

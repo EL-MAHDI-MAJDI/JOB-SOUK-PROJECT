@@ -260,10 +260,6 @@
         <div>
           <h2 class="fw-bold mb-1">Mes entretiens</h2>
         </div>
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-primary"><i class="bi bi-filter me-2"></i>Filtrer</button>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInterviewModal"><i class="bi bi-plus me-2"></i>Ajouter un entretien</button>
-        </div>
       </div>
 
       <!-- Filtres -->
@@ -310,118 +306,65 @@
       <!-- Liste des entretiens -->
       <div class="row">
         <div class="col-12">
-          <!-- Entretien 1 -->
+@forelse($entretiens as $entretien)
           <div class="interview-card card mb-3">
             <div class="card-body">
               <div class="row align-items-center">
                 <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
+                  <img src="{{ asset('storage/' . $entretien->candidature->offreEmploi->entreprise->logo) }}" alt="Logo" class="company-logo">
                 </div>
                 <div class="col-md-7">
-                  <h5 class="mb-1">Entretien technique - Développeur Full Stack</h5>
-                  <p class="text-muted mb-2">TechSolutions Inc.</p>
+                  <h5 class="mb-1">{{ $entretien->candidature->offreEmploi->intitule_offre_emploi }}</h5>
+                  <p class="text-muted mb-2">{{ $entretien->candidature->offreEmploi->entreprise->nomEntreprise }}</p>
                   <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="status-badge scheduled">Programmé</span>
-                    <span class="interview-type type-onsite">En personne</span>
-                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>15 Juin 2023 - 10:00</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: 1h</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Tour Casablanca, étage 12</span>
+                    <span class="status-badge {{ $entretien->statut === 'En attente' ? 'pending' : 'scheduled' }}">
+                      {{ $entretien->statut }}
+                    </span>
+                    @if($entretien->type === 'EnPersonne')
+                      <span class="interview-type type-onsite">En personne</span>
+                    @elseif($entretien->type === 'Telephonique')
+                      <span class="interview-type type-phone">Téléphonique</span>
+                    @else
+                      <span class="interview-type type-remote">À distance</span>
+                    @endif
+                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('d M Y') }} - {{ $entretien->heure_debut }}</span>
+                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: {{ $entretien->heure_fin ? \Carbon\Carbon::parse($entretien->heure_debut)->diffInMinutes(\Carbon\Carbon::parse($entretien->heure_fin)) : '1h' }}min</span>
+                    @if($entretien->type === 'EnPersonne')
+                      <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $entretien->enPersonnes->lieu ?? 'Lieu non spécifié' }}</span>
+                    @elseif($entretien->type === 'Telephonique')
+                      <span class="text-muted"><i class="bi bi-telephone me-1"></i>{{ $entretien->telephoniques->numero_telephone ?? 'Numéro non spécifié' }}</span>
+                    @else
+                      <span class="text-muted"><i class="bi bi-link-45deg me-1"></i>{{ $entretien->visioconferences->lien ?? 'Lien non spécifié' }}</span>
+                    @endif
                   </div>
                 </div>
                 <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#confirmInterviewModal"><i class="bi bi-calendar-check me-1"></i>Confirmer</button>
-                  <button class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#editInterviewModal"><i class="bi bi-pencil me-1"></i>Modifier</button>
-                  <button class="btn btn-outline-danger cancel-btn" title="Annuler" data-bs-toggle="modal" data-bs-target="#cancelInterviewModal">
-                    <i class="bi bi-x-circle"></i>
+                  @if($entretien->statut === 'En attente')
+                    <button class="btn btn-primary me-2" onclick="confirmInterview({{ $entretien->id }})">
+                      <i class="bi bi-calendar-check me-1"></i>Confirmer
+                    </button>
+                  @endif
+                  <button class="btn btn-outline-primary me-2" onclick="showDetails({{ $entretien->id }})">
+                    <i class="bi bi-eye me-1"></i>Détails
+                    <!-- <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#interviewDetailsModal"><i class="bi bi-eye me-1"></i>Détails</button> -->
                   </button>
+                  @if($entretien->statut === 'En attente')
+                    <button class="btn btn-warning attention-btn" title="Attention" onclick="showWarningPopup()">
+                      <i class="bi bi-exclamation-triangle me-1"></i>Attention
+                    </button>
+                  @endif
                 </div>
               </div>
             </div>
           </div>
+          @empty
+          <div class="text-center py-5">
+            <p class="text-muted">Aucun entretien en attente ou programmé</p>
+          </div>
+          @endforelse
           
-          <!-- Entretien 2 -->
-          <div class="interview-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Entretien RH - Chef de Projet IT</h5>
-                  <p class="text-muted mb-2">TechInnov</p>
-                  <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="status-badge completed">Terminé</span>
-                    <span class="interview-type type-remote">À distance</span>
-                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>10 Juin 2023 - 14:30</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: 45min</span>
-                    <span class="text-muted"><i class="bi bi-link-45deg me-1"></i>Lien Zoom envoyé</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#interviewDetailsModal"><i class="bi bi-eye me-1"></i>Détails</button>
-                  <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#feedbackModal"><i class="bi bi-check-circle me-1"></i>Feedback</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Entretien 3 -->
-          <div class="interview-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Entretien téléphonique préliminaire</h5>
-                  <p class="text-muted mb-2">AI Solutions</p>
-                  <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="status-badge pending">En attente</span>
-                    <span class="interview-type type-phone">Téléphonique</span>
-                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>20 Juin 2023 - 11:15</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: 30min</span>
-                    <span class="text-muted"><i class="bi bi-telephone me-1"></i>+212 6 12 34 56 78</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#confirmInterviewModal"><i class="bi bi-calendar-check me-1"></i>Confirmer</button>
-                  <button class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#editInterviewModal"><i class="bi bi-pencil me-1"></i>Modifier</button>
-                  <button class="btn btn-outline-danger cancel-btn" title="Annuler" data-bs-toggle="modal" data-bs-target="#cancelInterviewModal">
-                    <i class="bi bi-x-circle"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Entretien 4 -->
-          <div class="interview-card card mb-3">
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-1 text-center">
-                  <img src="https://via.placeholder.com/60" alt="Logo" class="company-logo">
-                </div>
-                <div class="col-md-7">
-                  <h5 class="mb-1">Entretien final - Responsable Marketing Digital</h5>
-                  <p class="text-muted mb-2">DigitalLab</p>
-                  <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="status-badge canceled">Annulé</span>
-                    <span class="interview-type type-onsite">En personne</span>
-                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>5 Juin 2023 - 09:00</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: 1h30</span>
-                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Siège social, Rabat</span>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end">
-                  <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#interviewDetailsModal"><i class="bi bi-eye me-1"></i>Détails</button>
-                  <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#rescheduleModal"><i class="bi bi-arrow-repeat me-1"></i>Reprogrammer</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Pagination -->
-          <nav aria-label="Page navigation" class="mt-4">
+          <!-- <nav aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
               <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1">Précédent</a>
@@ -432,11 +375,28 @@
                 <a class="page-link" href="#">Suivant</a>
               </li>
             </ul>
-          </nav>
+          </nav> -->
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Pop-up d'avertissement -->
+    <div class="modal fade" id="warningModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-warning"><i class="bi bi-exclamation-triangle me-2"></i>Attention</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-center mb-0">Si vous ne confirmez pas l'entretien 24 heures avant sa date prévue, celui-ci sera automatiquement annulé.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-warning" data-bs-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   <!-- Bouton scroll to top -->
   <button id="scrollTop" class="btn btn-danger">
@@ -444,81 +404,6 @@
   </button>
 
   <!-- Modales/Popups -->
-
-  <!-- Modal: Ajouter un entretien -->
-  <div class="modal fade" id="addInterviewModal" tabindex="-1" aria-labelledby="addInterviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="addInterviewModalLabel">Ajouter un nouvel entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="companyName" class="form-label">Entreprise</label>
-                <input type="text" class="form-control" id="companyName" placeholder="Nom de l'entreprise">
-              </div>
-              <div class="col-md-6">
-                <label for="jobTitle" class="form-label">Poste</label>
-                <input type="text" class="form-control" id="jobTitle" placeholder="Intitulé du poste">
-              </div>
-              <div class="col-md-6">
-                <label for="interviewDate" class="form-label">Date</label>
-                <input type="datetime-local" class="form-control" id="interviewDate">
-              </div>
-              <div class="col-md-6">
-                <label for="interviewDuration" class="form-label">Durée</label>
-                <select id="interviewDuration" class="form-select">
-                  <option selected>30 minutes</option>
-                  <option>45 minutes</option>
-                  <option>1 heure</option>
-                  <option>1 heure 30</option>
-                  <option>2 heures</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="interviewType" class="form-label">Type d'entretien</label>
-                <select id="interviewType" class="form-select">
-                  <option selected>En personne</option>
-                  <option>À distance</option>
-                  <option>Téléphonique</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="interviewStatus" class="form-label">Statut</label>
-                <select id="interviewStatus" class="form-select">
-                  <option selected>Programmé</option>
-                  <option>En attente</option>
-                </select>
-              </div>
-              <div class="col-12" id="locationField">
-                <label for="interviewLocation" class="form-label">Lieu</label>
-                <input type="text" class="form-control" id="interviewLocation" placeholder="Adresse complète">
-              </div>
-              <div class="col-12 d-none" id="remoteField">
-                <label for="interviewLink" class="form-label">Lien ou informations de connexion</label>
-                <input type="text" class="form-control" id="interviewLink" placeholder="Lien Zoom, Teams, etc.">
-              </div>
-              <div class="col-12 d-none" id="phoneField">
-                <label for="interviewPhone" class="form-label">Numéro de téléphone</label>
-                <input type="tel" class="form-control" id="interviewPhone" placeholder="+212 6 12 34 56 78">
-              </div>
-              <div class="col-12">
-                <label for="interviewNotes" class="form-label">Notes</label>
-                <textarea class="form-control" id="interviewNotes" rows="3" placeholder="Informations supplémentaires..."></textarea>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Enregistrer</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal: Détails de l'entretien -->
   <div class="modal fade" id="interviewDetailsModal" tabindex="-1" aria-labelledby="interviewDetailsModalLabel" aria-hidden="true">
@@ -569,7 +454,7 @@
   </div>
 
   <!-- Modal: Confirmer un entretien -->
-  <div class="modal fade" id="confirmInterviewModal" tabindex="-1" aria-labelledby="confirmInterviewModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="confirmInterviewModal" tabindex="-1" aria-labelledby="confirmInterviewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -597,10 +482,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Modal: Annuler un entretien -->
-  <div class="modal fade" id="cancelInterviewModal" tabindex="-1" aria-labelledby="cancelInterviewModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="cancelInterviewModal" tabindex="-1" aria-labelledby="cancelInterviewModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -642,79 +527,10 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Modal: Modifier un entretien -->
-  <div class="modal fade" id="editInterviewModal" tabindex="-1" aria-labelledby="editInterviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="editInterviewModalLabel">Modifier l'entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="editCompanyName" class="form-label">Entreprise</label>
-                <input type="text" class="form-control" id="editCompanyName" value="TechSolutions Inc.">
-              </div>
-              <div class="col-md-6">
-                <label for="editJobTitle" class="form-label">Poste</label>
-                <input type="text" class="form-control" id="editJobTitle" value="Développeur Full Stack">
-              </div>
-              <div class="col-md-6">
-                <label for="editInterviewDate" class="form-label">Date</label>
-                <input type="datetime-local" class="form-control" id="editInterviewDate" value="2023-06-15T10:00">
-              </div>
-              <div class="col-md-6">
-                <label for="editInterviewDuration" class="form-label">Durée</label>
-                <select id="editInterviewDuration" class="form-select">
-                  <option>30 minutes</option>
-                  <option>45 minutes</option>
-                  <option selected>1 heure</option>
-                  <option>1 heure 30</option>
-                  <option>2 heures</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="editInterviewType" class="form-label">Type d'entretien</label>
-                <select id="editInterviewType" class="form-select">
-                  <option selected>En personne</option>
-                  <option>À distance</option>
-                  <option>Téléphonique</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="editInterviewStatus" class="form-label">Statut</label>
-                <select id="editInterviewStatus" class="form-select">
-                  <option selected>Programmé</option>
-                  <option>En attente</option>
-                  <option>Terminé</option>
-                  <option>Annulé</option>
-                </select>
-              </div>
-              <div class="col-12" id="editLocationField">
-                <label for="editInterviewLocation" class="form-label">Lieu</label>
-                <input type="text" class="form-control" id="editInterviewLocation" value="Tour Casablanca, étage 12">
-              </div>
-              <div class="col-12">
-                <label for="editInterviewNotes" class="form-label">Notes</label>
-                <textarea class="form-control" id="editInterviewNotes" rows="3">Préparer les démonstrations techniques et revoir les bases de données.</textarea>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Enregistrer les modifications</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  </div> -->
 
   <!-- Modal: Feedback sur l'entretien -->
-  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -781,10 +597,10 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Modal: Reprogrammer un entretien -->
-  <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -836,7 +652,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
@@ -949,6 +765,11 @@
         setTimeout(() => toast.remove(), 3000);
       }
     });
+    // gestion attention
+    function showWarningPopup() {
+        var warningModal = new bootstrap.Modal(document.getElementById('warningModal'));
+        warningModal.show();
+      }
   </script>
 </body>
 </html>
