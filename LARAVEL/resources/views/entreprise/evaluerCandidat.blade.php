@@ -33,11 +33,11 @@
           <h2 class="fw-bold mb-1">Évaluer Candidats</h2>
           <p class="text-muted mb-0">Examinez et évaluez les candidatures pour vos offres d'emploi</p>
         </div>
-        <div class="d-flex gap-2">
+        {{-- <div class="d-flex gap-2">
           <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
             <i class="bi bi-funnel me-1"></i> Filtrer
           </button>
-        </div>
+        </div> --}}
       </div>
 
       <!-- Modal pour les filtres -->

@@ -229,6 +229,19 @@
               </li>
               <li><strong>Publiée :</strong> {{ $offre->created_at }}</li>
             </ul>
+            <div class="offre-section-title"><i class="bi bi-person-lines-fill me-1"></i>Informations de Contact</div>
+            <div class="mb-3">
+              @if(!empty($offre->email_contact))
+                <p><i class="bi bi-envelope-fill me-2"></i><strong>Email :</strong> <a href="mailto:{{ $offre->email_contact }}">{{ $offre->email_contact }}</a></p>
+              @else
+                <p><i class="bi bi-envelope-fill me-2"></i><strong>Email :</strong> Non précisé</p>
+              @endif
+              @if(!empty($offre->telephone_contact))
+                <p><i class="bi bi-telephone-fill me-2"></i><strong>Téléphone :</strong> {{ $offre->telephone_contact }}</p>
+              @else
+                <p><i class="bi bi-telephone-fill me-2"></i><strong>Téléphone :</strong> Non précisé</p>
+              @endif
+            </div>
             <!-- Bouton stylisé pour ouvrir le modal -->
             @if(!$candidat->cv)
               <button type="button" class="btn btn-postuler shadow" style="box-shadow:0 4px 16px rgba(231,76,60,0.15);" data-bs-toggle="modal" data-bs-target="#noCVModal">

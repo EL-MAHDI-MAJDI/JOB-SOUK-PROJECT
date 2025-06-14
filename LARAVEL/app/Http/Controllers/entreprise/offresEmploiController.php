@@ -5,18 +5,30 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OffreEmploiRequest;
 use App\Models\Entreprise;
 use App\Models\OffreEmploi;
+use App\Models\Candidature;
+use App\Models\Entretien;
 
 use Illuminate\Http\Request;
 
 class offresEmploiController extends Controller
 {
     public function show(Entreprise $entreprise){
+        // Récupérer les statistiques
+        $stats = [
+            'offres_actives' => $entreprise->offreEmplois()->where('status', 'active')->count(),
+            'candidatures' => Candidature::whereHas('offreEmploi', function($query) use ($entreprise) {
+                $query->where('entreprise_id', $entreprise->id);
+            })->count(),
+            'entretiens' => Entretien::whereHas('candidature.offreEmploi', function($query) use ($entreprise) {
+                $query->where('entreprise_id', $entreprise->id);
+            })->count(),
+            'offres_cloturees' => $entreprise->offreEmplois()->where('status', 'desactive')->count()
+        ];
 
         $offres = $entreprise->offreEmplois()
-        ->orderBy('created_at', 'desc') // Tri par date de création, les plus récentes en premier
-        ->paginate(4); // 10 offres par page
-        return view('entreprise.offresEmploi', compact('entreprise', 'offres'));
-
+            ->orderBy('created_at', 'desc') // Tri par date de création, les plus récentes en premier
+            ->paginate(4); // 10 offres par page
+        return view('entreprise.offresEmploi', compact('entreprise', 'offres', 'stats'));
     }
     public function store(OffreEmploiRequest $request, Entreprise $entreprise)
     {   

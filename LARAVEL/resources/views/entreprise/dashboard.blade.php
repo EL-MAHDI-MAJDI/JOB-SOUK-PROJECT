@@ -23,9 +23,9 @@
   <!-- Contenu principal -->
   <div class="main-content">
     <div class="container-fluid">
-
-    <!-- Afficher message "Votre compte a été créé avec succès !" -->
+      <!-- Afficher message "Votre compte a été créé avec succès !" -->
       @include('partials.flashbag')
+      
       <!-- En-tête -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -47,7 +47,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Offres actives</h6>
-                <h3 class="fw-bold mb-0">12</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['offres_actives'] }}</h3>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Candidatures</h6>
-                <h3 class="fw-bold mb-0">48</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['candidatures'] }}</h3>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Entretiens</h6>
-                <h3 class="fw-bold mb-0">5</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['entretiens'] }}</h3>
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@
               </div>
               <div>
                 <h6 class="text-muted mb-1">Embauches</h6>
-                <h3 class="fw-bold mb-0">3</h3>
+                <h3 class="fw-bold mb-0">{{ $stats['embauches'] }}</h3>
               </div>
             </div>
           </div>
@@ -103,60 +103,32 @@
             <h5 class="fw-bold mb-4">Activité récente</h5>
             
             <div class="activity-list">
-              <!-- Item 1 -->
-              <div class="activity-item">
-                <div class="activity-badge">
-                  <i class="bi bi-briefcase"></i>
+              @if($activites->isEmpty())
+                <div class="text-center text-muted py-4">
+                  <i class="bi bi-inbox display-4 mb-3"></i>
+                  <p class="mb-0">Aucune activité récente à afficher</p>
                 </div>
-                <div class="activity-content">
-                  <div class="activity-time">Aujourd'hui, 10:24</div>
-                  <h6 class="fw-bold mb-1">Nouvelle offre publiée</h6>
-                  <p class="mb-2">Poste de Développeur Back-end à Casablanca</p>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Voir l'offre</a>
-                </div>
-              </div>
-              
-              <!-- Item 2 -->
-              <div class="activity-item">
-                <div class="activity-badge">
-                  <i class="bi bi-person-check"></i>
-                </div>
-                <div class="activity-content">
-                  <div class="activity-time">Aujourd'hui, 09:15</div>
-                  <h6 class="fw-bold mb-1">Candidature reçue</h6>
-                  <p class="mb-2">Karim El Mansouri pour le poste de Designer UI/UX</p>
-                  <div class="d-flex gap-2">
-                    <a href="#" class="btn btn-sm btn-outline-primary">Voir CV</a>
-                    <a href="#" class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal">Planifier entretien</a>
+              @else
+                @foreach($activites as $activite)
+                  <div class="activity-item">
+                    <div class="activity-badge">
+                      @if($activite['type'] == 'offre')
+                        <i class="bi bi-briefcase"></i>
+                      @elseif($activite['type'] == 'candidature')
+                        <i class="bi bi-person-check"></i>
+                      @elseif($activite['type'] == 'entretien')
+                        <i class="bi bi-calendar-plus"></i>
+                      @endif
+                    </div>
+                    <div class="activity-content">
+                      <div class="activity-time">{{ $activite['date']->diffForHumans() }}</div>
+                      <h6 class="fw-bold mb-1">{{ $activite['titre'] }}</h6>
+                      <p class="mb-2">{{ $activite['description'] }}</p>
+                      <a href="{{ $activite['lien'] }}" class="btn btn-sm btn-outline-primary">Voir détails</a>
+                    </div>
                   </div>
-                </div>
-              </div>
-              
-              <!-- Item 3 -->
-              <div class="activity-item">
-                <div class="activity-badge">
-                  <i class="bi bi-calendar-plus"></i>
-                </div>
-                <div class="activity-content">
-                  <div class="activity-time">Hier, 16:30</div>
-                  <h6 class="fw-bold mb-1">Entretien programmé</h6>
-                  <p class="mb-2">Avec Amina Zari pour demain à 10h (en ligne)</p>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Voir détails</a>
-                </div>
-              </div>
-              
-              <!-- Item 4 -->
-              <div class="activity-item">
-                <div class="activity-badge">
-                  <i class="bi bi-envelope"></i>
-                </div>
-                <div class="activity-content">
-                  <div class="activity-time">Hier, 14:12</div>
-                  <h6 class="fw-bold mb-1">Message reçu</h6>
-                  <p class="mb-2">De la part de Société XYZ concernant une collaboration</p>
-                  <a href="#" class="btn btn-sm btn-outline-primary">Répondre</a>
-                </div>
-              </div>
+                @endforeach
+              @endif
             </div>
           </div>
         </div>
@@ -166,69 +138,37 @@
           <div class="dashboard-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">Candidats récents</h5>
-              <a href="evaluer-candidat.html" class="small">Voir tous</a>
+              <a href="{{ route('entreprise.evaluerCandidat', $entreprise) }}" class="small">Voir tous</a>
             </div>
             
             <div class="list-group list-group-flush">
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">Youssef Benali</h6>
-                    <p class="small text-muted mb-0">Développeur Front-end • 3 ans exp.</p>
-                  </div>
-                  <span class="badge bg-success bg-opacity-10 text-success ms-auto">Nouveau</span>
+              @if($candidats_recents->isEmpty())
+                <div class="text-center text-muted py-4">
+                  <i class="bi bi-people display-4 mb-3"></i>
+                  <p class="mb-0">Aucun candidat récent à afficher</p>
                 </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">Leila Nassiri</h6>
-                    <p class="small text-muted mb-0">Chef de projet • 5 ans exp.</p>
-                  </div>
-                  <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">À relancer</span>
-                </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">Mehdi El Fassi</h6>
-                    <p class="small text-muted mb-0">Designer UI/UX • 2 ans exp.</p>
-                  </div>
-                  <span class="badge bg-info bg-opacity-10 text-info ms-auto">En revue</span>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">Mehdi El Fassi</h6>
-                    <p class="small text-muted mb-0">Designer UI/UX • 2 ans exp.</p>
-                  </div>
-                  <span class="badge bg-info bg-opacity-10 text-info ms-auto">En revue</span>
-                </div>
-              </a>
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">Fatima Zahra</h6>
-                    <p class="small text-muted mb-0">Marketing digital • 4 ans exp.</p>
-                  </div>
-                  <span class="badge bg-primary bg-opacity-10 text-primary ms-auto">À contacter</span>
-                </div>
-              </a>
+              @else
+                @foreach($candidats_recents as $candidature)
+                  <a href="{{ route('entreprise.evaluerCandidat', [$entreprise, $candidature->offreEmploi, $candidature->candidat]) }}" class="list-group-item list-group-item-action border-0 px-0 py-3">
+                    <div class="d-flex align-items-center">
+                      <img src="{{ $candidature->candidat->photoProfile ?? 'https://via.placeholder.com/40' }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                      <div>
+                        <h6 class="fw-bold mb-1">{{ $candidature->candidat->nom }}</h6>
+                        <p class="small text-muted mb-0">{{ $candidature->offreEmploi->intitule_offre_emploi }} • {{ $candidature->created_at->diffForHumans() }}</p>
+                      </div>
+                      <span class="badge bg-{{ $candidature->statut == 'En attente' ? 'success' : ($candidature->statut == 'Évaluation terminée' ? 'warning' : 'info') }} bg-opacity-10 text-{{ $candidature->statut == 'En attente' ? 'success' : ($candidature->statut == 'Évaluation terminée' ? 'warning' : 'info') }} ms-auto">
+                        {{ $candidature->statut }}
+                      </span>
+                    </div>
+                  </a>
+                @endforeach
+              @endif
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
 
   <!-- Modal Planifier Entretien -->
   <div class="modal fade" id="scheduleInterviewModal" tabindex="-1" aria-labelledby="scheduleInterviewModalLabel" aria-hidden="true">

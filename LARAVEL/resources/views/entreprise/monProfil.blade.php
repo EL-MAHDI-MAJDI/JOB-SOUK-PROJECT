@@ -314,90 +314,41 @@
               @endif
             </div>
           </div>
-          <!-- Modal Ajouter Compétence -->
-          <div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="action_type" value="competence_add">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="addSkillModalLabel">Ajouter une compétence</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="mb-3">
-                      <label for="newSkill" class="form-label">Compétence</label>
-                      <input type="text" class="form-control" id="newSkill" name="nom" placeholder="Ex: Python, Scrum, etc." required>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-          
-          <!-- Modal Modifier Compétence -->
-          <div class="modal fade" id="editSkillModal" tabindex="-1" aria-labelledby="editSkillModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <form method="POST" action="{{ route('entreprise.updateEntreprise', $entreprise) }}" id="editCompetenceForm">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="action_type" value="competence_update">
-                <input type="hidden" name="competence_id" id="editCompetenceId">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="editSkillModalLabel">Modifier la compétence</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="mb-3">
-                      <label for="editSkill" class="form-label">Compétence</label>
-                      <input type="text" class="form-control" id="editSkill" name="nom" required>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-          
-          <!-- Galerie -->
-          {{-- <div class="dashboard-card p-4">
-            <h4 class="section-title fw-bold mb-3" style="color: var(--primary);">Galerie</h4>
-            
-            <div class="row g-2">
-              <div class="col-4">
-                <img src="https://via.placeholder.com/100" alt="Photo entreprise" class="img-fluid rounded">
-              </div>
-              <div class="col-4">
-                <img src="https://via.placeholder.com/100" alt="Photo entreprise" class="img-fluid rounded">
-              </div>
-              <div class="col-4">
-                <img src="https://via.placeholder.com/100" alt="Photo entreprise" class="img-fluid rounded">
-              </div>
-              <div class="col-4">
-                <img src="https://via.placeholder.com/100" alt="Photo entreprise" class="img-fluid rounded">
-              </div>
-              <div class="col-4">
-                <img src="https://via.placeholder.com/100" alt="Photo entreprise" class="img-fluid rounded">
-              </div>
-              <div class="col-4">
-                <img src="https://via.placeholder.com/100" alt="Photo entreprise" class="img-fluid rounded">
-              </div>
+
+          <!-- Candidats récents -->
+          <div class="dashboard-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="section-title fw-bold">Candidats récents</h4>
+              <a href="{{ route('entreprise.evaluerCandidat', $entreprise) }}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-arrow-right"></i> Voir tous
+              </a>
             </div>
             
-            <button class="btn btn-outline-primary w-100 mt-3">
-              <i class="bi bi-images"></i> Voir plus de photos
-            </button>
-          </div> --}}
+            <div class="list-group list-group-flush">
+              @if($candidats_recents->isEmpty())
+                <div class="text-center text-muted py-4">
+                  <i class="bi bi-people display-4 mb-3"></i>
+                  <p class="mb-0">Aucun candidat récent à afficher</p>
+                  <small>Les candidats apparaîtront ici</small>
+                </div>
+              @else
+                @foreach($candidats_recents as $candidature)
+                  <a href="{{ route('entreprise.evaluerCandidat', [$entreprise, $candidature->offreEmploi, $candidature->candidat]) }}" class="list-group-item list-group-item-action border-0 px-0 py-3">
+                    <div class="d-flex align-items-center">
+                      <img src="{{ $candidature->candidat->photoProfile ?? 'https://via.placeholder.com/40' }}" alt="Profile" class="rounded-circle me-3" width="40" height="40">
+                      <div>
+                        <h6 class="fw-bold mb-1">{{ $candidature->candidat->nom }}</h6>
+                        <p class="small text-muted mb-0">{{ $candidature->offreEmploi->intitule_offre_emploi }} • {{ $candidature->created_at->diffForHumans() }}</p>
+                      </div>
+                      <span class="badge bg-{{ $candidature->statut == 'En attente' ? 'success' : ($candidature->statut == 'Évaluation terminée' ? 'warning' : 'info') }} bg-opacity-10 text-{{ $candidature->statut == 'En attente' ? 'success' : ($candidature->statut == 'Évaluation terminée' ? 'warning' : 'info') }} ms-auto">
+                        {{ $candidature->statut }}
+                      </span>
+                    </div>
+                  </a>
+                @endforeach
+              @endif
+            </div>
+          </div>
         </div>
       </div>
     </div>

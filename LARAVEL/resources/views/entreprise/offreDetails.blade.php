@@ -109,6 +109,20 @@
           @endif
         </div>
         <hr>
+        <h5 class="fw-bold mb-2">Informations de Contact</h5>
+        <div class="mb-3">
+          @if(!empty($offre->email_contact))
+            <p><i class="bi bi-envelope-fill me-2"></i><strong>Email :</strong> <a href="mailto:{{ $offre->email_contact }}">{{ $offre->email_contact }}</a></p>
+          @else
+            <p><i class="bi bi-envelope-fill me-2"></i><strong>Email :</strong> Non précisé</p>
+          @endif
+          @if(!empty($offre->telephone_contact))
+            <p><i class="bi bi-telephone-fill me-2"></i><strong>Téléphone :</strong> {{ $offre->telephone_contact }}</p>
+          @else
+            <p><i class="bi bi-telephone-fill me-2"></i><strong>Téléphone :</strong> Non précisé</p>
+          @endif
+        </div>
+        <hr>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editOfferModal">
           <i class="bi bi-pencil"></i> Modifier

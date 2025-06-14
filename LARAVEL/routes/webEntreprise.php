@@ -58,6 +58,10 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::get('rechercherCandidats', [rechercherCandidatsController::class,'show'])
     ->where('entreprise','\d+')
     ->name('rechercherCandidats');
+    // Route pour voir le profil d'un candidat spécifique
+    Route::get('rechercherCandidats/{candidat}', [rechercherCandidatsController::class, 'voirProfil'])
+    ->where(['entreprise' => '\d+', 'candidat' => '\d+'])
+    ->name('rechercherCandidats.voirProfil');
     
     Route::get('parametres', [parametresController::class,'show'])
     ->where('entreprise','\d+')

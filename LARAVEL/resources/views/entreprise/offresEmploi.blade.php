@@ -92,25 +92,25 @@
       <div class="row mb-4">
         <div class="col-md-3">
           <div class="dashboard-card p-3 text-center">
-            <h3 class="fw-bold mb-1" style="color: var(--primary);">12</h3>
+            <h3 class="fw-bold mb-1" style="color: var(--primary);">{{ $stats['offres_actives'] }}</h3>
             <p class="text-muted mb-0">Offres actives</p>
           </div>
         </div>
         <div class="col-md-3">
           <div class="dashboard-card p-3 text-center">
-            <h3 class="fw-bold mb-1" style="color: var(--secondary);">156</h3>
+            <h3 class="fw-bold mb-1" style="color: var(--secondary);">{{ $stats['candidatures'] }}</h3>
             <p class="text-muted mb-0">Candidatures</p>
           </div>
         </div>
         <div class="col-md-3">
           <div class="dashboard-card p-3 text-center">
-            <h3 class="fw-bold mb-1" style="color: var(--accent);">24</h3>
+            <h3 class="fw-bold mb-1" style="color: var(--accent);">{{ $stats['entretiens'] }}</h3>
             <p class="text-muted mb-0">Entretiens</p>
           </div>
         </div>
         <div class="col-md-3">
           <div class="dashboard-card p-3 text-center">
-            <h3 class="fw-bold mb-1" style="color: #3498db;">8</h3>
+            <h3 class="fw-bold mb-1" style="color: #3498db;">{{ $stats['offres_cloturees'] }}</h3>
             <p class="text-muted mb-0">Offres clôturées</p>
           </div>
         </div>

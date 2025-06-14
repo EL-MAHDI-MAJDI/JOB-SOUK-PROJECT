@@ -17,9 +17,9 @@
             <i class="bi bi-lightning-charge me-1"></i> Actions rapides
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createOfferModal"><i class="bi bi-plus-circle me-2"></i>Créer une offre</a></li>
-            <li><a class="dropdown-item" href="rechercher-candidats.html"><i class="bi bi-search me-2"></i>Rechercher candidats</a></li>
-            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#scheduleInterviewModal"><i class="bi bi-calendar-plus me-2"></i>Planifier entretien</a></li>
+            <li><a class="dropdown-item" href="{{ route('entreprise.offresEmploi', $entreprise) }}" ><i class="bi bi-plus-circle me-2"></i>Créer une offre</a></li>
+            <li><a class="dropdown-item" href="{{ route('entreprise.rechercherCandidats', ['entreprise' => $entreprise]) }}"><i class="bi bi-search me-2"></i>Rechercher candidats</a></li>
+            <li><a class="dropdown-item" href="{{ route('entreprise.entretiens', ['entreprise' => $entreprise]) }}" ><i class="bi bi-calendar-plus me-2"></i>Planifier entretien</a></li>
           </ul>
         </div>
         

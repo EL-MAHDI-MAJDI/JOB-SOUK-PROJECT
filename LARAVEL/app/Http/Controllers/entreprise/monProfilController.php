@@ -15,7 +15,17 @@ class monProfilController extends Controller
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();
-        return view('entreprise.monProfil', compact('entreprise', 'offresRecentes'));
+
+        $candidats_recents = $entreprise->offreEmplois()
+            ->with(['candidatures.candidat', 'candidatures.offreEmploi'])
+            ->whereHas('candidatures')
+            ->get()
+            ->pluck('candidatures')
+            ->flatten()
+            ->sortByDesc('created_at')
+            ->take(5);
+
+        return view('entreprise.monProfil', compact('entreprise', 'offresRecentes', 'candidats_recents'));
     }
 public function update(Request $request, Entreprise $entreprise)
     {
