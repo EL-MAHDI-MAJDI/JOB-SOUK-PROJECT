@@ -148,6 +148,7 @@
       </div>
 
       <!-- Pagination -->
+      @if($categories->count()>0)
       <nav class="mt-4">
         <ul class="pagination justify-content-center">
           @if($categories->currentPage() > 1)
@@ -175,8 +176,16 @@
               <span class="page-link">Suivant</span>
             </li>
           @endif
+            
         </ul>
       </nav>
+      @else
+      <div class="text-center py-5">
+        <i class="bi bi-folder-x display-3 text-muted mb-3"></i>
+        <h5 class="text-muted">Aucune catégorie trouvée</h5>
+        <p class="text-muted">Commencez par ajouter une nouvelle catégorie.</p>
+      </div>
+      @endif
     </div>
   </div>
 
@@ -715,12 +724,7 @@
                   subcategoriesList.appendChild(li);
                 });
               } else {
-                subcategoriesList.innerHTML = `
-                  <li class="list-group-item text-center">
-                    <div class="text-muted mb-2">Aucune sous-catégorie n'existe pour cette catégorie</div>
-                    <small class="text-muted">Utilisez le formulaire ci-dessus pour ajouter une sous-catégorie</small>
-                  </li>
-                `;
+                // Si aucune sous-catégorie n'est trouvée, la liste reste vide (elle a été effacée par subcategoriesList.innerHTML = '';).
               }
             } else {
               throw new Error(result.message || 'Erreur lors du chargement des sous-catégories');

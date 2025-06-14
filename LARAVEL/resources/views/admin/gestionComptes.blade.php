@@ -104,7 +104,7 @@
               <!-- Candidate 1 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/photoProfile/profile.png') }}" alt="Profile" class="rounded-circle" width="40" height="40">
                 </td>
                 <td>
                   <div class="fw-bold">Youssef Benali</div>
@@ -132,7 +132,7 @@
               <!-- Company 1 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Logo" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Logo" class="rounded-circle" width="40" height="40">
                 </td>
                 <td>
                   <div class="fw-bold">TechSolutions</div>
@@ -160,7 +160,7 @@
               <!-- Admin 1 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/photoProfile/profile.png') }}" alt="Profile" class="rounded-circle" width="40" height="40">
                 </td>
                 <td>
                   <div class="fw-bold">Admin User</div>
@@ -186,7 +186,7 @@
               <!-- Candidate 2 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/photoProfile/profile.png') }}" alt="Profile" class="rounded-circle" width="40" height="40">
                 </td>
                 <td>
                   <div class="fw-bold">Leila Nassiri</div>

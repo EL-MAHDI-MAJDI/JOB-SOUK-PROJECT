@@ -9,7 +9,6 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   @vite(['resources/css/StyleAdmin/gestionOffres.css'])
-
 </head>
 <body>
   <!-- Sidebar Menu -->
@@ -107,7 +106,10 @@
               <!-- Offer 1 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Company Logo" class="rounded-circle" width="40" height="40" style="object-fit: 
+                  width: 100%;
+                  height: 100%;
+                  object-fit: cover;">
                 </td>
                 <td>
                   <div class="job-title">Développeur Full Stack</div>
@@ -140,7 +142,7 @@
               <!-- Offer 2 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Company Logo" class="rounded-circle" width="40" height="40" style="object-fit: cover;">
                 </td>
                 <td>
                   <div class="job-title">Designer UI/UX</div>
@@ -173,7 +175,7 @@
               <!-- Offer 3 -->
               <tr>
                 <td>
-                  <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-circle" width="40" height="40">
+                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Company Logo" class="rounded-circle" width="40" height="40" style="object-fit: cover;">
                 </td>
                 <td>
                   <div class="job-title">Chef de Projet Marketing</div>
@@ -204,7 +206,7 @@
               </tr>
 
               <!-- Offer 4 -->
-              <tr>
+              {{-- <tr>
                 <td>
                   <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-circle" width="40" height="40">
                 </td>
@@ -234,10 +236,10 @@
                     </ul>
                   </div>
                 </td>
-              </tr>
+              </tr> --}}
 
               <!-- Offer 5 -->
-              <tr>
+              {{-- <tr>
                 <td>
                   <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-circle" width="40" height="40">
                 </td>
@@ -267,7 +269,7 @@
                     </ul>
                   </div>
                 </td>
-              </tr>
+              </tr> --}}
             </tbody>
           </table>
         </div>

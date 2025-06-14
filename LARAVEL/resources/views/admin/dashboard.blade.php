@@ -103,7 +103,7 @@
       </div>
       
       <!-- Graphiques et activité -->
-      <div class="row g-4 mb-4">
+      {{-- <div class="row g-4 mb-4">
         <!-- Graphique des inscriptions -->
         <div class="col-lg-6">
           <div class="dashboard-card p-4 h-100">
@@ -149,7 +149,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       
       <!-- Dernière activité et entreprises à valider -->
       <div class="row g-4">
@@ -234,7 +234,7 @@
             <div class="list-group list-group-flush">
               <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
                 <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Logo" class="rounded me-3" width="40" height="40">
+                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Logo" class="rounded me-3" width="40" height="40">
                   <div>
                     <h6 class="fw-bold mb-1">TechSolutions SARL</h6>
                     <p class="small text-muted mb-0">Inscrite il y a 2 heures</p>
@@ -245,7 +245,7 @@
               
               <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
                 <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Logo" class="rounded me-3" width="40" height="40">
+                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }} " alt="Logo" class="rounded me-3" width="40" height="40">
                   <div>
                     <h6 class="fw-bold mb-1">DesignStudio</h6>
                     <p class="small text-muted mb-0">Inscrite il y a 5 heures</p>
@@ -254,7 +254,7 @@
                 </div>
               </a>
               
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
+              {{-- <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
                 <div class="d-flex align-items-center">
                   <img src="https://via.placeholder.com/40" alt="Logo" class="rounded me-3" width="40" height="40">
                   <div>
@@ -275,7 +275,7 @@
                   <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">En attente</span>
                 </div>
               </a>
-            </div>
+            </div> --}}
             
             <div class="mt-3">
               <button class="btn btn-primary w-100">
