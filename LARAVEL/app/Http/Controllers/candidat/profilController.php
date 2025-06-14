@@ -84,16 +84,16 @@ class profilController extends Controller
                 'niveau' => intval($request->niveau) // Ensure niveau is properly cast to integer
             ];
 
-            if ($request->has('competence_id')) {
-                // Mettre à jour la compétence existante
-                $competence = $candidat->competences()->findOrFail($request->competence_id);
-                $competence->update($data);
-                return response()->json(['success' => true, 'message' => 'Compétence modifiée avec succès']);
-            } else {
+            // if ($request->has('competence_id')) {
+            //     // Mettre à jour la compétence existante
+            //     $competence = $candidat->competences()->findOrFail($request->competence_id);
+            //     $competence->update($data);
+            //     return back()->with('success', 'Compétence modifiée avec succès');
+            // } else {
                 // Créer une nouvelle compétence
-                $competence = $candidat->competences()->create($data);
-                return response()->json(['success' => true, 'message' => 'Compétence ajoutée avec succès']);
-            }
+                $candidat->competences()->create($data);
+                return back()->with('success', 'Compétence ajoutée avec succès');
+            // }
         } elseif ($request->action_type === 'delete_competence') {
             $request->validate([
                 'competence_id' => 'required|exists:competences,id'
@@ -102,11 +102,11 @@ class profilController extends Controller
             $competence = $candidat->competences()->findOrFail($request->competence_id);
             $competence->delete();
 
-            return response()->json(['success' => true, 'message' => 'Compétence supprimée avec succès']);
+            return back()->with('success', 'Compétence supprimée avec succès');
         } elseif ($request->action_type === 'langue') {
             $request->validate([
                 'nom' => 'required|string|max:50',
-                'niveau' => 'required|in:Native,Fluent,Professional,Intermediate,Basic',
+                'niveau' => 'required|in:native,fluent,professional,intermediate,basic',
             ]);
             if ($request->filled('langue_id')) {
                 // Mise à jour d'une langue existante
@@ -129,46 +129,14 @@ class profilController extends Controller
             $langue->delete();
             return redirect()->back()->with('success', 'Langue supprimée avec succès');
         } elseif ($request->action_type === 'experience') {
-            // Vérifier si un poste actuel existe déjà
-            if ($request->has('poste_actuel')) {
-                $posteActuelExistant = $candidat->experiences()
-                    ->where('poste_actuel', true)
-                    ->when($request->filled('experience_id'), function($query) use ($request) {
-                        return $query->where('id', '!=', $request->experience_id);
-                    })
-                    ->exists();
-
-                if ($posteActuelExistant) {
-                    return back()->withErrors(['poste_actuel' => 'Vous ne pouvez avoir qu\'un seul poste actuel à la fois.']);
-                }
-            }
-
             $request->validate([
                 'titre_poste' => 'required|string|max:100',
                 'entreprise' => 'required|string|max:100',
                 'ville' => 'required|string|max:100',
-                'date_debut' => [
-                    'required',
-                    'date',
-                    'before_or_equal:today',
-                    'after_or_equal:1900-01-01'
-                ],
-                'date_fin' => [
-                    'nullable',
-                    'date',
-                    'after_or_equal:date_debut',
-                    'before_or_equal:today'
-                ],
+                'date_debut' => 'required|date',
+                'date_fin' => 'nullable|date|after_or_equal:date_debut',
                 'poste_actuel' => 'boolean',
                 'description' => 'nullable|string'
-            ], [
-                'date_debut.required' => 'La date de début est obligatoire.',
-                'date_debut.date' => 'La date de début doit être une date valide.',
-                'date_debut.before_or_equal' => 'La date de début ne peut pas être dans le futur.',
-                'date_debut.after_or_equal' => 'La date de début doit être après 1900.',
-                'date_fin.date' => 'La date de fin doit être une date valide.',
-                'date_fin.after_or_equal' => 'La date de fin doit être après la date de début.',
-                'date_fin.before_or_equal' => 'La date de fin ne peut pas être dans le futur.'
             ]);
 
             $data = [
@@ -203,25 +171,6 @@ class profilController extends Controller
                 'organisation' => 'required|string|max:255',
                 'date_obtention' => 'required|date',
                 'code_certifications_international' => 'nullable|string|max:255',
-                'date_obtention' => [
-                    'required',
-                    'date',
-                    'before_or_equal:today',
-                    'after_or_equal:1900-01-01'
-                ],
-                'code_certifications_international' => [
-                    'nullable',
-                    'string',
-                    'max:255',
-                    'regex:/^[A-Za-z0-9\-_]+$/', // Alphanumérique avec tirets et underscores
-                ],
-                [
-                    'date_obtention.required' => 'La date d\'obtention est obligatoire.',
-                    'date_obtention.date' => 'La date d\'obtention doit être une date valide.',
-                    'date_obtention.before_or_equal' => 'La date d\'obtention ne peut pas être dans le futur.',
-                    'date_obtention.after_or_equal' => 'La date d\'obtention doit être après 1900.',
-                    'code_certifications_international.regex' => 'Le code de certification doit contenir uniquement des lettres, chiffres, tirets et underscores.',
-                ]
             ]);
 
             if ($request->certification_id) {
@@ -244,64 +193,25 @@ class profilController extends Controller
                 return back()->with('success', 'Certification ajoutée avec succès.');
             }
         } elseif ($request->action_type === 'delete_certification') {
-            $request->validate([
-                'certification_id' => 'required|exists:certifications,id'
-            ]);
-            
-            $certification = $candidat->certifications()->findOrFail($request->certification_id);
-            $certification->delete();
+            $candidat->certifications()->where('id', $request->certification_id)->delete();
             return back()->with('success', 'Certification supprimée avec succès.');
         }elseif( $request->action_type === 'formation') {
             $request->validate([
                 'diplome' => 'required|string|max:255',
                 'etablissement' => 'required|string|max:255',
-                'date_debut' => [
-                    'required',
-                    'date',
-                    'before_or_equal:today',
-                    'after_or_equal:1900-01-01'
-                ],
-                'date_fin' => [
-                    'nullable',
-                    'date',
-                    'after:date_debut',
-                    'before_or_equal:today'
-                ],
-                'description' => 'nullable|string|max:1000'
-            ], [
-                'diplome.required' => 'Le diplôme est obligatoire.',
-                'diplome.max' => 'Le diplôme ne peut pas dépasser 255 caractères.',
-                'etablissement.required' => 'L\'établissement est obligatoire.',
-                'etablissement.max' => 'L\'établissement ne peut pas dépasser 255 caractères.',
-                'date_debut.required' => 'La date de début est obligatoire.',
-                'date_debut.date' => 'La date de début doit être une date valide.',
-                'date_debut.before_or_equal' => 'La date de début ne peut pas être dans le futur.',
-                'date_debut.after_or_equal' => 'La date de début doit être après 1900.',
-                'date_fin.date' => 'La date de fin doit être une date valide.',
-                'date_fin.after' => 'La date de fin doit être après la date de début.',
-                'date_fin.before_or_equal' => 'La date de fin ne peut pas être dans le futur.',
-                'description.max' => 'La description ne peut pas dépasser 1000 caractères.'
+                'date_debut' => 'required|date',
+                'date_fin' => 'nullable|date|after_or_equal:date_debut',
+                'description' => 'nullable|string|max:1000',
             ]);
 
             if ($request->filled('formation_id')) {
                 // Mise à jour d'une formation existante
-                $candidat->formations()->where('id', $request->formation_id)->update([
-                    'diplome' => $request->diplome,
-                    'etablissement' => $request->etablissement,
-                    'date_debut' => $request->date_debut,
-                    'date_fin' => $request->date_fin,
-                    'description' => $request->description
-                ]);
+                $formation = $candidat->formations()->findOrFail($request->formation_id);
+                $formation->update($request->all());
                 return back()->with('success', 'Formation mise à jour avec succès.');
             } else {
                 // Création d'une nouvelle formation
-                $candidat->formations()->create([
-                    'diplome' => $request->diplome,
-                    'etablissement' => $request->etablissement,
-                    'date_debut' => $request->date_debut,
-                    'date_fin' => $request->date_fin,
-                    'description' => $request->description
-                ]);
+                $candidat->formations()->create($request->all());
                 return back()->with('success', 'Formation ajoutée avec succès.');
             }
         } elseif ($request->action_type === 'delete_formation') {

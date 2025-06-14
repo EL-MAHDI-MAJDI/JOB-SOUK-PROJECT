@@ -4,6 +4,7 @@ namespace App\Http\Controllers\entreprise;
 use App\Http\Controllers\Controller;
 use App\Models\Entreprise;
 use App\Models\Candidature;
+use App\Models\Entretien;
 
 use Illuminate\Http\Request;
 
@@ -37,71 +38,92 @@ class entretiensController extends Controller
         ->get();
         
         // Charger les relations nécessaires pour les candidatures
-        $candidatures->load('offreEmploi', 'candidat');
+        $candidatures->load('offreEmploi', 'candidat', 'entretiens');
         
-        return view('entreprise.entretiens', compact('entreprise', 'offres', 'candidatures'));
-    }
+        // Récupérer tous les entretiens associés à ces candidatures
+        $entretiens = Entretien::whereIn('candidature_id', $candidatures->pluck('id'))->get();
+        
+        // Charger les détails spécifiques pour chaque entretien
+        $entretiens->load('enPersonnes', 'telephoniques', 'visioconferences');
+        return view('entreprise.entretiens', compact('entreprise', 'offres', 'candidatures', 'entretiens'));
+        }
     public function store(Entreprise $entreprise, Request $request)
     {
         // Validation des données de la requête
         $request->validate([
             'offre_id' => 'required|exists:offre_emplois,id',
             'candidat_id' => 'required|exists:candidats,id',
-            'date' => 'required|date|after_or_equal:today',
+            'date_entretien' => 'required|date|after_or_equal:today',
             'heure_debut' => 'required|date_format:H:i',
             'heure_fin' => 'nullable|date_format:H:i|after:heure_debut',
-            'type' => 'required|string|max:255',
+            'type' => 'required|string|in:visioconference,telephonique,en_personne',
             'participant'=> 'required|string|max:255',
             'notes' => 'nullable|string|max:1000',
         ], [
-            'date.after_or_equal' => 'La date de l\'entretien doit être une date postérieure ou égale à aujourd\'hui.',
+            'date_entretien.after_or_equal' => 'La date de l\'entretien doit être une date postérieure ou égale à aujourd\'hui.',
         ]);
+
         // Vérification du type d'entretien
         if ($request->type == 'visioconference') {
             $request->validate([
                 'lien' => 'required|url',
+                // dd($request->lien),
             ]);
             
         } elseif ($request->type == 'telephonique') {
             $request->validate([
                 'numero_telephone' => 'required|string|max:15',
             ]);
+            // dd($request->numero_telephone);
         } elseif ($request->type == 'en_personne') {
             $request->validate([
                 'lieu' => 'required|string|max:255',
             ]);
+            // dd($request->lieu);
         }
-
+        
+        // Trouver la candidature correspondante
+        $candidature = Candidature::where('candidat_id', $request->candidat_id)
+                                ->where('offre_emploi_id', $request->offre_id)
+                                ->first();
+        
+        if (!$candidature) {
+            return back()->withErrors(['message' => 'Aucune candidature trouvée pour ce candidat et cette offre.'])->withInput();
+        }
+        
         // dd($request->offre_id, $request->candidat_id, $request->date, $request->heure_debut, $request->heure_fin, $request->type, $request->participant, $request->notes);
         
         // Création d'un nouvel entretien
-        $entreprise->entretiens()->create([
-            'offre_id' => $request->offre_id,
-            'candidat_id' => $request->candidat_id,
-            'date' => $request->date,
+        $entretien = new Entretien([
+            // 'offre_id' => $request->offre_id,
+            // 'candidat_id' => $request->candidat_id,
+            'date_entretien' => $request->date_entretien,
             'heure_debut' => $request->heure_debut,
             'heure_fin' => $request->heure_fin,
             'type' => $request->type,
             'participant' => $request->participant,
             'notes' => $request->notes,
-            'status' => 'En attente',
+            'statut' => 'En attente',
         ]);
+
+            // Associer l'entretien à la candidature
+        $candidature->entretiens()->save($entretien);
         
         if ($request->type == 'visioconference') {
             // Création d'une visioconférence associée à l'entretien
-            $entreprise->visioconferences()->create([
+            $entretien->visioconferences()->create([
                 'entretien_id' => $entreprise->id,
                 'lien' => $request->lien,
             ]);
         } elseif ($request->type == 'telephonique') {
             // Création d'un entretien téléphonique associé à l'entretien
-            $entreprise->telephoniques()->create([
+            $entretien->telephoniques()->create([
                 'entretien_id' => $entreprise->id,
                 'numero_telephone' => $request->numero_telephone,
             ]);
         } else {
             // Création d'un entretien en personne associé à l'entretien
-            $entreprise->enPersonnes()->create([
+            $entretien->enPersonnes()->create([
                 'entretien_id' => $entreprise->id,
                 'lieu' => $request->lieu,
             ]);
@@ -109,37 +131,37 @@ class entretiensController extends Controller
         return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
                          ->with('success', 'Entretien créé avec succès.');
     }
-    public function destroy(Entreprise $entreprise, $id)
-    {
-        // Trouver l'entretien par son ID
-        $entretien = $entreprise->entretiens()->findOrFail($id);
+    // public function destroy(Entreprise $entreprise, $id)
+    // {
+    //     // Trouver l'entretien par son ID
+    //     $entretien = $entreprise->entretiens()->findOrFail($id);
 
-        // Supprimer l'entretien
-        $entretien->delete();
+    //     // Supprimer l'entretien
+    //     $entretien->delete();
 
-        return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
-                         ->with('success', 'Entretien supprimé avec succès.');
-    }
-    public function update(Entreprise $entreprise, Request $request, $id)
-    {
-        // Validation des données de la requête
-        $request->validate([
-            'date' => 'required|date',
-            'heure' => 'required|date_format:H:i',
-            'lieu' => 'required|string|max:255',
-        ]);
+    //     return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
+    //                      ->with('success', 'Entretien supprimé avec succès.');
+    // }
+    // public function update(Entreprise $entreprise, Request $request, $id)
+    // {
+    //     // Validation des données de la requête
+    //     $request->validate([
+    //         'date' => 'required|date',
+    //         'heure' => 'required|date_format:H:i',
+    //         'lieu' => 'required|string|max:255',
+    //     ]);
 
-        // Trouver l'entretien par son ID
-        $entretien = $entreprise->entretiens()->findOrFail($id);
+    //     // Trouver l'entretien par son ID
+    //     $entretien = $entreprise->entretiens()->findOrFail($id);
 
-        // Mettre à jour les informations de l'entretien
-        $entretien->update([
-            'date' => $request->date,
-            'heure' => $request->heure,
-            'lieu' => $request->lieu,
-        ]);
+    //     // Mettre à jour les informations de l'entretien
+    //     $entretien->update([
+    //         'date' => $request->date,
+    //         'heure' => $request->heure,
+    //         'lieu' => $request->lieu,
+    //     ]);
 
-        return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
-                         ->with('success', 'Entretien mis à jour avec succès.');
-    }
+    //     return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
+    //                      ->with('success', 'Entretien mis à jour avec succès.');
+    // }
 }

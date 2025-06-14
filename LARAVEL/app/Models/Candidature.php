@@ -35,7 +35,7 @@ class Candidature extends Model
     }
     public function entretiens()
     {
-        return $this->hasMany(Entretien::class);
+        return $this->hasOne(Entretien::class);
     }
     public function scopeEnAttente($query)
     {

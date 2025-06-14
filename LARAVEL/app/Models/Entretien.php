@@ -16,6 +16,7 @@ class Entretien extends Model
         'type',
         'statut',
     ];
+    
 
     public function candidature()
     {
