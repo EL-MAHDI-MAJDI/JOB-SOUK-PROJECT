@@ -256,6 +256,15 @@
     <!-- En-tête -->
       <!-- Afficher message "votre modification a été faite avec succès" -->
       @include('partials.flashbag')
+
+@if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Paramètres</h2>
@@ -407,7 +416,7 @@
               
               <div class="settings-card">
                 <h5 class="mb-3">Mot de passe</h5>
-                <p class="text-muted mb-3">Dernière modification il y a 3 mois</p>
+                <p class="text-muted mb-3">Dernière modification : {{ $candidat->updated_at->format('d/m/Y à H:i') }}</p>
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#passwordModal">
                   Modifier le mot de passe
                 </button>
@@ -716,25 +725,37 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label for="currentPassword" class="form-label">Mot de passe actuel</label>
-              <input type="password" class="form-control" id="currentPassword">
+          <!-- Formulaire de changement de mot de passe -->
+          <form method="POST" action="{{ route('candidat.updateparametre', ['candidat' => $candidat->id]) }}">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="update" value="update_password">
+
+            <div class="form-group mb-3">
+              <label for="current_password" class="form-label">Mot de passe actuel</label>
+              <input type="password" name="current_password" id="current_password" class="form-control @error('current_password') is-invalid @enderror" required>
+              @error('current_password')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            <div class="mb-3">
-              <label for="newPassword" class="form-label">Nouveau mot de passe</label>
-              <input type="password" class="form-control" id="newPassword">
-              <div class="form-text">Le mot de passe doit contenir au moins 8 caractères.</div>
+
+            <div class="form-group mb-3">
+              <label for="new_password" class="form-label">Nouveau mot de passe</label>
+              <input type="password" name="new_password" id="new_password" class="form-control @error('new_password') is-invalid @enderror" required>
+              @error('new_password')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
-            <div class="mb-3">
-              <label for="confirmPassword" class="form-label">Confirmer le nouveau mot de passe</label>
-              <input type="password" class="form-control" id="confirmPassword">
+
+            <div class="form-group mb-3">
+              <label for="new_password_confirmation" class="form-label">Confirmer le nouveau mot de passe</label>
+              <input type="password" name="new_password_confirmation" id="new_password_confirmation" class="form-control" required>
+            </div>
+
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
             </div>
           </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Enregistrer</button>
         </div>
       </div>
     </div>
@@ -804,6 +825,13 @@
 
     // Empêcher le défilement de la page
     document.body.style.overflow = 'hidden';
+
+    @if($errors->has('current_password') || $errors->has('new_password'))
+        <script>
+            var passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
+            passwordModal.show();
+        </script>
+    @endif
   </script>
 </body>
 </html>
