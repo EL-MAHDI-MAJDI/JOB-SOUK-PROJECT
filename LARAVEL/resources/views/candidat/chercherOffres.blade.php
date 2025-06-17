@@ -326,7 +326,12 @@
         <div class="col-md-12">
           <div class="d-flex justify-content-between align-items-center mb-4">
             {{-- <h5 class="fw-bold mb-0">@if($countoffres==1) une offre disponible @else {{$countoffres}} offres disponibles @endif</h5> --}}
-            <h5 class="fw-bold mb-0">Offres recommandées pour vous</h5>
+            {{-- Exemple d’affichage --}}
+            @if($countoffres == 1)
+              <h5 class="fw-bold mb-0">Une offre disponible</h5>
+            @else
+              <h5 class="fw-bold mb-0">{{ $countoffres }} offres disponibles</h5>
+            @endif
             @if(!$offres->isEmpty())
               <div>
                 <form method="GET" id="sortForm" >

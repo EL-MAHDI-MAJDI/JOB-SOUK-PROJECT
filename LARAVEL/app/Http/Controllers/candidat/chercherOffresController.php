@@ -18,19 +18,25 @@ class chercherOffresController extends Controller
         }else{
             $sortBy = $request->input('sortBy', 'created_at'); // ou la valeur par défaut
 
-            $offresSauvegardeesIds = $candidat->offresSauvegardees()->pluck('offre_emplois.id')->toArray();
-            // Récupérer les IDs des offres auxquelles le candidat a postulé
-            $appliedOfferIds = $candidat->candidatures()->pluck('offre_emploi_id')->toArray();
+            // Récupérer les IDs des offres déjà postulées et sauvegardées
+            $postuleesIds = $candidat->candidatures()->pluck('offre_emploi_id')->toArray();
+            $sauvegardeesIds = $candidat->offresSauvegardees()->pluck('offre_emploi_id')->toArray();
 
-            $query = OffreEmploi::with('entreprise')
-                ->where('status', 'active')
-                ->whereNotIn('id', $appliedOfferIds)      // Exclure les offres postulées
-                ->whereNotIn('id', $offresSauvegardeesIds); // Exclure les offres sauvegardées
+            // Requête de base pour les offres valides
+            $offresQuery = OffreEmploi::where('status', 'active')
+                ->whereNotIn('id', $postuleesIds)
+                ->whereNotIn('id', $sauvegardeesIds)
+                ->whereHas('entreprise', function($q) {
+                    $q->where('status', 'active');
+                });
 
-            $countoffres = $query->count(); // Compter après tous les filtres
-            $offres = $query->orderBy($sortBy)->paginate(4); // Trier et paginer
+            // Compter les offres filtrées
+            $countoffres = $offresQuery->count();
+
+            // Paginer les résultats
+            $offres = $offresQuery->with('entreprise')->latest()->paginate(10);
             
-            return view('candidat.chercherOffres', compact('candidat', 'offres', 'countoffres', 'sortBy', 'offresSauvegardeesIds', 'appliedOfferIds'));
+            return view('candidat.chercherOffres', compact('candidat', 'offres', 'countoffres', 'sortBy', 'sauvegardeesIds', 'postuleesIds'));
         }
     }
     public function search(Request $request, Candidat $candidat)

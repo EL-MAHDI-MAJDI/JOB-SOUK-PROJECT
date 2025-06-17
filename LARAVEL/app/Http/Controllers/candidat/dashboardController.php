@@ -49,9 +49,17 @@ class dashboardController extends Controller
             ->take(2)
             ->get();
 
-        // Offres recommandées
+        // Récupérer les IDs des offres déjà postulées et sauvegardées
+        $postuleesIds = $candidat->candidatures()->pluck('offre_emploi_id')->toArray();
+        $sauvegardeesIds = $candidat->offresSauvegardees()->pluck('offre_emploi_id')->toArray();
+
+        // Offres recommandées (non postulées, non sauvegardées, entreprise active)
         $offres_recommandees = OffreEmploi::where('status', 'active')
-            ->whereNotIn('id', $candidat->candidatures()->pluck('offre_emploi_id'))
+            ->whereNotIn('id', $postuleesIds)
+            ->whereNotIn('id', $sauvegardeesIds)
+            ->whereHas('entreprise', function($q) {
+                $q->where('status', 'active');
+            })
             ->with('entreprise')
             ->latest()
             ->take(3)
