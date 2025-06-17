@@ -13,7 +13,9 @@ use App\Http\Controllers\admin\administrateursController;
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [dashboardController::class,'index'])->name('dashboard');
 
+    // Routes pour la gestion des offres
     Route::get('gestionOffres', [gestionOffresController::class,'index'])->name('gestionOffres');
+    // Route::get('gestionOffres/{offre}', [gestionOffresController::class,'show'])->name('gestionOffres.show');
 
     Route::get('annonces', [annoncesController::class,'index'])->name('annonces');
 

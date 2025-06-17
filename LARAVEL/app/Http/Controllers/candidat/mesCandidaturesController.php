@@ -16,7 +16,7 @@ class mesCandidaturesController extends Controller
         return view('candidat.compte_desactive', compact('candidat'));
         }
         $candidatures = Candidature::where('candidat_id', $candidat->id)
-            ->with(['offreEmploi', 'offreEmploi.entreprise'])
+            ->with(['offreEmploi', 'offreEmploi.entreprise', 'entretiens'])
             ->get();
         return view('candidat.mesCandidatures',compact('candidat', 'candidatures'));
     }

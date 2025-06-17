@@ -289,10 +289,12 @@
                   <i class="bi bi-calendar me-2"></i>
                   <span>Postulé le: {{ $candidature->created_at->format('d/m/Y') }}</span>
                 </div>
+                @if($candidature->statut === 'Entretien prévu')
                 <div class="d-flex align-items-center">
                   <i class="bi bi-calendar-event me-2"></i>
-                  <span>Entretien: 25/05/2023</span>
+                  <span>Entretien prévu le: {{ $candidature->entretiens->date_entretien->format('d/m/Y') }}</span>
                 </div>
+                @endif
               </div>
               <div class="col-md-3 text-end">
                 <a href='{{ route("candidat.candidature.details", ["candidat" => $candidat->id, "candidature" => $candidature->id]) }}'
