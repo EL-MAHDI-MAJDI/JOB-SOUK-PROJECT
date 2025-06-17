@@ -10,6 +10,10 @@ class mesEntretiensController extends Controller
 {
     public function show(Candidat $candidat)
     {
+        // Vérification compte désactivé
+        if ($candidat->status === 'pending') {
+        return view('candidat.compte_desactive', compact('candidat'));
+        }
         // Récupérer les entretiens en attente du candidat avec leurs relations
         $entretiens = Entretien::with(['candidature.offreEmploi.entreprise', 'enPersonnes', 'telephoniques', 'visioconferences'])
             ->whereHas('candidature', function($query) use ($candidat) {

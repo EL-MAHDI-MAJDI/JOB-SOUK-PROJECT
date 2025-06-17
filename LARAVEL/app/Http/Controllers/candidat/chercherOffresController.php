@@ -10,9 +10,9 @@ class chercherOffresController extends Controller
 {
     public function show(Candidat $candidat, Request $request, OffreEmploi $offre){
         
-        // if ($request->has('save')) {
-        //    return $this->sauvegarder($request, $candidat, $offre);
-        // }
+        if ($candidat->status === 'pending') {
+        return view('candidat.compte_desactive', compact('candidat'));
+        }
         if (!empty($request->input('search'))) {
             return $this->search($request, $candidat);
         }else{

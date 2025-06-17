@@ -97,137 +97,106 @@
                 <th>Email</th>
                 <th>Inscription</th>
                 <th>Statut</th>
-                <th class="text-end">Actions</th>
+                <th class="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <!-- Candidate 1 -->
-              <tr>
-                <td>
-                  <img src="{{ asset('storage/photoProfile/profile.png') }}" alt="Profile" class="rounded-circle" width="40" height="40">
-                </td>
-                <td>
-                  <div class="fw-bold">Youssef Benali</div>
-                  <div class="small text-muted">Développeur Front-end</div>
-                </td>
-                <td><span class="badge bg-success">Candidat</span></td>
-                <td>youssef.b@example.com</td>
-                <td>12/05/2023</td>
-                <td><span class="badge bg-success">Actif</span></td>
-                <td class="text-end">
-                  <div class="dropdown">
-                    <button class="btn btn-sm" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-lock me-2"></i>Bloquer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
+              {{-- Candidats uniquement --}}
+              @foreach($users as $user)
+                <tr>
+                  <td>
+                    <img src="{{ asset('storage/' . $user->photoProfile) }}" alt="Profile" class="rounded-circle" width="40" height="40">
+                  </td>
+                  <td>
+                    <div class="fw-bold">{{ $user->prenom }} {{ $user->nom }}</div>
+                    <div class="small text-muted">Candidat</div>
+                  </td>
+                  <td>
+                    <span class="badge bg-success">Candidat</span>
+                  </td>
+                  <td>{{ $user->email }}</td>
+                  <td>{{ $user->created_at->format('d/m/Y') }}</td>
+                  <td>
+                    <span class="badge 
+                      @if($user->status == 'active') bg-success
+                      @elseif($user->status == 'pending') bg-warning
+                      @elseif($user->status == 'suspended') bg-danger
+                      @else bg-secondary @endif">
+                      {{ ucfirst($user->status) }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    @if($user->status === 'active')
+                      <form method="POST" action="{{ route('admin.candidat.deactivate', $user->id) }}" style="display:inline;">
+                        @csrf
+                        <button class="btn btn-warning btn-sm" type="submit">
+                          <i class="bi bi-x-circle"></i> Désactiver
+                        </button>
+                      </form>
+                    @else
+                      <form method="POST" action="{{ route('admin.candidat.activate', $user->id) }}" style="display:inline;">
+                        @csrf
+                        <button class="btn btn-success btn-sm" type="submit">
+                          <i class="bi bi-check-circle"></i> Activer
+                        </button>
+                      </form>
+                    @endif
+                  </td>
+                </tr>
+              @endforeach
 
-              <!-- Company 1 -->
-              <tr>
-                <td>
-                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Logo" class="rounded-circle" width="40" height="40">
-                </td>
-                <td>
-                  <div class="fw-bold">TechSolutions</div>
-                  <div class="small text-muted">Informatique</div>
-                </td>
-                <td><span class="badge bg-primary">Entreprise</span></td>
-                <td>contact@techsolutions.com</td>
-                <td>28/04/2023</td>
-                <td><span class="badge bg-warning">En attente</span></td>
-                <td class="text-end">
-                  <div class="dropdown">
-                    <button class="btn btn-sm" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-success" href="#"><i class="bi bi-check-circle me-2"></i>Valider</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Admin 1 -->
-              <tr>
-                <td>
-                  <img src="{{ asset('storage/photoProfile/profile.png') }}" alt="Profile" class="rounded-circle" width="40" height="40">
-                </td>
-                <td>
-                  <div class="fw-bold">Admin User</div>
-                  <div class="small text-muted">Super Admin</div>
-                </td>
-                <td><span class="badge bg-purple">Administrateur</span></td>
-                <td>admin@jobsouk.com</td>
-                <td>15/01/2023</td>
-                <td><span class="badge bg-success">Actif</span></td>
-                <td class="text-end">
-                  <div class="dropdown">
-                    <button class="btn btn-sm" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-
-              <!-- Candidate 2 -->
-              <tr>
-                <td>
-                  <img src="{{ asset('storage/photoProfile/profile.png') }}" alt="Profile" class="rounded-circle" width="40" height="40">
-                </td>
-                <td>
-                  <div class="fw-bold">Leila Nassiri</div>
-                  <div class="small text-muted">Chef de projet</div>
-                </td>
-                <td><span class="badge bg-success">Candidat</span></td>
-                <td>leila.n@example.com</td>
-                <td>03/06/2023</td>
-                <td><span class="badge bg-danger">Suspendu</span></td>
-                <td class="text-end">
-                  <div class="dropdown">
-                    <button class="btn btn-sm" data-bs-toggle="dropdown">
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Voir</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Modifier</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item text-success" href="#"><i class="bi bi-unlock me-2"></i>Activer</a></li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
+              {{-- Entreprises --}}
+              @foreach($companies as $company)
+                <tr>
+                  <td>
+                    @if($company->logo)
+                      <img src="{{ asset('storage/' . $company->logo) }}" alt="Logo" width="40" height="40" class="rounded-circle">
+                    @else
+                      <img src="{{ asset('images/default-logo.png') }}" alt="Logo" width="40" height="40" class="rounded-circle">
+                    @endif
+                  </td>
+                  <td>
+                    <div class="fw-bold">{{ $company->nomEntreprise }}</div>
+                    <div class="small text-muted">{{ $company->SecteurActivite }}</div>
+                  </td>
+                  <td><span class="badge bg-primary">Entreprise</span></td>
+                  <td>{{ $company->email }}</td>
+                  <td>{{ $company->created_at->format('d/m/Y') }}</td>
+                  <td>
+                    <span class="badge 
+                      @if($company->status == 'active') bg-success
+                      @else bg-warning
+                      @endif">
+                      {{ ucfirst($company->status) }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    @if($company->status === 'active')
+                      <form method="POST" action="{{ route('admin.entreprise.deactivate', $company->id) }}" style="display:inline;">
+                        @csrf
+                        <button class="btn btn-warning btn-sm" type="submit">
+                          <i class="bi bi-x-circle"></i> Désactiver
+                        </button>
+                      </form>
+                    @elseif($company->status === 'pending')
+                      <form method="POST" action="{{ route('admin.entreprise.activate', $company->id) }}" style="display:inline;">
+                        @csrf
+                        <button class="btn btn-success btn-sm" type="submit">
+                          <i class="bi bi-check-circle"></i> Activer
+                        </button>
+                      </form>
+                    @endif
+                  </td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
 
         <!-- Pagination -->
-        <nav class="mt-4">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Précédent</a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Suivant</a>
-            </li>
-          </ul>
-        </nav>
+        <div class="d-flex justify-content-center">
+          {{ $companies->links() }}
+        </div>
       </div>
     </div>
   </div>

@@ -33,5 +33,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('signalements', [signalementsController::class,'index'])->name('signalements');
 
     Route::get('administrateurs', [administrateursController::class,'index'])->name('administrateurs');
+    //gestion compte
+    Route::post('/entreprise/{id}/activate', [gestionComptesController::class, 'activateEntreprise'])->name('entreprise.activate');
+    Route::post('/entreprise/{id}/deactivate', [gestionComptesController::class, 'deactivateEntreprise'])->name('entreprise.deactivate');
+    Route::post('/candidat/{id}/activate', [gestionComptesController::class, 'activateCandidat'])->name('candidat.activate');
+    Route::post('/candidat/{id}/deactivate', [gestionComptesController::class, 'deactivateCandidat'])->name('candidat.deactivate');
 });
 

@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Storage;
 class mesCandidaturesController extends Controller
 {
     public function show(Candidat $candidat){
-        // $profiles=Profile::paginate(10);
-        // $profiles=Profile::all();
+        // Vérification compte désactivé
+        if ($candidat->status === 'pending') {
+        return view('candidat.compte_desactive', compact('candidat'));
+        }
         $candidatures = Candidature::where('candidat_id', $candidat->id)
             ->with(['offreEmploi', 'offreEmploi.entreprise'])
             ->get();

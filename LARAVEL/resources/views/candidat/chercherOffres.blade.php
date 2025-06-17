@@ -325,7 +325,8 @@
          <!-- <div class="col-md-9"> il remplace par 12 puisque on a supprimer Filtres  --> 
         <div class="col-md-12">
           <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="fw-bold mb-0">@if($countoffres==1) une offre disponible @else {{$countoffres}} offres disponibles @endif</h5>
+            {{-- <h5 class="fw-bold mb-0">@if($countoffres==1) une offre disponible @else {{$countoffres}} offres disponibles @endif</h5> --}}
+            <h5 class="fw-bold mb-0">Offres recommandées pour vous</h5>
             @if(!$offres->isEmpty())
               <div>
                 <form method="GET" id="sortForm" >
@@ -352,11 +353,12 @@
                 // Supposons que $appliedOfferIds est passé par le contrôleur.
                 // $appliedOfferIds devrait être un tableau des IDs des offres auxquelles le candidat a postulé.
                 $isApplied = in_array($offre->id, $appliedOfferIds ?? []);
+                $isentreprisenovalide = $offre->entreprise->status === 'pending';
             @endphp
 
             {{-- Afficher l'offre seulement si elle n'est NI postulée NI sauvegardée --}}
             {{-- Cela signifie qu'une offre est masquée si elle est postulée OU si elle est sauvegardée (ou les deux) --}}
-            @if(!$isApplied && !$isSaved)
+            @if(!$isApplied && !$isSaved && !$isentreprisenovalide)
             <div class="job-card card mb-3">
               <div class="card-body">
                 <div class="row align-items-center">

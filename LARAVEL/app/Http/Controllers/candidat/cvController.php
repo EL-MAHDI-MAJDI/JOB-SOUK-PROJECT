@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Storage;
 class cvController extends Controller
 {
     public function show(Candidat $candidat){
+        // Vérification compte désactivé
+        if ($candidat->status === 'pending') {
+        return view('candidat.compte_desactive', compact('candidat'));
+        }
         return view('candidat.cv',compact('candidat'));
     }
 

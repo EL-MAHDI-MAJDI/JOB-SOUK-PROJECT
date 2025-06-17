@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Hash;
 class parametreController extends Controller
 {
     public function show(Candidat $candidat){
-        // $profiles=Profile::paginate(10);
-        // $profiles=Profile::all();
+        // Vérification compte désactivé
+        if ($candidat->status === 'pending') {
+        return view('candidat.compte_desactive', compact('candidat'));
+        }
         return view('candidat.parametre',compact('candidat'));
     }
     public function update(Request $request, Candidat $candidat){

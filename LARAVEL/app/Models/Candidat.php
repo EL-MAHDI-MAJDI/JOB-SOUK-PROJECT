@@ -65,6 +65,7 @@ class Candidat extends Authenticatable
             'titre_professionnel',
             'photoProfile',
             'password',
+            'status', // Ajouté ici
     ];
 
     /**

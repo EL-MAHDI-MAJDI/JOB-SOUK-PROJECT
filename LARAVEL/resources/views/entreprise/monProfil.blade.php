@@ -21,9 +21,19 @@
   </nav>
 
   <!-- Contenu principal -->
-    <div class="main-content">
   <div class="main-content">
     <div class="container-fluid">
+      {{-- Message compte non validé --}}
+        @if($entreprise->status === 'pending')
+    <div class="alert alert-warning text-center mb-4">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Votre compte n'est pas encore validé.
+        <u style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#pendingModal">
+            Cliquez ici pour plus de détails
+        </u>.
+    </div>
+    <x-compoEntreprise.compteDesactive/>
+        @endif
       <!-- En-tête -->
        {{-- Afficher les erreurs de validation --}}
       @if ($errors->any())

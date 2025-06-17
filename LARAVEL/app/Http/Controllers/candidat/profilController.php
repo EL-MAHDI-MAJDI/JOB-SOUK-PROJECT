@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Storage;
 class profilController extends Controller
 {
     public function show(Candidat $candidat){
-        // $profiles=Profile::paginate(10);
-        // $profiles=Profile::all();
+        // Vérification compte désactivé
+        if ($candidat->status === 'pending') {
+        return view('candidat.compte_desactive', compact('candidat'));
+        }
         return view('candidat.profil',compact('candidat'));
     }
     public function update(Request $request, Candidat $candidat)

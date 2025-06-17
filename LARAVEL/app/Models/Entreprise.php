@@ -30,6 +30,7 @@ class Entreprise extends Authenticatable
         'logo',
         'phone',
         'password',
+        'status', // Ajouté ici
 ];
 
     /**
