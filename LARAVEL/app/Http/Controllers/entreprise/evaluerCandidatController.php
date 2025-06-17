@@ -38,4 +38,11 @@ class evaluerCandidatController extends Controller
             return back()->with('error', 'Candidature introuvable.');
         }
     }
+    public function voirProfil(Entreprise $entreprise, Candidat $candidat)
+    {
+        // Charger les relations nécessaires pour l'affichage du profil
+        $candidat->load(['experiences', 'formations', 'competences']); // Ajoutez d'autres relations si besoin (ex: langues)
+
+        return view('entreprise.voirProfilCandidat', compact('entreprise', 'candidat'));
+    }
 }

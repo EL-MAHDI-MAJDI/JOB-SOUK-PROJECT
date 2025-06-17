@@ -359,11 +359,12 @@
                 // $appliedOfferIds devrait être un tableau des IDs des offres auxquelles le candidat a postulé.
                 $isApplied = in_array($offre->id, $appliedOfferIds ?? []);
                 $isentreprisenovalide = $offre->entreprise->status === 'pending';
+                $isOffreDesactive = $offre->status === 'desactive';
             @endphp
 
             {{-- Afficher l'offre seulement si elle n'est NI postulée NI sauvegardée --}}
             {{-- Cela signifie qu'une offre est masquée si elle est postulée OU si elle est sauvegardée (ou les deux) --}}
-            @if(!$isApplied && !$isSaved && !$isentreprisenovalide)
+            @if(!$isApplied && !$isSaved && !$isentreprisenovalide  && !$isOffreDesactive)
             <div class="job-card card mb-3">
               <div class="card-body">
                 <div class="row align-items-center">

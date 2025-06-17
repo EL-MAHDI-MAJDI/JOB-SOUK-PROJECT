@@ -306,7 +306,7 @@
       <!-- Liste des entretiens -->
       <div class="row">
         <div class="col-12">
-@forelse($entretiens as $entretien)
+          @forelse($entretiens as $entretien)
           <div class="interview-card card mb-3">
             <div class="card-body">
               <div class="row align-items-center">
@@ -327,8 +327,7 @@
                     @else
                       <span class="interview-type type-remote">À distance</span>
                     @endif
-                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('d M Y') }} - {{ $entretien->heure_debut }}</span>
-                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: {{ $entretien->heure_fin ? \Carbon\Carbon::parse($entretien->heure_debut)->diffInMinutes(\Carbon\Carbon::parse($entretien->heure_fin)) : '1h' }}min</span>
+                    <span class="text-muted"><i class="bi bi-calendar me-1"></i>{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('d M Y') }} - {{ \Carbon\Carbon::parse($entretien->heure_debut)->format('H:i') }}</span>                    <span class="text-muted"><i class="bi bi-clock me-1"></i>Durée: {{ $entretien->heure_fin ? \Carbon\Carbon::parse($entretien->heure_debut)->diffInMinutes(\Carbon\Carbon::parse($entretien->heure_fin)) : '1h' }}min</span>
                     @if($entretien->type === 'EnPersonne')
                       <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>{{ $entretien->enPersonnes->lieu ?? 'Lieu non spécifié' }}</span>
                     @elseif($entretien->type === 'Telephonique')
@@ -341,12 +340,26 @@
                 <div class="col-md-4 text-end">
                   <div class="d-flex justify-content-end gap-2">
                     @if($entretien->statut === 'En attente')
-                      <button class="btn btn-primary btn-sm" onclick="confirmInterview({{ $entretien->id }})">
-                        <i class="bi bi-calendar-check me-1"></i>Confirmer
-                      </button>
-                    @endif
-                    <button class="btn btn-outline-primary btn-sm" onclick="showDetails({{ $entretien->id }})">
-                      <i class="bi bi-eye me-1"></i>Détails
+                    <form action="{{ route('candidat.mesEntretiens.confirm',["candidat" => $candidat->id, "entretien" => $entretien->id]) }}" method="POST" class="d-inline">
+                      @csrf
+                        <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir confirmer cet entretien ?')">
+                          <i class="bi bi-calendar-check me-1"></i>Confirmer
+                        </button>
+                      </form>
+                      @endif
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#interviewDetailsModal" onclick="showInterviewDetails({
+                      'titre': '{{ addslashes($entretien->candidature->offreEmploi->intitule_offre_emploi) }}',
+                      'entreprise': '{{ addslashes($entretien->candidature->offreEmploi->entreprise->nomEntreprise) }}',
+                      'date': '{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('d M Y') }} - {{ \Carbon\Carbon::parse($entretien->heure_debut)->format('H:i') }} ({{ $entretien->heure_fin ? \Carbon\Carbon::parse($entretien->heure_debut)->diffInMinutes(\Carbon\Carbon::parse($entretien->heure_fin)) : '1h' }}min)',
+                      'type': '{{ $entretien->type }}',
+                      'statut': '{{ $entretien->statut }}',
+                      'connexion': '{{ $entretien->type === 'EnPersonne' ? $entretien->enPersonnes->lieu : ($entretien->type === 'Telephonique' ? $entretien->telephoniques->numero_telephone : $entretien->visioconferences->lien) }}',
+                      'participant': '{{ $entretien->participant }}',
+                      'email': '{{ $entretien->candidature->offreEmploi->email_contact ?? ($entretien->candidature->offreEmploi->entreprise->email ?? 'Non spécifié') }}',
+                      'phone': '{{ $entretien->candidature->offreEmploi->telephone_contact ?? ($entretien->candidature->offreEmploi->entreprise->phone ?? 'Non spécifié') }}',
+                      'notes': '{{ $entretien->notes ?? 'Aucune note' }}'
+                    })">
+                      <i class="bi bi-info-circle me-1"></i>Détails
                     </button>
                     @if($entretien->statut === 'En attente')
                       <button class="btn btn-warning btn-sm" title="Attention" onclick="showWarningPopup()">
@@ -359,24 +372,56 @@
             </div>
           </div>
           @empty
-          <div class="text-center py-5">
-            <p class="text-muted">Aucun entretien en attente ou programmé</p>
-          </div>
+            <div class="empty-state text-center">
+              <i class="bi bi-calendar3 text-muted empty-state-icon"></i>
+              <h4 class="text-muted mb-3">Aucun entretien prévu</h4>
+              <p class="text-muted">Vous n'avez pas d'entretiens prévus pour le moment.</p>
+            </div>
           @endforelse
-          
-          <!-- Pagination -->
-          <!-- <nav aria-label="Page navigation" class="mt-4">
-            <ul class="pagination justify-content-center">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Précédent</a>
-              </li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">Suivant</a>
-              </li>
-            </ul>
-          </nav> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Détails de l'entretien -->
+    <div class="modal fade" id="interviewDetailsModal" tabindex="-1" aria-labelledby="interviewDetailsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold" id="interviewDetailsModalLabel">Détails de l'entretien</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center mb-4">
+              <h4 id="modalTitre"></h4>
+              <p class="text-muted" id="modalEntreprise"></p>
+            </div>
+            
+            <dl class="interview-details">
+              <dt>Date et heure</dt>
+              <dd id="modalDate"></dd>
+              
+              <dt>Type</dt>
+              <dd id="modalType"></dd>
+              
+              <dt>Statut</dt>
+              <dd id="modalStatut"></dd>
+              
+              <dt>Méthode de connexion</dt>
+              <dd id="modalConnexion"></dd>
+              
+              <dt>Participant</dt>
+              <dd id="modalContact"></dd>
+              
+              <dt>Email</dt>
+              <dd id="modalEmail"></dd>
+              
+              <dt>Téléphone</dt>
+              <dd id="modalPhone"></dd>
+              
+              <dt>Notes supplémentaires</dt>
+              <dd id="modalNotes"></dd>
+            </dl>
+          </div>
         </div>
       </div>
     </div>
@@ -404,257 +449,6 @@
     <i class="bi bi-arrow-up"></i>
   </button>
 
-  <!-- Modales/Popups -->
-
-  <!-- Modal: Détails de l'entretien -->
-  <div class="modal fade" id="interviewDetailsModal" tabindex="-1" aria-labelledby="interviewDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="interviewDetailsModalLabel">Détails de l'entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="text-center mb-4">
-            <img src="https://via.placeholder.com/100" alt="Logo entreprise" class="company-logo mb-2">
-            <h4>Entretien RH - Chef de Projet IT</h4>
-            <p class="text-muted">TechInnov</p>
-          </div>
-          
-          <dl class="interview-details">
-            <dt>Date et heure</dt>
-            <dd>10 Juin 2023 - 14:30 (45min)</dd>
-            
-            <dt>Type</dt>
-            <dd><span class="interview-type type-remote">À distance</span></dd>
-            
-            <dt>Statut</dt>
-            <dd><span class="status-badge completed">Terminé</span></dd>
-            
-            <dt>Méthode de connexion</dt>
-            <dd>Lien Zoom envoyé par email</dd>
-            
-            <dt>Personne à contacter</dt>
-            <dd>Meryem Tazi - RH</dd>
-            
-            <dt>Email</dt>
-            <dd>m.tazi@techinnov.com</dd>
-            
-            <dt>Téléphone</dt>
-            <dd>+212 6 12 34 56 78</dd>
-            
-            <dt>Notes</dt>
-            <dd>Préparer les questions sur les projets en cours et l'équipe.</dd>
-          </dl>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Confirmer un entretien -->
-  <!-- <div class="modal fade" id="confirmInterviewModal" tabindex="-1" aria-labelledby="confirmInterviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="confirmInterviewModalLabel">Confirmer l'entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Confirmez-vous votre participation à l'entretien suivant ?</p>
-          <div class="card bg-light p-3 mb-3">
-            <strong>Entretien technique - Développeur Full Stack</strong><br>
-            <span class="text-muted">TechSolutions Inc.</span><br>
-            <i class="bi bi-calendar"></i> 15 Juin 2023 - 10:00 (1h)<br>
-            <i class="bi bi-geo-alt"></i> Tour Casablanca, étage 12
-          </div>
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="sendConfirmation">
-            <label class="form-check-label" for="sendConfirmation">
-              Envoyer une confirmation par email
-            </label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Confirmer</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- Modal: Annuler un entretien -->
-  <!-- <div class="modal fade" id="cancelInterviewModal" tabindex="-1" aria-labelledby="cancelInterviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="cancelInterviewModalLabel">Annuler l'entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Êtes-vous sûr de vouloir annuler cet entretien ?</p>
-          <div class="card bg-light p-3 mb-3">
-            <strong>Entretien technique - Développeur Full Stack</strong><br>
-            <span class="text-muted">TechSolutions Inc.</span><br>
-            <i class="bi bi-calendar"></i> 15 Juin 2023 - 10:00 (1h)<br>
-            <i class="bi bi-geo-alt"></i> Tour Casablanca, étage 12
-          </div>
-          <div class="mb-3">
-            <label for="cancelReason" class="form-label">Raison de l'annulation (optionnel)</label>
-            <select class="form-select" id="cancelReason">
-              <option selected value="">Sélectionnez une raison...</option>
-              <option>J'ai trouvé un autre emploi</option>
-              <option>Le poste ne correspond pas à mes attentes</option>
-              <option>Problème de disponibilité</option>
-              <option>Autre raison</option>
-            </select>
-          </div>
-          <div class="mb-3 d-none" id="otherReasonField">
-            <label for="otherReason" class="form-label">Veuillez préciser</label>
-            <textarea class="form-control" id="otherReason" rows="2"></textarea>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="notifyCompany">
-            <label class="form-check-label" for="notifyCompany">
-              Notifier l'entreprise par email
-            </label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Retour</button>
-          <button type="button" class="btn btn-danger">Confirmer l'annulation</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- Modal: Feedback sur l'entretien -->
-  <!-- <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="feedbackModalLabel">Feedback sur l'entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="text-center mb-4">
-            <img src="https://via.placeholder.com/80" alt="Logo entreprise" class="company-logo mb-2">
-            <h5>Entretien RH - Chef de Projet IT</h5>
-            <p class="text-muted">TechInnov - 10 Juin 2023</p>
-          </div>
-          
-          <form>
-            <div class="mb-4 text-center">
-              <label class="form-label d-block mb-3">Comment évaluez-vous cet entretien ?</label>
-              <div class="feedback-rating">
-                <i class="bi bi-star-fill me-1"></i>
-                <i class="bi bi-star-fill me-1"></i>
-                <i class="bi bi-star-fill me-1"></i>
-                <i class="bi bi-star-fill me-1"></i>
-                <i class="bi bi-star"></i>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <label for="feedbackNotes" class="form-label">Notes (optionnel)</label>
-              <textarea class="form-control" id="feedbackNotes" rows="4" placeholder="Comment s'est passé l'entretien ? Quelles questions ont été posées ? etc."></textarea>
-            </div>
-            
-            <div class="mb-3">
-              <label class="form-label">Résultat attendu</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="expectedResult" id="expectPositive" checked>
-                <label class="form-check-label" for="expectPositive">
-                  Positif - Je pense que ça s'est bien passé
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="expectedResult" id="expectNeutral">
-                <label class="form-check-label" for="expectNeutral">
-                  Neutre - Pas sûr du résultat
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="expectedResult" id="expectNegative">
-                <label class="form-check-label" for="expectNegative">
-                  Négatif - Je ne pense pas être retenu
-                </label>
-              </div>
-            </div>
-            
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" id="rememberForNextTime">
-              <label class="form-check-label" for="rememberForNextTime">
-                Enregistrer ces notes pour me préparer au prochain entretien
-              </label>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Enregistrer le feedback</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- Modal: Reprogrammer un entretien -->
-  <!-- <div class="modal fade" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="rescheduleModalLabel">Reprogrammer l'entretien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="card bg-light p-3 mb-4">
-            <strong>Entretien final - Responsable Marketing Digital</strong><br>
-            <span class="text-muted">DigitalLab</span><br>
-            <span class="text-danger"><s>5 Juin 2023 - 09:00 (1h30)</s></span><br>
-            <i class="bi bi-geo-alt"></i> Siège social, Rabat
-          </div>
-          
-          <form>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="newInterviewDate" class="form-label">Nouvelle date</label>
-                <input type="datetime-local" class="form-control" id="newInterviewDate">
-              </div>
-              <div class="col-md-6">
-                <label for="newInterviewDuration" class="form-label">Durée</label>
-                <select id="newInterviewDuration" class="form-select">
-                  <option>30 minutes</option>
-                  <option>45 minutes</option>
-                  <option selected>1 heure</option>
-                  <option>1 heure 30</option>
-                  <option>2 heures</option>
-                </select>
-              </div>
-              <div class="col-12">
-                <label for="rescheduleReason" class="form-label">Raison de la reprogrammation</label>
-                <textarea class="form-control" id="rescheduleReason" rows="2" placeholder="Pourquoi souhaitez-vous reprogrammer cet entretien ?"></textarea>
-              </div>
-              <div class="col-12">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="sendRescheduleRequest">
-                  <label class="form-check-label" for="sendRescheduleRequest">
-                    Envoyer une demande de reprogrammation à l'entreprise
-                  </label>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button type="button" class="btn btn-primary">Reprogrammer</button>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Afficher/masquer le bouton de retour en haut
@@ -667,12 +461,40 @@
       }
     };
 
-    // Scroll to top
+    // Scroll vers le haut
     document.getElementById("scrollTop").addEventListener("click", function() {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    // Fonction pour afficher les détails de l'entretien
+    function showInterviewDetails(details) {
+      // Mettre à jour les éléments du modal avec les détails de l'entretien
+      document.getElementById('modalTitre').textContent = details.titre;
+      document.getElementById('modalEntreprise').textContent = details.entreprise;
+      document.getElementById('modalDate').textContent = details.date;
+      
+      // Mettre à jour le type avec la classe appropriée
+      const typeElement = document.createElement('span');
+      typeElement.className = 'interview-type ' + (details.type === 'EnPersonne' ? 'type-onsite' : (details.type === 'Telephonique' ? 'type-phone' : 'type-remote'));
+      typeElement.textContent = details.type === 'EnPersonne' ? 'En personne' : (details.type === 'Telephonique' ? 'Téléphonique' : 'À distance');
+      document.getElementById('modalType').innerHTML = '';
+      document.getElementById('modalType').appendChild(typeElement);
+      
+      // Mettre à jour le statut avec la classe appropriée
+      const statutElement = document.createElement('span');
+      statutElement.className = 'status-badge ' + (details.statut === 'En attente' ? 'pending' : 'scheduled');
+      statutElement.textContent = details.statut;
+      document.getElementById('modalStatut').innerHTML = '';
+      document.getElementById('modalStatut').appendChild(statutElement);
+      
+      document.getElementById('modalConnexion').textContent = details.connexion;
+      document.getElementById('modalContact').textContent = details.contact;
+      document.getElementById('modalEmail').textContent = details.email;
+      document.getElementById('modalPhone').textContent = details.phone;
+      document.getElementById('modalNotes').textContent = details.notes;
+      document.getElementById('modalContact').textContent = details.participant;
+    }
+    
     // Toggle sidebar on mobile
     document.getElementById('menuToggle').addEventListener('click', function() {
       document.querySelector('.side-menu').classList.toggle('show');

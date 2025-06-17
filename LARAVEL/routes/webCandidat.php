@@ -79,6 +79,9 @@ Route::prefix('candidat/{candidat}')->name('candidat.')->group(function () {
     Route::get('mesEntretiens',[mesEntretiensController::class,'show'])
     ->where('candidat','\d+')
     ->name('mesEntretiens');
+    Route::post('mesEntretiens/{entretien}', [mesEntretiensController::class, 'confirm'])
+    ->where(['entretien' => '\d+']) // La contrainte pour 'candidat' est héritée
+    ->name('mesEntretiens.confirm');
 
     Route::get('message',[messageController::class,'show'])
     ->where('candidat','\d+')

@@ -264,9 +264,16 @@
       
       <!-- Conteneur des candidatures -->
       <div class="application-container">
-        <!-- Candidature  -->
-      @foreach ($candidatures as $candidature)
-        <div class="application-card card mb-3">
+        @if($candidatures->isEmpty())
+          <div class="text-center py-5">
+            <i class="bi bi-box-seam display-1 text-muted mb-3"></i>
+            <h4 class="mb-3">Aucune candidature</h4>
+            <p class="text-muted">Vous n'avez pas encore postulé à des offres d'emploi.</p>
+          </div>
+        @else
+          <!-- Candidature  -->
+        @foreach ($candidatures as $candidature)
+            <div class="application-card card mb-3">
           <div class="card-body">
             <div class="row align-items-center">
               <div class="col-md-1">
@@ -314,6 +321,7 @@
           </div>
         </div>
       @endforeach
+      @endif
       </div>
       
       <!-- Pagination -->

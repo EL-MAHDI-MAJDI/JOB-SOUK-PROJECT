@@ -4,6 +4,7 @@ namespace App\Http\Controllers\candidat;
 use App\Http\Controllers\Controller;
 use App\Models\Candidat;
 use App\Models\Entretien;
+use App\Models\Candidature;
 use Illuminate\Http\Request;
 
 class mesEntretiensController extends Controller
@@ -22,7 +23,12 @@ class mesEntretiensController extends Controller
             ->whereIn('statut', ['En attente','Confirme'])
             ->orderBy('date_entretien', 'asc')
             ->get();
-        // dd($entretiens);
-        return view('candidat.mesEntretiens', compact('candidat', 'entretiens'));
+        // charge les candidatures assignees a l'entretien
+        $candidatures = Candidature::with('offreEmploi.entreprise')
+            ->whereHas('entretiens', function($query) use ($entretiens) {
+                $query->whereIn('id', $entretiens->pluck('id'));
+            })
+            ->get();
+        return view('candidat.mesEntretiens', compact('candidat', 'entretiens','candidatures'));
     }
 }

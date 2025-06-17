@@ -172,7 +172,6 @@
                     <div class="d-flex align-items-center">
                       <div>
                         <h6 class="fw-bold mb-0">{{$offre->intitule_offre_emploi}}</h6>
-                        <small class="text-muted">TechnoSoft Solutions</small>
                       </div>
                     </div>
                   </td>

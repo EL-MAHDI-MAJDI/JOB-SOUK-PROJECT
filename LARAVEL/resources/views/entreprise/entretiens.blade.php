@@ -143,7 +143,7 @@
               </thead>
               <tbody>
                 @foreach ($entretiensAll as $entretien)
-                  @if ($entretien->statut == 'En attente' || $entretien->statut == 'Confirmé')
+                  @if ($entretien->statut == 'En attente' || $entretien->statut == 'Confirme')
                   <tr>
                     <td>
                       <div class="d-flex align-items-center">
@@ -169,7 +169,7 @@
                     <td><span class="badge bg-success bg-opacity-10 text-success">
                       @if ($entretien->statut == 'En attente')
                         <i class="bi bi-hourglass-split"></i> En attente
-                      @elseif ($entretien->statut == 'Confirmé')
+                      @elseif ($entretien->statut == 'Confirme')
                         <i class="bi bi-check-circle"></i> Confirmé
                       @elseif ($entretien->statut == 'Terminé')
                         <i class="bi bi-check2-circle"></i> Terminé

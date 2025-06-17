@@ -128,7 +128,6 @@
                     <thead>
                       <tr>
                         <th>Candidat</th>
-                        <th>Expérience</th>
                         <th>Statut</th>
                         <th>Date</th>
                         <th>Actions</th>
@@ -146,12 +145,14 @@
                                 </div>
                               </div>
                             </td>
-                            <td>3 ans</td>
                             <td><span class="status-badge status-new">{{ $candidat->pivot->statut }}</span></td>
                             <td>{{ $candidat->pivot->created_at->format('d/m/Y') }}</td>
                             <td>
                               <div class="d-flex gap-2">
                                 <a href="{{ Storage::url($candidat->pivot->fichier) }}" class="btn btn-sm btn-outline-primary">Voir CV</a>
+                                <a href="{{ route('entreprise.rechercherCandidats.voirProfil', ['entreprise' => $entreprise->id, 'candidat' => $candidat->id]) }}" class="btn btn-sm btn-outline-primary">
+                                  <i class="bi bi-person-fill me-1"></i> Voir profil
+                                </a>
                                 <!-- Remplacer le bouton modal par un bouton qui affiche le formulaire -->
                                 @if($candidat->pivot->statut === 'En attente')
                                   <button class="btn btn-sm btn-outline-success" type="button" onclick="toggleEvalForm({{ $offre->id }}, {{ $candidat->id }})">Évaluer</button>
