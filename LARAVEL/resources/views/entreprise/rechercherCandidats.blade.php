@@ -131,9 +131,9 @@
           @endforelse
           
           <!-- Pagination -->
-          <nav class="mt-4">
-            {{ $candidats->links() }}
-          </nav>
+         <div class="d-flex justify-content-center mt-3">
+              {{ $candidats->links('pagination::bootstrap-4') }}
+          </div>
         </div>
       </div>
     </div>
