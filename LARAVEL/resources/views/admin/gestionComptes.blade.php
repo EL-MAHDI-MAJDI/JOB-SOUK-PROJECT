@@ -25,12 +25,18 @@
   <!-- Main Content -->
   <div class="main-content">
     <div class="container-fluid">
+            @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ session('success') }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        </div>
+      @endif
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">Gestion des Comptes</h2>
           <p class="text-muted mb-0">Gérez tous les utilisateurs de la plateforme</p>
         </div>
-        <div class="d-flex gap-2">
+        {{-- <div class="d-flex gap-2">
           <!-- <button class="btn btn-outline-secondary" id="exportUsersBtn">
             <i class="bi bi-download me-1"></i> Exporter
           </button> -->
@@ -48,7 +54,7 @@
               
             </ul>
           </div>
-        </div>
+        </div> --}}
       </div>
 
       <!-- Filters Card -->
@@ -141,6 +147,13 @@
                         </button>
                       </form>
                     @endif
+                    <form method="POST" action="{{ route('admin.candidat.delete', $user->id) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce candidat ?');">
+                      @csrf
+                      @method('DELETE')
+                      <button class="btn btn-danger btn-sm" type="submit">
+                        <i class="bi bi-trash"></i> Supprimer
+                      </button>
+                    </form>
                   </td>
                 </tr>
               @endforeach
@@ -149,11 +162,7 @@
               @foreach($companies as $company)
                 <tr>
                   <td>
-                    @if($company->logo)
                       <img src="{{ asset('storage/' . $company->logo) }}" alt="Logo" width="40" height="40" class="rounded-circle">
-                    @else
-                      <img src="{{ asset('images/default-logo.png') }}" alt="Logo" width="40" height="40" class="rounded-circle">
-                    @endif
                   </td>
                   <td>
                     <div class="fw-bold">{{ $company->nomEntreprise }}</div>
@@ -186,6 +195,13 @@
                         </button>
                       </form>
                     @endif
+                    <form method="POST" action="{{ route('admin.entreprise.delete', $company->id) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?');">
+                      @csrf
+                      @method('DELETE')
+                      <button class="btn btn-danger btn-sm" type="submit">
+                        <i class="bi bi-trash"></i> Supprimer
+                      </button>
+                    </form>
                   </td>
                 </tr>
               @endforeach

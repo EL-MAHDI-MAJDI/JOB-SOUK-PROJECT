@@ -40,5 +40,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/entreprise/{id}/deactivate', [gestionComptesController::class, 'deactivateEntreprise'])->name('entreprise.deactivate');
     Route::post('/candidat/{id}/activate', [gestionComptesController::class, 'activateCandidat'])->name('candidat.activate');
     Route::post('/candidat/{id}/deactivate', [gestionComptesController::class, 'deactivateCandidat'])->name('candidat.deactivate');
+    Route::delete('/admin/candidat/{id}/delete', [gestionComptesController::class, 'destroyCandidat'])->name('candidat.delete');
+    Route::delete('/admin/entreprise/{id}/delete', [gestionComptesController::class, 'destroyEntreprise'])->name('entreprise.delete');
+    
 });
 

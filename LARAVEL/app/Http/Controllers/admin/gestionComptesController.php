@@ -43,4 +43,17 @@ class gestionComptesController extends Controller
         $candidat->save();
         return back()->with('success', 'Compte candidat désactivé.');
     }
+    public function destroyCandidat($id)
+    {
+        $candidat = Candidat::findOrFail($id);
+        $candidat->delete();
+        return back()->with('success', 'Compte candidat supprimé.');
+    }
+
+    public function destroyEntreprise($id)
+    {
+        $entreprise = Entreprise::findOrFail($id);
+        $entreprise->delete();
+        return back()->with('success', 'Compte entreprise supprimé.');
+    }
 }

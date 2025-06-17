@@ -158,7 +158,6 @@
           <div class="dashboard-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">Activité récente</h5>
-              <a href="#" class="small">Voir tout</a>
             </div>
             
             <div class="activity-list">
@@ -228,59 +227,35 @@
           <div class="dashboard-card p-4 h-100">
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">Entreprises à valider</h5>
-              <a href="#" class="small">Voir toutes</a>
+                <a href="{{ route('admin.gestionComptes') }}" class="btn btn-outline-primary btn-sm">Voir toutes</a>
             </div>
             
             <div class="list-group list-group-flush">
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }}" alt="Logo" class="rounded me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">TechSolutions SARL</h6>
-                    <p class="small text-muted mb-0">Inscrite il y a 2 heures</p>
-                  </div>
-                  <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">En attente</span>
-                </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="{{ asset('storage/logoEntreprise/affaires-et-commerce.png') }} " alt="Logo" class="rounded me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">DesignStudio</h6>
-                    <p class="small text-muted mb-0">Inscrite il y a 5 heures</p>
-                  </div>
-                  <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">En attente</span>
-                </div>
-              </a>
-              
-              {{-- <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Logo" class="rounded me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">LogiTranse</h6>
-                    <p class="small text-muted mb-0">Inscrite hier</p>
-                  </div>
-                  <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">En attente</span>
-                </div>
-              </a>
-              
-              <a href="#" class="list-group-item list-group-item-action border-0 px-0 py-3">
-                <div class="d-flex align-items-center">
-                  <img src="https://via.placeholder.com/40" alt="Logo" class="rounded me-3" width="40" height="40">
-                  <div>
-                    <h6 class="fw-bold mb-1">FinTech Group</h6>
-                    <p class="small text-muted mb-0">Inscrite il y a 2 jours</p>
-                  </div>
-                  <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">En attente</span>
-                </div>
-              </a>
-            </div> --}}
-            
+              @forelse($entreprises as $entreprise)
+                <a href="{{ route('admin.gestionComptes') }}" class="list-group-item list-group-item-action border-0 px-0 py-3">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ asset('storage/' . $entreprise->logo) }}" alt="Logo" class="rounded me-3" width="40" height="40">
+                        <div>
+                            <h6 class="fw-bold mb-1">{{ $entreprise->nomEntreprise ?? $entreprise->nom }}</h6>
+                            <p class="small text-muted mb-0">
+                                Inscrite {{ $entreprise->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                        <span class="badge bg-warning bg-opacity-10 text-warning ms-auto">En attente</span>
+                    </div>
+                </a>
+              @empty
+                
+                <div class="text-muted text-center py-3">
+                  <i class="bi bi-building" style="font-size: 2rem;"></i><br>
+                  Aucune entreprise à valider.</div>
+              @endforelse
+            </div>
+
             <div class="mt-3">
-              <button class="btn btn-primary w-100">
+              {{-- <button class="btn btn-primary w-100">
                 <i class="bi bi-check-circle me-1"></i> Valider tout
-              </button>
+              </button> --}}
             </div>
           </div>
         </div>

@@ -172,11 +172,12 @@
                     <div class="d-flex align-items-center">
                       <div>
                         <h6 class="fw-bold mb-0">{{$offre->intitule_offre_emploi}}</h6>
+                        <small class="text-muted">{{ $offre->entreprise->nomEntreprise }}</small>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <span class="badge bg-primary bg-opacity-10 text-primary">24 candidats</span>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">@if($offre->candidats->count() == 0) aucun candidat @elseif($offre->candidats->count() == 1) 1 candidat @else {{ $offre->candidats->count() }} candidats @endif</span>
                   </td>
                   <td>{{$offre->localisation}}</td>
                   <td>{{$offre->type_contrat}}</td>
