@@ -61,8 +61,7 @@
         <!-- Profil admin -->
         <div class="dropdown">
           <button class="btn dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-            <img src="https://via.placeholder.com/32" alt="Profile" class="rounded-circle me-2" width="32" height="32">
-            <span class="d-none d-md-inline">Admin</span>
+            <span class="d-none d-md-inline">Administrateur</span>
             <!-- <span class="badge badge-admin ms-2">Admin</span> -->
           </button>
           <ul class="dropdown-menu dropdown-menu-end">

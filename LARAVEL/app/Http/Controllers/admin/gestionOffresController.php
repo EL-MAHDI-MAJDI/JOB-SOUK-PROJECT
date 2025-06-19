@@ -30,9 +30,17 @@ class gestionOffresController extends Controller
         return view('admin.gestionOffres', compact('offres', 'entreprises'));
     }
 
+    public function destroy($id)
+    {
+        $offre = OffreEmploi::findOrFail($id);
+        $offre->delete();
+
+        return redirect()->route('admin.gestionOffres')->with('success', "Offre supprimée avec succès.");
+    }
+
     public function show($id)
     {
         $offre = OffreEmploi::with(['entreprise', 'candidats'])->findOrFail($id);
-        return view('admin.offreDetails', compact('offre'));
+        return response()->json($offre);
     }
 }

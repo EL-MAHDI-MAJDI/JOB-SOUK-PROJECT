@@ -15,7 +15,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Routes pour la gestion des offres
     Route::get('gestionOffres', [gestionOffresController::class,'index'])->name('gestionOffres');
-    // Route::get('gestionOffres/{offre}', [gestionOffresController::class,'show'])->name('gestionOffres.show');
+    // Voir une offre
+    Route::get('gestionOffres/{offre}', [gestionOffresController::class, 'show'])->name('gestionOffres.show');
+    
+    // Supprimer une offre
+    Route::delete('gestionOffres/{offre}', [gestionOffresController::class,'destroy'])->name('gestionOffres.destroy');
 
     Route::get('annonces', [annoncesController::class,'index'])->name('annonces');
 
