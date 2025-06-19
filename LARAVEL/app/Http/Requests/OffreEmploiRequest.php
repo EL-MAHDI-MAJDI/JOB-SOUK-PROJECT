@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +23,17 @@ class OffreEmploiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'intitule_offre_emploi' => 'required|string|max:100',
+            'intitule_offre_emploi' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('offre_emplois') // Nom exact de votre table
+                    ->where('localisation', $this->localisation)
+                    ->where('date_limite_candidature', $this->date_limite_candidature)
+                    ->where('niveau_experience_demander', $this->niveau_experience_demander)
+                    ->where('type_contrat', $this->type_contrat)
+                    ->ignore($this->offre->id ?? null), // Ignore l'ID en cas de mise à jour
+            ],
             'description_offre_emploi' => 'required|string',
             'type_contrat' => 'required|string|max:50',
             'salaire_offre_emploi' => 'nullable|string|max:50',
