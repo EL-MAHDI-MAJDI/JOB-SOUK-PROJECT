@@ -41,16 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('.side-menu').classList.toggle('show');
     });
   }
-
-  // Confirmation avant annulation d'entretien
-  const cancelButtons = document.querySelectorAll('.btn-outline-danger');
-  cancelButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      if (!confirm("Êtes-vous sûr de vouloir annuler cet entretien ?")) {
-        e.preventDefault();
-      }
-    });
-  });
   
   // Initialisation des tooltips
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));

@@ -144,7 +144,20 @@
               <tbody>
                 @foreach ($entretiensAll as $entretien)
                   @if ($entretien->statut == 'En attente' || $entretien->statut == 'Confirme')
-                  <tr>
+                  <tr
+                    data-id="{{ $entretien->id }}"
+                    data-date="{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('Y-m-d') }}"
+                    data-heure-debut="{{ $entretien->heure_debut ? \Carbon\Carbon::parse($entretien->heure_debut)->format('H:i') : '' }}"
+                    data-heure-fin="{{ $entretien->heure_fin ? \Carbon\Carbon::parse($entretien->heure_fin)->format('H:i') : '' }}"
+                    data-type="{{ $entretien->type }}"
+                    data-participant="{{ $entretien->participant }}"
+                    data-notes="{{ $entretien->notes }}"
+                    data-lien="{{ optional(optional($entretien->visioconferences)->first())->lien }}"
+                    data-numero-telephone="{{ optional(optional($entretien->telephoniques)->first())->numero_telephone }}"
+                    data-lieu="{{ optional(optional($entretien->enPersonnes)->first())->lieu }}"
+                    data-edit-url="{{ route('entreprise.entretiens.update', [$entreprise->id, $entretien->id]) }}"
+                    data-url="{{ route('entreprise.rechercherCandidats.voirProfil', [$entreprise->id, $entretien->candidature->candidat->id]) }}"
+                    >
                     <td>
                       <div class="d-flex align-items-center">
                         <img src="{{ asset('storage/' . $entretien->candidature->candidat->photoProfile) }}" alt="Profile" class="rounded-circle me-2" width="40" height="40">
@@ -155,16 +168,21 @@
                       </div>
                     </td>
                     <td>{{ $entretien->candidature->offreEmploi->intitule_offre_emploi }}</td>
-                    @if ($entretien->type_entretien == 'visio')
+                    @if ($entretien->type == 'Visioconference')
                       <td><span class="badge bg-primary bg-opacity-10 text-primary"><i class="bi bi-camera-video"></i> Visio</span></td>
-                    @elseif ($entretien->type_entretien == 'telephone')
+                    @elseif ($entretien->type == 'Telephonique')
                       <td><span class="badge bg-info bg-opacity-10 text-info"><i class="bi bi-telephone"></i> Téléphone</span></td>
                     @else
                       <td><span class="badge bg-secondary bg-opacity-10 text-secondary"><i class="bi bi-person"></i> En personne</span></td>
                     @endif
                     <td>
                       <div>{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('d M Y') }}</div>
-                      <small class="text-muted">{{ \Carbon\Carbon::parse($entretien->date_entretien)->format('H:i') }} - {{ \Carbon\Carbon::parse($entretien->date_entretien)->addMinutes(30)->format('H:i') }}</small>
+                      <small class="text-muted">
+                        {{ \Carbon\Carbon::parse($entretien->heure_debut)->format('H:i') }}
+                        @if($entretien->heure_fin)
+                          - {{ \Carbon\Carbon::parse($entretien->heure_fin)->format('H:i') }}
+                        @endif
+                      </small>
                     </td>
                     <td><span class="badge bg-success bg-opacity-10 text-success">
                       @if ($entretien->statut == 'En attente')
@@ -182,9 +200,13 @@
                       <button class="btn btn-sm btn-outline-secondary me-1" title="Modifier">
                         <i class="bi bi-pencil"></i>
                       </button>
-                      <button class="btn btn-sm btn-outline-danger" title="Annuler">
-                        <i class="bi bi-x-circle"></i>
-                      </button>
+                      <form method="POST" action="{{ route('entreprise.entretiens.cancel', [$entreprise->id, $entretien->id]) }}" class="d-inline cancel-entretien-form">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Annuler" onclick="return confirm('Voulez-vous vraiment annuler cet entretien ?')">
+                          <i class="bi bi-x-circle"></i>
+                        </button>
+                      </form>
                     </td>
                   </tr>
                   @endif
@@ -395,6 +417,89 @@
         </div>
       </div>
 
+      {{-- Modal de détails d'entretien --}}
+      <div class="modal fade" id="entretienDetailsModal" tabindex="-1" aria-labelledby="entretienDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="entretienDetailsModalLabel">Détails de l'entretien</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+              <div id="entretien-details-content">
+                <!-- Les détails seront injectés ici par JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- Modal Modifier Entretien --}}
+      <div class="modal fade" id="editInterviewModal" tabindex="-1" aria-labelledby="editInterviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title fw-bold" id="editInterviewModalLabel">Modifier l'entretien</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+              <form id="editInterviewForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="edit_date_entretien" class="form-label">Date de l'entretien*</label>
+                    <input type="date" class="form-control" id="edit_date_entretien" name="date_entretien" required>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="edit_heure_debut" class="form-label">Heure début*</label>
+                    <input type="time" class="form-control" id="edit_heure_debut" name="heure_debut" required>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="edit_heure_fin" class="form-label">Heure fin</label>
+                    <input type="time" class="form-control" id="edit_heure_fin" name="heure_fin">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="edit_type" class="form-label">Type*</label>
+                    <select class="form-select" id="edit_type" name="type" required>
+                      <option value="Visioconference">Visioconférence</option>
+                      <option value="Telephonique">Téléphonique</option>
+                      <option value="EnPersonne">En personne</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="edit_participant" class="form-label">Participant*</label>
+                    <input type="text" class="form-control" id="edit_participant" name="participant" required>
+                  </div>
+                </div>
+                <div class="mb-3 d-none" id="edit_phoneDetails">
+                  <label for="edit_numero_telephone" class="form-label">Numéro de téléphone*</label>
+                  <input type="tel" class="form-control" id="edit_numero_telephone" name="numero_telephone">
+                </div>
+                <div class="mb-3 d-none" id="edit_videoConferenceDetails">
+                  <label for="edit_lien" class="form-label">Lien de la réunion*</label>
+                  <input type="url" class="form-control" id="edit_lien" name="lien">
+                </div>
+                <div class="mb-3 d-none" id="edit_locationDetails">
+                  <label for="edit_lieu" class="form-label">Lieu*</label>
+                  <input type="text" class="form-control" id="edit_lieu" name="lieu">
+                </div>
+                <div class="mb-3">
+                  <label for="edit_notes" class="form-label">Notes supplémentaires</label>
+                  <textarea class="form-control" id="edit_notes" name="notes" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annuler</button>
+                  <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
       @vite(['resources/js/entrepriseJs/entretiens.js'])
       <script>
@@ -466,6 +571,92 @@
             }
           });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+          // Ajoute un event sur tous les boutons "Détails"
+          document.querySelectorAll('button[title="Détails"]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              // Trouve la ligne du tableau
+              const tr = btn.closest('tr');
+              // Récupère les infos depuis la ligne
+              const candidat = tr.querySelector('h6').textContent.trim();
+              const email = tr.querySelector('small').textContent.trim();
+              const poste = tr.children[1].textContent.trim();
+              const type = tr.children[2].innerText.trim();
+              const date = tr.children[3].children[0].textContent.trim();
+              const heure = tr.children[3].children[1].textContent.trim();
+              const statut = tr.children[4].innerText.trim();
+
+              // Construit le HTML du détail
+              let html = `
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><strong>Candidat :</strong> ${candidat} <br><small>${email}</small></li>
+                  <li class="list-group-item"><strong>Poste :</strong> ${poste}</li>
+                  <li class="list-group-item"><strong>Type :</strong> ${type}</li>
+                  <li class="list-group-item"><strong>Date :</strong> ${date}</li>
+                  <li class="list-group-item"><strong>Heure :</strong> ${heure}</li>
+                  <li class="list-group-item"><strong>Statut :</strong> ${statut}</li>
+                </ul>
+              `;
+              document.getElementById('entretien-details-content').innerHTML = html;
+              // Affiche la modal
+              var modal = new bootstrap.Modal(document.getElementById('entretienDetailsModal'));
+              modal.show();
+            });
+          });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+          // Affichage conditionnel des champs selon le type
+          function toggleEditFields(type) {
+            document.getElementById('edit_phoneDetails').classList.toggle('d-none', type !== 'Telephonique');
+            document.getElementById('edit_videoConferenceDetails').classList.toggle('d-none', type !== 'Visioconference');
+            document.getElementById('edit_locationDetails').classList.toggle('d-none', type !== 'EnPersonne');
+          }
+          document.getElementById('edit_type').addEventListener('change', function() {
+            toggleEditFields(this.value);
+          });
+
+          // Ajoute un event sur tous les boutons "Modifier"
+          document.querySelectorAll('button[title="Modifier"]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              // Récupère les infos depuis la ligne (à adapter selon ton HTML)
+              const tr = btn.closest('tr');
+              // Remplis les champs du formulaire avec les valeurs de la ligne
+              document.getElementById('edit_date_entretien').value = tr.dataset.date || '';
+              document.getElementById('edit_heure_debut').value = tr.dataset.heureDebut || '';
+              document.getElementById('edit_heure_fin').value = tr.dataset.heureFin || '';
+              document.getElementById('edit_type').value = tr.dataset.type || 'Visioconference';
+              document.getElementById('edit_participant').value = tr.dataset.participant || '';
+              document.getElementById('edit_notes').value = tr.dataset.notes || '';
+              document.getElementById('edit_numero_telephone').value = tr.dataset.numeroTelephone || '';
+              document.getElementById('edit_lien').value = tr.dataset.lien || '';
+              document.getElementById('edit_lieu').value = tr.dataset.lieu || '';
+              toggleEditFields(tr.dataset.type || 'Visioconference');
+
+              // Met à jour l'action du formulaire (à adapter selon ta route)
+              document.getElementById('editInterviewForm').action = tr.dataset.editUrl;
+
+              // Affiche la modal
+              var modal = new bootstrap.Modal(document.getElementById('editInterviewModal'));
+              modal.show();
+            });
+          });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+          document.querySelectorAll('table.table tbody tr').forEach(function(row) {
+            row.addEventListener('click', function(e) {
+              // Ne pas déclencher si on clique sur un bouton ou un lien
+              if (e.target.closest('button') || e.target.closest('a') || e.target.tagName === 'BUTTON') return;
+              const url = row.getAttribute('data-url');
+              if (url) {
+                window.location.href = url;
+              }
+            });
+          });
+        });
+        </script>
       </script>
     </body>
   </html>

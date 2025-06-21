@@ -43,6 +43,12 @@ Route::prefix('entreprise/{entreprise}')->name('entreprise.')->group(function ()
     Route::post('entretiens', [entretiensController::class,'store'])
     ->where('entreprise','\d+')
     ->name('entretiens.store');
+    Route::put('entretiens/{entretien}', [entretiensController::class,'update'])
+    ->where(['entreprise' => '\d+', 'entretien' => '\d+'])
+    ->name('entretiens.update');
+    Route::put('entretiens/{entretien}/cancel', [entretiensController::class,'cancel'])
+    ->where(['entreprise' => '\d+', 'entretien' => '\d+'])
+    ->name('entretiens.cancel');
 
     Route::get('evaluerCandidat', [evaluerCandidatController::class,'show'])
     ->where('entreprise','\d+')

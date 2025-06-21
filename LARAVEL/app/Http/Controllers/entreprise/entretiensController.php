@@ -152,37 +152,71 @@ class entretiensController extends Controller
         return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
                          ->with('success', 'Entretien créé avec succès.');
     }
-    // public function destroy(Entreprise $entreprise, $id)
-    // {
-    //     // Trouver l'entretien par son ID
-    //     $entretien = $entreprise->entretiens()->findOrFail($id);
+    public function update(Entreprise $entreprise, Request $request, $id)
+    {
+        // Validation des données de la requête
+        $request->validate([
+            'date_entretien' => 'required|date|after_or_equal:today',
+            'heure_debut' => 'required|date_format:H:i',
+            'heure_fin' => 'nullable|date_format:H:i|after:heure_debut',
+            'type' => 'required|string|in:Visioconference,Telephonique,EnPersonne',
+            'participant'=> 'required|string|max:255',
+            'notes' => 'nullable|string|max:1000',
+        ]);
 
-    //     // Supprimer l'entretien
-    //     $entretien->delete();
+        // Trouver l'entretien par son ID
+        $entretien = Entretien::findOrFail($id);
 
-    //     return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
-    //                      ->with('success', 'Entretien supprimé avec succès.');
-    // }
-    // public function update(Entreprise $entreprise, Request $request, $id)
-    // {
-    //     // Validation des données de la requête
-    //     $request->validate([
-    //         'date' => 'required|date',
-    //         'heure' => 'required|date_format:H:i',
-    //         'lieu' => 'required|string|max:255',
-    //     ]);
+        // Mettre à jour les informations de l'entretien
+        $entretien->update([
+            'date_entretien' => $request->date_entretien,
+            'heure_debut' => $request->heure_debut,
+            'heure_fin' => $request->heure_fin,
+            'type' => $request->type,
+            'participant' => $request->participant,
+            'notes' => $request->notes,
+        ]);
 
-    //     // Trouver l'entretien par son ID
-    //     $entretien = $entreprise->entretiens()->findOrFail($id);
+        // Mettre à jour les détails spécifiques selon le type
+        if ($request->type == 'Visioconference') {
+            $entretien->visioconferences()->updateOrCreate(
+                ['entretien_id' => $entretien->id],
+                ['lien' => $request->lien]
+            );
+            $entretien->telephoniques()->delete();
+            $entretien->enPersonnes()->delete();
+        } elseif ($request->type == 'Telephonique') {
+            $entretien->telephoniques()->updateOrCreate(
+                ['entretien_id' => $entretien->id],
+                ['numero_telephone' => $request->numero_telephone]
+            );
+            $entretien->visioconferences()->delete();
+            $entretien->enPersonnes()->delete();
+        } else {
+            $entretien->enPersonnes()->updateOrCreate(
+                ['entretien_id' => $entretien->id],
+                ['lieu' => $request->lieu]
+            );
+            $entretien->visioconferences()->delete();
+            $entretien->telephoniques()->delete();
+        }
 
-    //     // Mettre à jour les informations de l'entretien
-    //     $entretien->update([
-    //         'date' => $request->date,
-    //         'heure' => $request->heure,
-    //         'lieu' => $request->lieu,
-    //     ]);
+        return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
+                         ->with('success', 'Entretien modifié avec succès.');
+    }
+    public function cancel(Entreprise $entreprise, $id)
+    {
+        $entretien = Entretien::findOrFail($id);
+        $entretien->statut = 'Annuler'; // valeur ENUM correcte pour entretien
+        $entretien->save();
 
-    //     return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
-    //                      ->with('success', 'Entretien mis à jour avec succès.');
-    // }
+        // Mettre à jour le statut de la candidature liée
+        if ($entretien->candidature) {
+            $entretien->candidature->statut = 'Évaluation terminée'; // valeur autorisée
+            $entretien->candidature->save();
+        }
+
+        return redirect()->route('entreprise.entretiens', ['entreprise' => $entreprise->id])
+            ->with('success', 'Entretien annulé avec succès.');
+    }
 }

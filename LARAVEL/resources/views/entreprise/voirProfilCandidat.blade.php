@@ -219,9 +219,9 @@ body {
           {{-- <p class="text-muted mb-0">Consultez le profil détaillé du {{ $candidat->prenom }} {{ $candidat->nom }}</p> --}}
         </div>
         <div class="d-flex gap-2">
-          <a href="{{ route('entreprise.rechercherCandidats', $entreprise) }}" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left me-2"></i>Retour à la recherche
-          </a>
+            <a href="{{ url()->previous() }}" class="btn btn-secondary mb-3">
+                <i class="bi bi-arrow-left"></i> Retour
+            </a>
         </div>
       </div>
       
