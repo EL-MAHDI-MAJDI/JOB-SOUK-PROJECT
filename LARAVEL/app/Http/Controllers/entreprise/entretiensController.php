@@ -63,7 +63,18 @@ class entretiensController extends Controller
         
         // Charger les détails spécifiques pour chaque entretien
         $entretiensAll->load('enPersonnes', 'telephoniques', 'visioconferences');
-        return view('entreprise.entretiens', compact('entreprise', 'offres', 'candidatures', 'entretiens', 'candidaturesAll', 'entretiensAll'));
+
+        // Statistiques dynamiques
+        $stats = [
+            'planifies' => $entretiensAll->where('statut', 'En attente')->count(),
+            'confirmes' => $entretiensAll->where('statut', 'Confirme')->count(),
+            'termines'  => $entretiensAll->where('statut', 'Terminé')->count(),
+            'annules'   => $entretiensAll->where('statut', 'Annuler')->count(),
+        ];
+        return view('entreprise.entretiens', compact(
+            'entreprise', 'offres', 'candidatures', 'entretiens',
+            'candidaturesAll', 'entretiensAll', 'stats'
+        ));
         }
     public function store(Entreprise $entreprise, Request $request)
     {

@@ -93,31 +93,31 @@
       
       <!-- Statistiques rapides -->
       <div class="row mb-4">
-        <div class="col-md-3">
-          <div class="dashboard-card p-3 text-center">
-            <h5 class="fw-bold mb-1">24</h5>
+    <div class="col-md-3">
+        <div class="dashboard-card p-3 text-center">
+            <h5 class="fw-bold mb-1">{{ $stats['planifies'] }}</h5>
             <p class="text-muted mb-0">Planifiés</p>
-          </div>
         </div>
-        <div class="col-md-3">
-          <div class="dashboard-card p-3 text-center">
-            <h5 class="fw-bold mb-1">18</h5>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-card p-3 text-center">
+            <h5 class="fw-bold mb-1">{{ $stats['confirmes'] }}</h5>
             <p class="text-muted mb-0">Confirmés</p>
-          </div>
         </div>
-        <div class="col-md-3">
-          <div class="dashboard-card p-3 text-center">
-            <h5 class="fw-bold mb-1">12</h5>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-card p-3 text-center">
+            <h5 class="fw-bold mb-1">{{ $stats['termines'] }}</h5>
             <p class="text-muted mb-0">Terminés</p>
-          </div>
         </div>
-        <div class="col-md-3">
-          <div class="dashboard-card p-3 text-center">
-            <h5 class="fw-bold mb-1">3</h5>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-card p-3 text-center">
+            <h5 class="fw-bold mb-1">{{ $stats['annules'] }}</h5>
             <p class="text-muted mb-0">Annulés</p>
-          </div>
         </div>
-      </div>
+    </div>
+</div>
       <!-- Liste des entretiens -->
       <div class="dashboard-card p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
