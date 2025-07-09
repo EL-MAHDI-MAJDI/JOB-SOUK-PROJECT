@@ -48,31 +48,6 @@ Autres outils :
 - **Git & GitHub** pour le versionnement  
 - **Enterprise Architect** pour la modélisation UML
 
-## 🖼️ Captures d’écran
-
-### 🏠 Page d’accueil
-![Accueil 1](screenshots/acceuil-1.png)
-![Accueil 2](screenshots/acceuil-2.png)
-
-### 🔐 Page de connexion
-![Connexion](screenshots/connexion.png)
-
-### 📝 Page d’inscription
-![Inscription Choix](screenshots/inscription-choix.png)
-![Entreprise](screenshots/form-entreprise.png)
-![Candidat](screenshots/form-candidat.png)
-
-
-### 👤 Espace Candidat
-![Candidat](screenshots/dashboard-candidat.png)
-
-### 🏢 Espace Entreprise
-![Entreprise](screenshots/dashboard-entreprise.png)
-
-### 🛠️ Interface Admin
-![Admin](screenshots/admin-panel.png)
-
-
 ## 📌 Objectifs du projet
 
 - Centraliser les offres et candidatures
