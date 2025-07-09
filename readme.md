@@ -10,8 +10,9 @@ Job Souk répond aux besoins spécifiques du marché de l'emploi marocain, en of
 
 ## 👨‍💻 Réalisé par
 
-- **EL MAHDI MAJDI**  
-- Projet encadré par **Mr. Abderrahime Elkourchi** & **Pr. Abdelali Boushaba**
+- **EL MAHDI MAJDI**
+- **EL Abderrahime Elkourchi**  
+- Projet encadré par **Pr. Abdelali Boushaba**
 
 ## 🎯 Fonctionnalités principales
 
@@ -47,9 +48,26 @@ Autres outils :
 - **Git & GitHub** pour le versionnement  
 - **Enterprise Architect** pour la modélisation UML
 
-## 📷 Aperçu de l'application
+## 🖼️ Captures d’écran
 
-> Screenshots à ajouter ici (interfaces candidats, entreprises, admin, page d'accueil…)
+### 🏠 Page d’accueil
+![Accueil](screenshots/home.png)
+
+### 🔐 Page de connexion
+![Connexion](screenshots/login.png)
+
+### 📝 Page d’inscription
+![Inscription](screenshots/register.png)
+
+### 👤 Espace Candidat
+![Candidat](screenshots/dashboard-candidat.png)
+
+### 🏢 Espace Entreprise
+![Entreprise](screenshots/dashboard-entreprise.png)
+
+### 🛠️ Interface Admin
+![Admin](screenshots/admin-panel.png)
+
 
 ## 📌 Objectifs du projet
 
