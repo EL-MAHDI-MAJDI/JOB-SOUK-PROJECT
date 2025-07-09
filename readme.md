@@ -1,4 +1,4 @@
-# 🧑‍💼 Job Souk
+# Job Souk
 
 **Job Souk** est une application web de mise en relation entre recruteurs et chercheurs d’emploi, conçue pour simplifier, centraliser et automatiser le processus de recrutement au Maroc.
 
@@ -50,14 +50,21 @@ Autres outils :
 
 ## 🖼️ Captures d’écran
 
+## 🖼️ Captures d’écran
+
 ### 🏠 Page d’accueil
-![Accueil](screenshots/home.png)
+![Accueil 1](screenshots/acceuil-1.png)
+![Accueil 2](screenshots/acceuil-2.png)
+![Accueil 3](screenshots/acceuil-3.png)
+![Accueil 4](screenshots/acceuil-4.png)
 
 ### 🔐 Page de connexion
-![Connexion](screenshots/login.png)
+![Connexion](screenshots/connexion.png)
 
 ### 📝 Page d’inscription
-![Inscription](screenshots/register.png)
+![Inscription - Choix](screenshots/inscription-choix.png)
+![Inscription Entreprise](screenshots/form-entreprise.png)
+![Inscription Candidat](screenshots/form-candidat.png)
 
 ### 👤 Espace Candidat
 ![Candidat](screenshots/dashboard-candidat.png)
